@@ -1,0 +1,7 @@
+target/
+.classpath
+.settings/
+.project
+.wtpmodules
+.pydevproject
+**/.DS_Store

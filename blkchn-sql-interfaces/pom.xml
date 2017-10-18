@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.impetus</groupId>
+		<artifactId>blkchn-sql-driver</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>blkchn-sql-interfaces</artifactId>
+	<packaging>jar</packaging>
+	<name>Blockchain SQL Interfaces</name>
+	<description>Project to define all the interfaces and generate logical plan for SQL Execution.
+	This will be implemented by concrete implementations of Hyperledger and Ethereum</description>
+
+
+	<properties>
+		<blkchn-antlr4-gen.version>0.0.1-SNAPSHOT</blkchn-antlr4-gen.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.impetus</groupId>
+			<artifactId>blkchn-antlr4-gen</artifactId>
+			<version>${blkchn-antlr4-gen.version}</version>
+		</dependency>
+	</dependencies>
+
+</project>
