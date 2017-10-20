@@ -26,3 +26,4 @@ The antlr4 code is generated as it is tied to maven lifecycle. See pom files for
 
 TODO:
 1. Clean and configure logback.xml 
+2. Disable Cleaning anf Code generation on profile and activate only if required. 

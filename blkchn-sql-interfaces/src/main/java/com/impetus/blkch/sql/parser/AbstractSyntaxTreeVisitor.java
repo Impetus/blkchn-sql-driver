@@ -1,6 +1,8 @@
 package com.impetus.blkch.sql.parser;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.impetus.blkch.sql.generated.*;
 import com.impetus.blkch.sql.generated.SqlBaseParser.AddTableColumnsContext;
@@ -194,1337 +196,1344 @@ import com.impetus.blkch.sql.generated.SqlBaseParser.WindowRefContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.WindowsContext;
 import com.impetus.blkch.sql.parser.LogicalPlan;
 
-public class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan> implements SqlBaseVisitor<LogicalPlan>{
-//extends SqlBaseBaseVisitor<LogicalPlan>{
-	
-	public LogicalPlan visitSingleStatement1(SqlBaseParser.SingleStatementContext ctx) { 
-		return (LogicalPlan) visit(ctx); 
+public class AbstractSyntaxTreeVisitor extends	AbstractParseTreeVisitor<LogicalPlan> implements
+		SqlBaseVisitor<LogicalPlan> {
+
+	private static final Logger logger = LoggerFactory.getLogger(AbstractSyntaxTreeVisitor.class);
+
+	@Override
+	public LogicalPlan visitSingleStatement(SingleStatementContext ctx) {
+		logger.trace("In visitSingleStatement " + ctx.getText());
+		visitChildren(ctx);
+		return new LogicalPlan();
 	}
 
-@Override
-public LogicalPlan visitSingleStatement(SingleStatementContext ctx) {
-	System.out.println("In visitSingleStatement " + ctx.getText());
-	visitChildren(ctx);
-	return new LogicalPlan();
-}
-
-@Override
-public LogicalPlan visitSingleExpression(SingleExpressionContext ctx) {
-	System.out.println("In visitSingleExpression " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSingleTableIdentifier(SingleTableIdentifierContext ctx) {
-	System.out.println("In visitSingleTableIdentifier " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSingleFunctionIdentifier(SingleFunctionIdentifierContext ctx) {
-	System.out.println("In visitSingleFunctionIdentifier " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSingleDataType(SingleDataTypeContext ctx) {
-	System.out.println("In visitSingleDataType " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitStatementDefault(StatementDefaultContext ctx) {
-	System.out.println("In visitStatementDefault " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitUse(UseContext ctx) {
-	System.out.println("In visitUse " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitCreateDatabase(CreateDatabaseContext ctx) {
-	System.out.println("In visitCreateDatabase " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSetDatabaseProperties(SetDatabasePropertiesContext ctx) {
-	System.out.println("In visitSetDatabaseProperties " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitDropDatabase(DropDatabaseContext ctx) {
-	System.out.println("In visitDropDatabase " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitCreateTable(CreateTableContext ctx) {
-	System.out.println("In visitCreateTable " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitCreateHiveTable(CreateHiveTableContext ctx) {
-	System.out.println("In visitCreateHiveTable " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitCreateTableLike(CreateTableLikeContext ctx) {
-	System.out.println("In visitCreateTableLike " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitAnalyze(AnalyzeContext ctx) {
-	System.out.println("In visitAnalyze " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitAddTableColumns(AddTableColumnsContext ctx) {
-	System.out.println("In visitAddTableColumns " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitRenameTable(RenameTableContext ctx) {
-	System.out.println("In visitRenameTable " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSetTableProperties(SetTablePropertiesContext ctx) {
-	System.out.println("In visitSetTableProperties " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitUnsetTableProperties(UnsetTablePropertiesContext ctx) {
-	System.out.println("In visitUnsetTableProperties " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitChangeColumn(ChangeColumnContext ctx) {
-	System.out.println("In visitChangeColumn " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSetTableSerDe(SetTableSerDeContext ctx) {
-	System.out.println("In visitSetTableSerDe " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitAddTablePartition(AddTablePartitionContext ctx) {
-	System.out.println("In visitAddTablePartition " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitRenameTablePartition(RenameTablePartitionContext ctx) {
-	System.out.println("In visitRenameTablePartition " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitDropTablePartitions(DropTablePartitionsContext ctx) {
-	System.out.println("In visitDropTablePartitions " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSetTableLocation(SetTableLocationContext ctx) {
-	System.out.println("In visitSetTableLocation " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitRecoverPartitions(RecoverPartitionsContext ctx) {
-	System.out.println("In visitRecoverPartitions " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitDropTable(DropTableContext ctx) {
-	System.out.println("In visitDropTable " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitCreateView(CreateViewContext ctx) {
-	System.out.println("In visitCreateView " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitCreateTempViewUsing(CreateTempViewUsingContext ctx) {
-	System.out.println("In visitCreateTempViewUsing " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitAlterViewQuery(AlterViewQueryContext ctx) {
-	System.out.println("In visitAlterViewQuery " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitCreateFunction(CreateFunctionContext ctx) {
-	System.out.println("In visitCreateFunction " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitDropFunction(DropFunctionContext ctx) {
-	System.out.println("In visitDropFunction " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitExplain(ExplainContext ctx) {
-	System.out.println("In visitExplain " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitShowTables(ShowTablesContext ctx) {
-	System.out.println("In visitShowTables " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitShowTable(ShowTableContext ctx) {
-	System.out.println("In visitShowTable " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitShowDatabases(ShowDatabasesContext ctx) {
-	System.out.println("In visitShowDatabases " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitShowTblProperties(ShowTblPropertiesContext ctx) {
-	System.out.println("In visitShowTblProperties " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitShowColumns(ShowColumnsContext ctx) {
-	System.out.println("In visitShowColumns " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitShowPartitions(ShowPartitionsContext ctx) {
-	System.out.println("In visitShowPartitions " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitShowFunctions(ShowFunctionsContext ctx) {
-	System.out.println("In visitShowFunctions " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitShowCreateTable(ShowCreateTableContext ctx) {
-	System.out.println("In visitShowCreateTable " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitDescribeFunction(DescribeFunctionContext ctx) {
-	System.out.println("In visitDescribeFunction " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitDescribeDatabase(DescribeDatabaseContext ctx) {
-	System.out.println("In visitDescribeDatabase " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitDescribeTable(DescribeTableContext ctx) {
-	System.out.println("In visitDescribeTable " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitRefreshTable(RefreshTableContext ctx) {
-	System.out.println("In visitRefreshTable " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitRefreshResource(RefreshResourceContext ctx) {
-	System.out.println("In visitRefreshResource " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitCacheTable(CacheTableContext ctx) {
-	System.out.println("In visitCacheTable " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitUncacheTable(UncacheTableContext ctx) {
-	System.out.println("In visitUncacheTable " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitClearCache(ClearCacheContext ctx) {
-	System.out.println("In visitClearCache " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitLoadData(LoadDataContext ctx) {
-	System.out.println("In visitLoadData " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitTruncateTable(TruncateTableContext ctx) {
-	System.out.println("In visitTruncateTable " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitRepairTable(RepairTableContext ctx) {
-	System.out.println("In visitRepairTable " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitManageResource(ManageResourceContext ctx) {
-	System.out.println("In visitManageResource " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitFailNativeCommand(FailNativeCommandContext ctx) {
-	System.out.println("In visitFailNativeCommand " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSetConfiguration(SetConfigurationContext ctx) {
-	System.out.println("In visitSetConfiguration " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitResetConfiguration(ResetConfigurationContext ctx) {
-	System.out.println("In visitResetConfiguration " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitUnsupportedHiveNativeCommands(
-		UnsupportedHiveNativeCommandsContext ctx) {
-	System.out.println("In visitUnsupportedHiveNativeCommands " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitCreateTableHeader(CreateTableHeaderContext ctx) {
-	System.out.println("In visitCreateTableHeader " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitBucketSpec(BucketSpecContext ctx) {
-	System.out.println("In visitBucketSpec " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSkewSpec(SkewSpecContext ctx) {
-	System.out.println("In visitSkewSpec " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitLocationSpec(LocationSpecContext ctx) {
-	System.out.println("In visitLocationSpec " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitQuery(QueryContext ctx) {
-	System.out.println("In visitQuery " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitInsertInto(InsertIntoContext ctx) {
-	System.out.println("In visitInsertInto " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitPartitionSpecLocation(PartitionSpecLocationContext ctx) {
-	System.out.println("In visitPartitionSpecLocation " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitPartitionSpec(PartitionSpecContext ctx) {
-	System.out.println("In visitPartitionSpec " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitPartitionVal(PartitionValContext ctx) {
-	System.out.println("In visitPartitionVal " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitDescribeFuncName(DescribeFuncNameContext ctx) {
-	System.out.println("In visitDescribeFuncName " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitDescribeColName(DescribeColNameContext ctx) {
-	System.out.println("In visitDescribeColName " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitCtes(CtesContext ctx) {
-	System.out.println("In visitCtes " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitNamedQuery(NamedQueryContext ctx) {
-	System.out.println("In visitNamedQuery " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitTableProvider(TableProviderContext ctx) {
-	System.out.println("In visitTableProvider " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitTablePropertyList(TablePropertyListContext ctx) {
-	System.out.println("In visitTablePropertyList " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitTableProperty(TablePropertyContext ctx) {
-	System.out.println("In visitTableProperty " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitTablePropertyKey(TablePropertyKeyContext ctx) {
-	System.out.println("In visitTablePropertyKey " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitTablePropertyValue(TablePropertyValueContext ctx) {
-	System.out.println("In visitTablePropertyValue " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitConstantList(ConstantListContext ctx) {
-	System.out.println("In visitConstantList " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitNestedConstantList(NestedConstantListContext ctx) {
-	System.out.println("In visitNestedConstantList " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitCreateFileFormat(CreateFileFormatContext ctx) {
-	System.out.println("In visitCreateFileFormat " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitTableFileFormat(TableFileFormatContext ctx) {
-	System.out.println("In visitTableFileFormat " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitGenericFileFormat(GenericFileFormatContext ctx) {
-	System.out.println("In visitGenericFileFormat " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitStorageHandler(StorageHandlerContext ctx) {
-	System.out.println("In visitStorageHandler " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitResource(ResourceContext ctx) {
-	System.out.println("In visitResource " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSingleInsertQuery(SingleInsertQueryContext ctx) {
-	System.out.println("In visitSingleInsertQuery " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitMultiInsertQuery(MultiInsertQueryContext ctx) {
-	System.out.println("In visitMultiInsertQuery " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitQueryOrganization(QueryOrganizationContext ctx) {
-	System.out.println("In visitQueryOrganization " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitMultiInsertQueryBody(MultiInsertQueryBodyContext ctx) {
-	System.out.println("In visitMultiInsertQueryBody " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitQueryTermDefault(QueryTermDefaultContext ctx) {
-	System.out.println("In visitQueryTermDefault " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSetOperation(SetOperationContext ctx) {
-	System.out.println("In visitSetOperation " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitQueryPrimaryDefault(QueryPrimaryDefaultContext ctx) {
-	System.out.println("In visitQueryPrimaryDefault " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitTable(TableContext ctx) {
-	System.out.println("In visitTable " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitInlineTableDefault1(InlineTableDefault1Context ctx) {
-	System.out.println("In visitInlineTableDefault1 " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSubquery(SubqueryContext ctx) {
-	System.out.println("In visitSubquery " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSortItem(SortItemContext ctx) {
-	System.out.println("In visitSortItem " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitQuerySpecification(QuerySpecificationContext ctx) {
-	System.out.println("In visitQuerySpecification " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitHint(HintContext ctx) {
-	System.out.println("In visitHint " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitHintStatement(HintStatementContext ctx) {
-	System.out.println("In visitHintStatement " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitFromClause(FromClauseContext ctx) {
-	System.out.println("In visitFromClause " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitAggregation(AggregationContext ctx) {
-	System.out.println("In visitAggregation " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitGroupingSet(GroupingSetContext ctx) {
-	System.out.println("In visitGroupingSet " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitLateralView(LateralViewContext ctx) {
-	System.out.println("In visitLateralView " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSetQuantifier(SetQuantifierContext ctx) {
-	System.out.println("In visitSetQuantifier " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitRelation(RelationContext ctx) {
-	System.out.println("In visitRelation " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitJoinRelation(JoinRelationContext ctx) {
-	System.out.println("In visitJoinRelation " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitJoinType(JoinTypeContext ctx) {
-	System.out.println("In visitJoinType " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitJoinCriteria(JoinCriteriaContext ctx) {
-	System.out.println("In visitJoinCriteria " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSample(SampleContext ctx) {
-	System.out.println("In visitSample " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitIdentifierList(IdentifierListContext ctx) {
-	System.out.println("In visitIdentifierList " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitIdentifierSeq(IdentifierSeqContext ctx) {
-	System.out.println("In visitIdentifierSeq " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitOrderedIdentifierList(OrderedIdentifierListContext ctx) {
-	System.out.println("In visitOrderedIdentifierList " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitOrderedIdentifier(OrderedIdentifierContext ctx) {
-	System.out.println("In visitOrderedIdentifier " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitIdentifierCommentList(IdentifierCommentListContext ctx) {
-	System.out.println("In visitIdentifierCommentList " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitIdentifierComment(IdentifierCommentContext ctx) {
-	System.out.println("In visitIdentifierComment " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitTableName(TableNameContext ctx) {
-	System.out.println("In visitTableName " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitAliasedQuery(AliasedQueryContext ctx) {
-	System.out.println("In visitAliasedQuery " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitAliasedRelation(AliasedRelationContext ctx) {
-	System.out.println("In visitAliasedRelation " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitInlineTableDefault2(InlineTableDefault2Context ctx) {
-	System.out.println("In visitInlineTableDefault2 " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitTableValuedFunction(TableValuedFunctionContext ctx) {
-	System.out.println("In visitTableValuedFunction " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitInlineTable(InlineTableContext ctx) {
-	System.out.println("In visitInlineTable " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitRowFormatSerde(RowFormatSerdeContext ctx) {
-	System.out.println("In visitRowFormatSerde " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitRowFormatDelimited(RowFormatDelimitedContext ctx) {
-	System.out.println("In visitRowFormatDelimited " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitTableIdentifier(TableIdentifierContext ctx) {
-	System.out.println("In visitTableIdentifier " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitFunctionIdentifier(FunctionIdentifierContext ctx) {
-	System.out.println("In visitFunctionIdentifier " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitNamedExpression(NamedExpressionContext ctx) {
-	System.out.println("In visitNamedExpression " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitNamedExpressionSeq(NamedExpressionSeqContext ctx) {
-	System.out.println("In visitNamedExpressionSeq " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitExpression(ExpressionContext ctx) {
-	System.out.println("In visitExpression " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitLogicalNot(LogicalNotContext ctx) {
-	System.out.println("In visitLogicalNot " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitBooleanDefault(BooleanDefaultContext ctx) {
-	System.out.println("In visitBooleanDefault " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitExists(ExistsContext ctx) {
-	System.out.println("In visitExists " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitLogicalBinary(LogicalBinaryContext ctx) {
-	System.out.println("In visitLogicalBinary " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitPredicated(PredicatedContext ctx) {
-	System.out.println("In visitPredicated " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitPredicate(PredicateContext ctx) {
-	System.out.println("In visitPredicate " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitValueExpressionDefault(ValueExpressionDefaultContext ctx) {
-	System.out.println("In visitValueExpressionDefault " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitComparison(ComparisonContext ctx) {
-	System.out.println("In visitComparison " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitArithmeticBinary(ArithmeticBinaryContext ctx) {
-	System.out.println("In visitArithmeticBinary " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitArithmeticUnary(ArithmeticUnaryContext ctx) {
-	System.out.println("In visitArithmeticUnary " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitDereference(DereferenceContext ctx) {
-	System.out.println("In visitDereference " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSimpleCase(SimpleCaseContext ctx) {
-	System.out.println("In visitSimpleCase " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitColumnReference(ColumnReferenceContext ctx) {
-	System.out.println("In visitColumnReference " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitRowConstructor(RowConstructorContext ctx) {
-	System.out.println("In visitRowConstructor " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitLast(LastContext ctx) {
-	System.out.println("In visitLast " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitStar(StarContext ctx) {
-	System.out.println("In visitStar " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSubscript(SubscriptContext ctx) {
-	System.out.println("In visitSubscript " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitTimeFunctionCall(TimeFunctionCallContext ctx) {
-	System.out.println("In visitTimeFunctionCall " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSubqueryExpression(SubqueryExpressionContext ctx) {
-	System.out.println("In visitSubqueryExpression " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitCast(CastContext ctx) {
-	System.out.println("In visitCast " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitConstantDefault(ConstantDefaultContext ctx) {
-	System.out.println("In visitConstantDefault " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitParenthesizedExpression(
-		ParenthesizedExpressionContext ctx) {
-	System.out.println("In visitParenthesizedExpression " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitFunctionCall(FunctionCallContext ctx) {
-	System.out.println("In visitFunctionCall " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSearchedCase(SearchedCaseContext ctx) {
-	System.out.println("In visitSearchedCase " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitFirst(FirstContext ctx) {
-	System.out.println("In visitFirst " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitNullLiteral(NullLiteralContext ctx) {
-	System.out.println("In visitNullLiteral " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitIntervalLiteral(IntervalLiteralContext ctx) {
-	System.out.println("In visitIntervalLiteral " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitTypeConstructor(TypeConstructorContext ctx) {
-	System.out.println("In visitTypeConstructor " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitNumericLiteral(NumericLiteralContext ctx) {
-	System.out.println("In visitNumericLiteral " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitBooleanLiteral(BooleanLiteralContext ctx) {
-	System.out.println("In visitBooleanLiteral " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitStringLiteral(StringLiteralContext ctx) {
-	System.out.println("In visitStringLiteral " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitComparisonOperator(ComparisonOperatorContext ctx) {
-	System.out.println("In visitComparisonOperator " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitArithmeticOperator(ArithmeticOperatorContext ctx) {
-	System.out.println("In visitArithmeticOperator " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitPredicateOperator(PredicateOperatorContext ctx) {
-	System.out.println("In visitPredicateOperator " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitBooleanValue(BooleanValueContext ctx) {
-	System.out.println("In visitBooleanValue " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitInterval(IntervalContext ctx) {
-	System.out.println("In visitInterval " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitIntervalField(IntervalFieldContext ctx) {
-	System.out.println("In visitIntervalField " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitIntervalValue(IntervalValueContext ctx) {
-	System.out.println("In visitIntervalValue " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitColPosition(ColPositionContext ctx) {
-	System.out.println("In visitColPosition " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitComplexDataType(ComplexDataTypeContext ctx) {
-	System.out.println("In visitComplexDataType " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitPrimitiveDataType(PrimitiveDataTypeContext ctx) {
-	System.out.println("In visitPrimitiveDataType " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitColTypeList(ColTypeListContext ctx) {
-	System.out.println("In visitColTypeList " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitColType(ColTypeContext ctx) {
-	System.out.println("In visitColType " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitComplexColTypeList(ComplexColTypeListContext ctx) {
-	System.out.println("In visitComplexColTypeList " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitComplexColType(ComplexColTypeContext ctx) {
-	System.out.println("In visitComplexColType " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitWhenClause(WhenClauseContext ctx) {
-	System.out.println("In visitWhenClause " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitWindows(WindowsContext ctx) {
-	System.out.println("In visitWindows " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitNamedWindow(NamedWindowContext ctx) {
-	System.out.println("In visitNamedWindow " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitWindowRef(WindowRefContext ctx) {
-	System.out.println("In visitWindowRef " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitWindowDef(WindowDefContext ctx) {
-	System.out.println("In visitWindowDef " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitWindowFrame(WindowFrameContext ctx) {
-	System.out.println("In visitWindowFrame " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitFrameBound(FrameBoundContext ctx) {
-	System.out.println("In visitFrameBound " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitQualifiedName(QualifiedNameContext ctx) {
-	System.out.println("In visitQualifiedName " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitIdentifier(IdentifierContext ctx) {
-	System.out.println("In visitIdentifier " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitUnquotedIdentifier(UnquotedIdentifierContext ctx) {
-	System.out.println("In visitUnquotedIdentifier " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitQuotedIdentifierAlternative(
-		QuotedIdentifierAlternativeContext ctx) {
-	System.out.println("In visitQuotedIdentifierAlternative " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitQuotedIdentifier(QuotedIdentifierContext ctx) {
-	System.out.println("In visitQuotedIdentifier " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitDecimalLiteral(DecimalLiteralContext ctx) {
-	System.out.println("In visitDecimalLiteral " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitIntegerLiteral(IntegerLiteralContext ctx) {
-	System.out.println("In visitIntegerLiteral " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitBigIntLiteral(BigIntLiteralContext ctx) {
-	System.out.println("In visitBigIntLiteral " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitSmallIntLiteral(SmallIntLiteralContext ctx) {
-	System.out.println("In visitSmallIntLiteral " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitTinyIntLiteral(TinyIntLiteralContext ctx) {
-	System.out.println("In visitTinyIntLiteral " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitDoubleLiteral(DoubleLiteralContext ctx) {
-	System.out.println("In visitDoubleLiteral " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitBigDecimalLiteral(BigDecimalLiteralContext ctx) {
-	System.out.println("In visitBigDecimalLiteral " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
-
-@Override
-public LogicalPlan visitNonReserved(NonReservedContext ctx) {
-	System.out.println("In visitNonReserved " + ctx.getText());
-	return visitChildren(ctx);
-	
-}
+	@Override
+	public LogicalPlan visitSingleExpression(SingleExpressionContext ctx) {
+		logger.trace("In visitSingleExpression " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSingleTableIdentifier(
+			SingleTableIdentifierContext ctx) {
+		logger.trace("In visitSingleTableIdentifier " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSingleFunctionIdentifier(
+			SingleFunctionIdentifierContext ctx) {
+		logger.trace("In visitSingleFunctionIdentifier " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSingleDataType(SingleDataTypeContext ctx) {
+		logger.trace("In visitSingleDataType " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitStatementDefault(StatementDefaultContext ctx) {
+		logger.trace("In visitStatementDefault " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitUse(UseContext ctx) {
+		logger.trace("In visitUse " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitCreateDatabase(CreateDatabaseContext ctx) {
+		logger.trace("In visitCreateDatabase " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSetDatabaseProperties(
+			SetDatabasePropertiesContext ctx) {
+		logger.trace("In visitSetDatabaseProperties " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitDropDatabase(DropDatabaseContext ctx) {
+		logger.trace("In visitDropDatabase " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitCreateTable(CreateTableContext ctx) {
+		logger.trace("In visitCreateTable " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitCreateHiveTable(CreateHiveTableContext ctx) {
+		logger.trace("In visitCreateHiveTable " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitCreateTableLike(CreateTableLikeContext ctx) {
+		logger.trace("In visitCreateTableLike " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitAnalyze(AnalyzeContext ctx) {
+		logger.trace("In visitAnalyze " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitAddTableColumns(AddTableColumnsContext ctx) {
+		logger.trace("In visitAddTableColumns " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitRenameTable(RenameTableContext ctx) {
+		logger.trace("In visitRenameTable " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSetTableProperties(SetTablePropertiesContext ctx) {
+		logger.trace("In visitSetTableProperties " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitUnsetTableProperties(UnsetTablePropertiesContext ctx) {
+		logger.trace("In visitUnsetTableProperties " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitChangeColumn(ChangeColumnContext ctx) {
+		logger.trace("In visitChangeColumn " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSetTableSerDe(SetTableSerDeContext ctx) {
+		logger.trace("In visitSetTableSerDe " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitAddTablePartition(AddTablePartitionContext ctx) {
+		logger.trace("In visitAddTablePartition " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitRenameTablePartition(RenameTablePartitionContext ctx) {
+		logger.trace("In visitRenameTablePartition " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitDropTablePartitions(DropTablePartitionsContext ctx) {
+		logger.trace("In visitDropTablePartitions " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSetTableLocation(SetTableLocationContext ctx) {
+		logger.trace("In visitSetTableLocation " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitRecoverPartitions(RecoverPartitionsContext ctx) {
+		logger.trace("In visitRecoverPartitions " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitDropTable(DropTableContext ctx) {
+		logger.trace("In visitDropTable " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitCreateView(CreateViewContext ctx) {
+		logger.trace("In visitCreateView " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitCreateTempViewUsing(CreateTempViewUsingContext ctx) {
+		logger.trace("In visitCreateTempViewUsing " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitAlterViewQuery(AlterViewQueryContext ctx) {
+		logger.trace("In visitAlterViewQuery " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitCreateFunction(CreateFunctionContext ctx) {
+		logger.trace("In visitCreateFunction " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitDropFunction(DropFunctionContext ctx) {
+		logger.trace("In visitDropFunction " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitExplain(ExplainContext ctx) {
+		logger.trace("In visitExplain " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitShowTables(ShowTablesContext ctx) {
+		logger.trace("In visitShowTables " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitShowTable(ShowTableContext ctx) {
+		logger.trace("In visitShowTable " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitShowDatabases(ShowDatabasesContext ctx) {
+		logger.trace("In visitShowDatabases " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitShowTblProperties(ShowTblPropertiesContext ctx) {
+		logger.trace("In visitShowTblProperties " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitShowColumns(ShowColumnsContext ctx) {
+		logger.trace("In visitShowColumns " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitShowPartitions(ShowPartitionsContext ctx) {
+		logger.trace("In visitShowPartitions " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitShowFunctions(ShowFunctionsContext ctx) {
+		logger.trace("In visitShowFunctions " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitShowCreateTable(ShowCreateTableContext ctx) {
+		logger.trace("In visitShowCreateTable " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitDescribeFunction(DescribeFunctionContext ctx) {
+		logger.trace("In visitDescribeFunction " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitDescribeDatabase(DescribeDatabaseContext ctx) {
+		logger.trace("In visitDescribeDatabase " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitDescribeTable(DescribeTableContext ctx) {
+		logger.trace("In visitDescribeTable " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitRefreshTable(RefreshTableContext ctx) {
+		logger.trace("In visitRefreshTable " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitRefreshResource(RefreshResourceContext ctx) {
+		logger.trace("In visitRefreshResource " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitCacheTable(CacheTableContext ctx) {
+		logger.trace("In visitCacheTable " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitUncacheTable(UncacheTableContext ctx) {
+		logger.trace("In visitUncacheTable " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitClearCache(ClearCacheContext ctx) {
+		logger.trace("In visitClearCache " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitLoadData(LoadDataContext ctx) {
+		logger.trace("In visitLoadData " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitTruncateTable(TruncateTableContext ctx) {
+		logger.trace("In visitTruncateTable " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitRepairTable(RepairTableContext ctx) {
+		logger.trace("In visitRepairTable " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitManageResource(ManageResourceContext ctx) {
+		logger.trace("In visitManageResource " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitFailNativeCommand(FailNativeCommandContext ctx) {
+		logger.trace("In visitFailNativeCommand " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSetConfiguration(SetConfigurationContext ctx) {
+		logger.trace("In visitSetConfiguration " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitResetConfiguration(ResetConfigurationContext ctx) {
+		logger.trace("In visitResetConfiguration " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitUnsupportedHiveNativeCommands(
+			UnsupportedHiveNativeCommandsContext ctx) {
+		logger.trace("In visitUnsupportedHiveNativeCommands "
+				+ ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitCreateTableHeader(CreateTableHeaderContext ctx) {
+		logger.trace("In visitCreateTableHeader " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitBucketSpec(BucketSpecContext ctx) {
+		logger.trace("In visitBucketSpec " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSkewSpec(SkewSpecContext ctx) {
+		logger.trace("In visitSkewSpec " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitLocationSpec(LocationSpecContext ctx) {
+		logger.trace("In visitLocationSpec " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitQuery(QueryContext ctx) {
+		logger.trace("In visitQuery " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitInsertInto(InsertIntoContext ctx) {
+		logger.trace("In visitInsertInto " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitPartitionSpecLocation(
+			PartitionSpecLocationContext ctx) {
+		logger.trace("In visitPartitionSpecLocation " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitPartitionSpec(PartitionSpecContext ctx) {
+		logger.trace("In visitPartitionSpec " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitPartitionVal(PartitionValContext ctx) {
+		logger.trace("In visitPartitionVal " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitDescribeFuncName(DescribeFuncNameContext ctx) {
+		logger.trace("In visitDescribeFuncName " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitDescribeColName(DescribeColNameContext ctx) {
+		logger.trace("In visitDescribeColName " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitCtes(CtesContext ctx) {
+		logger.trace("In visitCtes " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitNamedQuery(NamedQueryContext ctx) {
+		logger.trace("In visitNamedQuery " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitTableProvider(TableProviderContext ctx) {
+		logger.trace("In visitTableProvider " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitTablePropertyList(TablePropertyListContext ctx) {
+		logger.trace("In visitTablePropertyList " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitTableProperty(TablePropertyContext ctx) {
+		logger.trace("In visitTableProperty " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitTablePropertyKey(TablePropertyKeyContext ctx) {
+		logger.trace("In visitTablePropertyKey " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitTablePropertyValue(TablePropertyValueContext ctx) {
+		logger.trace("In visitTablePropertyValue " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitConstantList(ConstantListContext ctx) {
+		logger.trace("In visitConstantList " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitNestedConstantList(NestedConstantListContext ctx) {
+		logger.trace("In visitNestedConstantList " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitCreateFileFormat(CreateFileFormatContext ctx) {
+		logger.trace("In visitCreateFileFormat " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitTableFileFormat(TableFileFormatContext ctx) {
+		logger.trace("In visitTableFileFormat " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitGenericFileFormat(GenericFileFormatContext ctx) {
+		logger.trace("In visitGenericFileFormat " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitStorageHandler(StorageHandlerContext ctx) {
+		logger.trace("In visitStorageHandler " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitResource(ResourceContext ctx) {
+		logger.trace("In visitResource " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSingleInsertQuery(SingleInsertQueryContext ctx) {
+		logger.trace("In visitSingleInsertQuery " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitMultiInsertQuery(MultiInsertQueryContext ctx) {
+		logger.trace("In visitMultiInsertQuery " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitQueryOrganization(QueryOrganizationContext ctx) {
+		logger.trace("In visitQueryOrganization " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitMultiInsertQueryBody(MultiInsertQueryBodyContext ctx) {
+		logger.trace("In visitMultiInsertQueryBody " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitQueryTermDefault(QueryTermDefaultContext ctx) {
+		logger.trace("In visitQueryTermDefault " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSetOperation(SetOperationContext ctx) {
+		logger.trace("In visitSetOperation " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitQueryPrimaryDefault(QueryPrimaryDefaultContext ctx) {
+		logger.trace("In visitQueryPrimaryDefault " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitTable(TableContext ctx) {
+		logger.trace("In visitTable " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitInlineTableDefault1(InlineTableDefault1Context ctx) {
+		logger.trace("In visitInlineTableDefault1 " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSubquery(SubqueryContext ctx) {
+		logger.trace("In visitSubquery " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSortItem(SortItemContext ctx) {
+		logger.trace("In visitSortItem " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitQuerySpecification(QuerySpecificationContext ctx) {
+		logger.trace("In visitQuerySpecification " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitHint(HintContext ctx) {
+		logger.trace("In visitHint " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitHintStatement(HintStatementContext ctx) {
+		logger.trace("In visitHintStatement " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitFromClause(FromClauseContext ctx) {
+		logger.trace("In visitFromClause " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitAggregation(AggregationContext ctx) {
+		logger.trace("In visitAggregation " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitGroupingSet(GroupingSetContext ctx) {
+		logger.trace("In visitGroupingSet " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitLateralView(LateralViewContext ctx) {
+		logger.trace("In visitLateralView " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSetQuantifier(SetQuantifierContext ctx) {
+		logger.trace("In visitSetQuantifier " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitRelation(RelationContext ctx) {
+		logger.trace("In visitRelation " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitJoinRelation(JoinRelationContext ctx) {
+		logger.trace("In visitJoinRelation " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitJoinType(JoinTypeContext ctx) {
+		logger.trace("In visitJoinType " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitJoinCriteria(JoinCriteriaContext ctx) {
+		logger.trace("In visitJoinCriteria " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSample(SampleContext ctx) {
+		logger.trace("In visitSample " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitIdentifierList(IdentifierListContext ctx) {
+		logger.trace("In visitIdentifierList " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitIdentifierSeq(IdentifierSeqContext ctx) {
+		logger.trace("In visitIdentifierSeq " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitOrderedIdentifierList(
+			OrderedIdentifierListContext ctx) {
+		logger.trace("In visitOrderedIdentifierList " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitOrderedIdentifier(OrderedIdentifierContext ctx) {
+		logger.trace("In visitOrderedIdentifier " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitIdentifierCommentList(
+			IdentifierCommentListContext ctx) {
+		logger.trace("In visitIdentifierCommentList " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitIdentifierComment(IdentifierCommentContext ctx) {
+		logger.trace("In visitIdentifierComment " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitTableName(TableNameContext ctx) {
+		logger.trace("In visitTableName " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitAliasedQuery(AliasedQueryContext ctx) {
+		logger.trace("In visitAliasedQuery " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitAliasedRelation(AliasedRelationContext ctx) {
+		logger.trace("In visitAliasedRelation " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitInlineTableDefault2(InlineTableDefault2Context ctx) {
+		logger.trace("In visitInlineTableDefault2 " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitTableValuedFunction(TableValuedFunctionContext ctx) {
+		logger.trace("In visitTableValuedFunction " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitInlineTable(InlineTableContext ctx) {
+		logger.trace("In visitInlineTable " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitRowFormatSerde(RowFormatSerdeContext ctx) {
+		logger.trace("In visitRowFormatSerde " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitRowFormatDelimited(RowFormatDelimitedContext ctx) {
+		logger.trace("In visitRowFormatDelimited " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitTableIdentifier(TableIdentifierContext ctx) {
+		logger.trace("In visitTableIdentifier " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitFunctionIdentifier(FunctionIdentifierContext ctx) {
+		logger.trace("In visitFunctionIdentifier " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitNamedExpression(NamedExpressionContext ctx) {
+		logger.trace("In visitNamedExpression " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitNamedExpressionSeq(NamedExpressionSeqContext ctx) {
+		logger.trace("In visitNamedExpressionSeq " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitExpression(ExpressionContext ctx) {
+		logger.trace("In visitExpression " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitLogicalNot(LogicalNotContext ctx) {
+		logger.trace("In visitLogicalNot " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitBooleanDefault(BooleanDefaultContext ctx) {
+		logger.trace("In visitBooleanDefault " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitExists(ExistsContext ctx) {
+		logger.trace("In visitExists " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitLogicalBinary(LogicalBinaryContext ctx) {
+		logger.trace("In visitLogicalBinary " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitPredicated(PredicatedContext ctx) {
+		logger.trace("In visitPredicated " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitPredicate(PredicateContext ctx) {
+		logger.trace("In visitPredicate " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitValueExpressionDefault(
+			ValueExpressionDefaultContext ctx) {
+		logger.trace("In visitValueExpressionDefault " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitComparison(ComparisonContext ctx) {
+		logger.trace("In visitComparison " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitArithmeticBinary(ArithmeticBinaryContext ctx) {
+		logger.trace("In visitArithmeticBinary " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitArithmeticUnary(ArithmeticUnaryContext ctx) {
+		logger.trace("In visitArithmeticUnary " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitDereference(DereferenceContext ctx) {
+		logger.trace("In visitDereference " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSimpleCase(SimpleCaseContext ctx) {
+		logger.trace("In visitSimpleCase " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitColumnReference(ColumnReferenceContext ctx) {
+		logger.trace("In visitColumnReference " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitRowConstructor(RowConstructorContext ctx) {
+		logger.trace("In visitRowConstructor " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitLast(LastContext ctx) {
+		logger.trace("In visitLast " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitStar(StarContext ctx) {
+		logger.trace("In visitStar " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSubscript(SubscriptContext ctx) {
+		logger.trace("In visitSubscript " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitTimeFunctionCall(TimeFunctionCallContext ctx) {
+		logger.trace("In visitTimeFunctionCall " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSubqueryExpression(SubqueryExpressionContext ctx) {
+		logger.trace("In visitSubqueryExpression " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitCast(CastContext ctx) {
+		logger.trace("In visitCast " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitConstantDefault(ConstantDefaultContext ctx) {
+		logger.trace("In visitConstantDefault " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitParenthesizedExpression(
+			ParenthesizedExpressionContext ctx) {
+		logger.trace("In visitParenthesizedExpression " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitFunctionCall(FunctionCallContext ctx) {
+		logger.trace("In visitFunctionCall " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSearchedCase(SearchedCaseContext ctx) {
+		logger.trace("In visitSearchedCase " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitFirst(FirstContext ctx) {
+		logger.trace("In visitFirst " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitNullLiteral(NullLiteralContext ctx) {
+		logger.trace("In visitNullLiteral " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitIntervalLiteral(IntervalLiteralContext ctx) {
+		logger.trace("In visitIntervalLiteral " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitTypeConstructor(TypeConstructorContext ctx) {
+		logger.trace("In visitTypeConstructor " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitNumericLiteral(NumericLiteralContext ctx) {
+		logger.trace("In visitNumericLiteral " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitBooleanLiteral(BooleanLiteralContext ctx) {
+		logger.trace("In visitBooleanLiteral " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitStringLiteral(StringLiteralContext ctx) {
+		logger.trace("In visitStringLiteral " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitComparisonOperator(ComparisonOperatorContext ctx) {
+		logger.trace("In visitComparisonOperator " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitArithmeticOperator(ArithmeticOperatorContext ctx) {
+		logger.trace("In visitArithmeticOperator " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitPredicateOperator(PredicateOperatorContext ctx) {
+		logger.trace("In visitPredicateOperator " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitBooleanValue(BooleanValueContext ctx) {
+		logger.trace("In visitBooleanValue " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitInterval(IntervalContext ctx) {
+		logger.trace("In visitInterval " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitIntervalField(IntervalFieldContext ctx) {
+		logger.trace("In visitIntervalField " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitIntervalValue(IntervalValueContext ctx) {
+		logger.trace("In visitIntervalValue " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitColPosition(ColPositionContext ctx) {
+		logger.trace("In visitColPosition " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitComplexDataType(ComplexDataTypeContext ctx) {
+		logger.trace("In visitComplexDataType " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitPrimitiveDataType(PrimitiveDataTypeContext ctx) {
+		logger.trace("In visitPrimitiveDataType " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitColTypeList(ColTypeListContext ctx) {
+		logger.trace("In visitColTypeList " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitColType(ColTypeContext ctx) {
+		logger.trace("In visitColType " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitComplexColTypeList(ComplexColTypeListContext ctx) {
+		logger.trace("In visitComplexColTypeList " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitComplexColType(ComplexColTypeContext ctx) {
+		logger.trace("In visitComplexColType " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitWhenClause(WhenClauseContext ctx) {
+		logger.trace("In visitWhenClause " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitWindows(WindowsContext ctx) {
+		logger.trace("In visitWindows " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitNamedWindow(NamedWindowContext ctx) {
+		logger.trace("In visitNamedWindow " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitWindowRef(WindowRefContext ctx) {
+		logger.trace("In visitWindowRef " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitWindowDef(WindowDefContext ctx) {
+		logger.trace("In visitWindowDef " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitWindowFrame(WindowFrameContext ctx) {
+		logger.trace("In visitWindowFrame " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitFrameBound(FrameBoundContext ctx) {
+		logger.trace("In visitFrameBound " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitQualifiedName(QualifiedNameContext ctx) {
+		logger.trace("In visitQualifiedName " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitIdentifier(IdentifierContext ctx) {
+		logger.trace("In visitIdentifier " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitUnquotedIdentifier(UnquotedIdentifierContext ctx) {
+		logger.trace("In visitUnquotedIdentifier " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitQuotedIdentifierAlternative(
+			QuotedIdentifierAlternativeContext ctx) {
+		logger.trace("In visitQuotedIdentifierAlternative "
+				+ ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitQuotedIdentifier(QuotedIdentifierContext ctx) {
+		logger.trace("In visitQuotedIdentifier " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitDecimalLiteral(DecimalLiteralContext ctx) {
+		logger.trace("In visitDecimalLiteral " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitIntegerLiteral(IntegerLiteralContext ctx) {
+		logger.trace("In visitIntegerLiteral " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitBigIntLiteral(BigIntLiteralContext ctx) {
+		logger.trace("In visitBigIntLiteral " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitSmallIntLiteral(SmallIntLiteralContext ctx) {
+		logger.trace("In visitSmallIntLiteral " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitTinyIntLiteral(TinyIntLiteralContext ctx) {
+		logger.trace("In visitTinyIntLiteral " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitDoubleLiteral(DoubleLiteralContext ctx) {
+		logger.trace("In visitDoubleLiteral " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitBigDecimalLiteral(BigDecimalLiteralContext ctx) {
+		logger.trace("In visitBigDecimalLiteral " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
+
+	@Override
+	public LogicalPlan visitNonReserved(NonReservedContext ctx) {
+		logger.trace("In visitNonReserved " + ctx.getText());
+		return visitChildren(ctx);
+
+	}
 
 }
