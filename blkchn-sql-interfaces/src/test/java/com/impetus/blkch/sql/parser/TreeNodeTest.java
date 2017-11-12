@@ -1,17 +1,13 @@
 package com.impetus.blkch.sql.parser;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 
-
-import com.impetus.blkch.sql.parser.LogicalPlan;
-
-public class LogicalPlanTest {
+public class TreeNodeTest {
 
 	@Test
-	public void testLogicalPLan() {
-		LogicalPlan logicalPLan = new LogicalPlan("TEST PLAN");
-		
+	public void testTreeNode() {
 		TreeNode rootNode = new TreeNode("CEO");
 		rootNode.setRootNode(true);
 		TreeNode cfo = new TreeNode("CFO");
@@ -39,18 +35,7 @@ public class LogicalPlanTest {
 		lead2.addChildNode(dev5);
 		//rootNode.traverse(rootNode.getChildNode(1).getChildNode(1));
 		rootNode.traverse();
-		System.out.println("\n*********==================***********\n");
-		logicalPLan.setCurrentNode(cto);
-		logicalPLan.getCurrentNode().traverse();
-		System.out.println("\n*********==================***********\n");
-		logicalPLan.setCurrentNode(cfo);
-		TreeNode bm1 = new TreeNode("BUSINESS MANAGER -1");
-		TreeNode bm2 = new TreeNode("BUSINESS MANAGER -2");
-		logicalPLan.getCurrentNode().addChildNode(bm1);
-		logicalPLan.getCurrentNode().addChildNode(bm2);
-		logicalPLan.getCurrentNode().traverse();
-		System.out.println("\n*********==================***********\n");
-		rootNode.traverse();
+
 	}
 
 }

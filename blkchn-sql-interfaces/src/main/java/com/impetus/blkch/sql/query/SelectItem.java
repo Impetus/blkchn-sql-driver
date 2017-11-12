@@ -1,14 +1,21 @@
 package com.impetus.blkch.sql.query;
 
+import com.impetus.blkch.sql.parser.LogicalPlan;
 import com.impetus.blkch.sql.schema.Column;
 
-public class SelectItem implements QueryItem {
+public class SelectItem extends LogicalPlan {
 
+	public static final String DESCRIPTION = "SELECT_ITEM";
+	
 	private Column column;
 	
 	private String alias;
 	
 	private Query query;
+	
+	public SelectItem(String description){
+		super(description);
+	}
 	
 	public SelectItem(Column column) {
 		this(column, null);
@@ -23,14 +30,11 @@ public class SelectItem implements QueryItem {
 	}
 
 	public SelectItem(Column column, String alias) {
+		super(DESCRIPTION);
 		this.column = column;
 		this.alias = alias;
 	}
 	
-	void setQuery(Query query) {
-		this.query = query;
-	}
-
 	@Override
 	public Query getQuery() {
 		return query;

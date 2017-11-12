@@ -27,60 +27,64 @@
 		</dependency>
 	</dependencies>
 
-	<build>
-		<!-- To define the plugin version in your parent POM -->
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.antlr</groupId>
-					<artifactId>antlr4-maven-plugin</artifactId>
-					<version>${antlr4-maven-plugin.version}</version>
-					<configuration>
-						<arguments>
-							<argument>-package</argument>
-							<argument>com.impetus.blkch.sql.generated</argument>
-						</arguments>
-						<visitor>true</visitor>
-						<sourceDirectory>${basedir}/antlr/sparksql</sourceDirectory>
-						<outputDirectory>${basedir}/src/main/java/com/impetus/blkch/sql/generated</outputDirectory>
-					</configuration>
-					<executions>
-						<execution>
-							<id>antlr</id>
-							<goals>
-								<goal>antlr4</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<artifactId>maven-clean-plugin</artifactId>
-					<version>3.0.0</version>
-					<configuration>
-						<filesets>
-							<fileset>
-								<directory>${basedir}/src/main/java/com/impetus/blkch/sql/generated</directory>
-								<includes>
-									<!-- <include>**/*.class</include> -->
-								</includes>
-								<excludes>
-									<!-- <exclude>**/another-important.log</exclude> -->
-								</excludes>
-								<followSymlinks>false</followSymlinks>
-							</fileset>
-						</filesets>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+	<profiles>
+		<profile>
+			<id>gen-sources</id>
+			<build>
+				<!-- To define the plugin version in your parent POM -->
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.antlr</groupId>
+							<artifactId>antlr4-maven-plugin</artifactId>
+							<version>${antlr4-maven-plugin.version}</version>
+							<configuration>
+								<arguments>
+									<argument>-package</argument>
+									<argument>com.impetus.blkch.sql.generated</argument>
+								</arguments>
+								<visitor>true</visitor>
+								<sourceDirectory>${basedir}/antlr/sparksql</sourceDirectory>
+								<outputDirectory>${basedir}/src/main/java/com/impetus/blkch/sql/generated</outputDirectory>
+							</configuration>
+							<executions>
+								<execution>
+									<id>antlr</id>
+									<goals>
+										<goal>antlr4</goal>
+									</goals>
+								</execution>
+							</executions>
+						</plugin>
+						<plugin>
+							<artifactId>maven-clean-plugin</artifactId>
+							<version>3.0.0</version>
+							<configuration>
+								<filesets>
+									<fileset>
+										<directory>${basedir}/src/main/java/com/impetus/blkch/sql/generated</directory>
+										<includes>
+											<!-- <include>**/*.class</include> -->
+										</includes>
+										<excludes>
+											<!-- <exclude>**/another-important.log</exclude> -->
+										</excludes>
+										<followSymlinks>false</followSymlinks>
+									</fileset>
+								</filesets>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
 
-		<plugins>
-			<plugin>
-				<groupId>org.antlr</groupId>
-				<artifactId>antlr4-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-
+				<plugins>
+					<plugin>
+						<groupId>org.antlr</groupId>
+						<artifactId>antlr4-maven-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

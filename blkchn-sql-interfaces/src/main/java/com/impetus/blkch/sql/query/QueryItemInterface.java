@@ -1,6 +1,7 @@
 package com.impetus.blkch.sql.query;
 
-public interface QueryItem {
-
+public interface QueryItemInterface {
+	
 	public Query getQuery();
+
 }

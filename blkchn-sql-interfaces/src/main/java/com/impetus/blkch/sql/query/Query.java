@@ -3,34 +3,41 @@ package com.impetus.blkch.sql.query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Query {
+import com.impetus.blkch.sql.parser.LogicalPlan;
 
+public class Query extends LogicalPlan{
+
+	public static final String DESCRIPTION = "QUERY";
+	
 	private List<SelectItem> selectItems;
 	
 	private FromItem fromItem;
 	
 	private List<FilterItem> whereItems;
 	
+	private List<LogicalPlan> subqueries;
+	
 	public Query() {
-		selectItems = new ArrayList<>();
-		whereItems = new ArrayList<>();
+		super(DESCRIPTION);
 	}
 	
 	public Query addSelectItem(SelectItem item) {
 		selectItems.add(item);
-		item.setQuery(this);
 		return this;
 	}
 	
 	public Query setFromItem(FromItem item) {
 		fromItem = item;
-		item.setQuery(this);
 		return this;
 	}
 	
 	public Query addWhereItems(FilterItem item) {
 		whereItems.add(item);
-		item.setQuery(this);
+		return this;
+	}
+
+	@Override
+	public Query getQuery() {
 		return this;
 	}
 }

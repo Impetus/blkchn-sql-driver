@@ -204,8 +204,7 @@ public class AbstractSyntaxTreeVisitor extends	AbstractParseTreeVisitor<LogicalP
 	@Override
 	public LogicalPlan visitSingleStatement(SingleStatementContext ctx) {
 		logger.trace("In visitSingleStatement " + ctx.getText());
-		visitChildren(ctx);
-		return new LogicalPlan();
+		return visitChildren(ctx);
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 mvn test
 
 TODO:
-1. Configure logback.xml
+1. Configure logback.xml (in main/resources and test/resources)
 2. Change all System.out to proper logging using slf4j and logback
 3. All junit methods should use appropraite assertions
-4. All hard coded values of parameters should come from configurtion files 
+4. All hard coded values of parameters should come from configuration files. 
 (from test/resources and main/resources for tests and main code respectively)  
