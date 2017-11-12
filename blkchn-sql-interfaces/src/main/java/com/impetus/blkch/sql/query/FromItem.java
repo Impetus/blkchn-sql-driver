@@ -11,22 +11,10 @@ public class FromItem extends LogicalPlan {
 	
 	private String alias;
 	
-	private Query query;
-	
-	public FromItem(String name) {
-		super(DESCRIPTION + ":" + name);
+	public FromItem() {
+		super(DESCRIPTION);
 	}
 	
-	public FromItem(Table table) {
-		this(table, null);
-	}
-	
-	public FromItem(Table table, String alias) {
-		super(DESCRIPTION + ":" + table.getName());
-		this.table = table;
-		this.alias = alias;
-	}
-
 	public Table getTable() {
 		return table;
 	}
@@ -35,8 +23,7 @@ public class FromItem extends LogicalPlan {
 		return alias;
 	}
 	
-	@Override
-	public Query getQuery() {
-		return query;
+	public void setTable(Table table) {
+		this.table = table;
 	}
 }

@@ -31,13 +31,9 @@ public class Query extends LogicalPlan{
 		return this;
 	}
 	
-	public Query addWhereItems(FilterItem item) {
+	public Query addWhereItem(FilterItem item) {
 		whereItems.add(item);
 		return this;
 	}
 
-	@Override
-	public Query getQuery() {
-		return this;
-	}
 }

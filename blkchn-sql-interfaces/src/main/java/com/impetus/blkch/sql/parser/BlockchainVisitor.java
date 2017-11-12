@@ -36,7 +36,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor{
 	@Override
 	public LogicalPlan visitNamedExpressionSeq(NamedExpressionSeqContext ctx) {
 		logger.trace("In visitQuerySpecification " + ctx.getText());
-		SelectItem selectItem = new SelectItem(SelectItem.DESCRIPTION);
+		SelectItem selectItem = new SelectItem();
 		logicalPlan.getCurrentNode().addChildNode(selectItem);
 		logicalPlan.setCurrentNode(selectItem);
 		return visitChildrenAndResetNode(ctx);
@@ -54,7 +54,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor{
 	@Override
 	public LogicalPlan visitFromClause(FromClauseContext ctx) {
 		logger.trace("In visitFromClause " + ctx.getText());
-		FromItem fromItem = new FromItem(ctx.getText());
+		FromItem fromItem = new FromItem();
 		logicalPlan.getCurrentNode().addChildNode(fromItem);
 		logicalPlan.setCurrentNode(fromItem);
 		return visitChildrenAndResetNode(ctx);

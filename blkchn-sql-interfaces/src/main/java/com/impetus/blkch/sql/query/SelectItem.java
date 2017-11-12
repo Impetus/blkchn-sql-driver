@@ -13,14 +13,10 @@ public class SelectItem extends LogicalPlan {
 	
 	private Query query;
 	
-	public SelectItem(String description){
-		super(description);
+	public SelectItem(){
+		super(DESCRIPTION);
 	}
-	
-	public SelectItem(Column column) {
-		this(column, null);
-	}
-	
+		
 	public Column getColumn() {
 		return column;
 	}
@@ -29,12 +25,6 @@ public class SelectItem extends LogicalPlan {
 		return alias;
 	}
 
-	public SelectItem(Column column, String alias) {
-		super(DESCRIPTION);
-		this.column = column;
-		this.alias = alias;
-	}
-	
 	@Override
 	public Query getQuery() {
 		return query;

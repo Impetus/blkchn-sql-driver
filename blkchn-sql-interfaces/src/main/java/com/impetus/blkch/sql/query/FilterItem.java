@@ -13,8 +13,6 @@ public class FilterItem extends LogicalPlan {
 	
 	private Object operand;
 	
-	private Query query;
-	
 	public FilterItem(Column column, OperatorType operator, Object operand, String description) {
 		super(DESCRIPTION);
 		this.column = column;
@@ -34,8 +32,4 @@ public class FilterItem extends LogicalPlan {
 		return operand;
 	}
 	
-	@Override
-	public Query getQuery() {
-		return query;
-	}
 }
