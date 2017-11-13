@@ -1,6 +1,6 @@
 package com.impetus.blkch.sql.query;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import com.impetus.blkch.sql.parser.LogicalPlan;

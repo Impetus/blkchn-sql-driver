@@ -1,8 +1,8 @@
-package com.impetus.blkch.sql.schema;
+package com.impetus.blkch.sql.query;
 
 import com.impetus.blkch.sql.parser.LogicalPlan;
 
-public class Column extends LogicalPlan implements ColumnInt{
+public class Column extends LogicalPlan{
 
 	public static final String DESCRIPTION = "COLUMN";
 	
@@ -21,16 +21,5 @@ public class Column extends LogicalPlan implements ColumnInt{
 		this.name = name;
 	}
 
-	@Override
-	public ColumnType getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Table getTable() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 }

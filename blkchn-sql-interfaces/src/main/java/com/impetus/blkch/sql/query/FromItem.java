@@ -1,7 +1,6 @@
 package com.impetus.blkch.sql.query;
 
 import com.impetus.blkch.sql.parser.LogicalPlan;
-import com.impetus.blkch.sql.schema.Table;
 
 public class FromItem extends LogicalPlan {
 

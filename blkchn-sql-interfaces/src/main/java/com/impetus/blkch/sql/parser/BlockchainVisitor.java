@@ -1,6 +1,5 @@
 package com.impetus.blkch.sql.parser;
 
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,14 +7,14 @@ import org.slf4j.LoggerFactory;
 import com.impetus.blkch.sql.generated.SqlBaseParser.ColumnReferenceContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.FromClauseContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.NamedExpressionSeqContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.QuerySpecificationContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.SingleStatementContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.TableIdentifierContext;
+import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.FromItem;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.SelectItem;
-import com.impetus.blkch.sql.schema.Column;
-import com.impetus.blkch.sql.schema.Table;
+import com.impetus.blkch.sql.query.Table;
+
 
 public class BlockchainVisitor extends AbstractSyntaxTreeVisitor{
 
