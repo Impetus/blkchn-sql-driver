@@ -2,13 +2,16 @@ package com.impetus.blkch.sql.parser;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class TreeNodeTest {
 
-	@Test
-	public void testTreeNode() {
-		TreeNode rootNode = new TreeNode("CEO");
+	TreeNode rootNode;
+	
+	@Before
+	public void setUpTree() {
+		rootNode = new TreeNode("CEO");
 		rootNode.setRootNode(true);
 		TreeNode cfo = new TreeNode("CFO");
 		TreeNode cto = new TreeNode("CTO");
@@ -33,9 +36,36 @@ public class TreeNodeTest {
 		lead2.addChildNode(dev3);
 		lead2.addChildNode(dev4);
 		lead2.addChildNode(dev5);
-		//rootNode.traverse(rootNode.getChildNode(1).getChildNode(1));
-		rootNode.traverse();
-
 	}
-
+	
+	@Test
+	public void testPrintTree(){
+		assertNotNull(rootNode);
+		rootNode.traverse();
+	}
+	
+	@Test
+	public void testGetChildNodes(){
+		int count = rootNode.getChildNodes().size();
+		assertEquals(2, count);
+	}
+	
+	@Test
+	public void testGetChildNode(){
+		TreeNode childNode = rootNode.getChildNode(0);
+		assertEquals("CFO", childNode.getDescription().trim());
+	}
+	
+	@Test
+	public void testIsRootNode(){
+		assertTrue(rootNode.isRootNode());
+		TreeNode childNode = rootNode.getChildNode(0);
+		assertFalse(childNode.isRootNode());
+	}
+	
+	@Test
+	public void testGetParent(){
+		TreeNode parentNode = rootNode.getChildNode(0).getParent();
+		assertSame(parentNode, rootNode);
+	}
 }

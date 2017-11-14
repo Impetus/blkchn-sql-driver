@@ -1,56 +1,60 @@
 package com.impetus.blkch.sql.parser;
 
 import static org.junit.Assert.*;
+
+import org.junit.Before;
 import org.junit.Test;
 
-
 import com.impetus.blkch.sql.parser.LogicalPlan;
+import com.impetus.blkch.sql.query.Column;
+import com.impetus.blkch.sql.query.FromItem;
+import com.impetus.blkch.sql.query.Query;
+import com.impetus.blkch.sql.query.SelectItem;
+import com.impetus.blkch.sql.query.Table;
 
 public class LogicalPlanTest {
 
+	LogicalPlan logicalPlan;
+	
+	@Before
+	public void setUp() {
+		logicalPlan = new LogicalPlan("TEST PLAN");
+		Query query = new Query();
+		query.setRootNode(true);
+		SelectItem selectItem = new SelectItem();
+		query.addChildNode(selectItem);
+		logicalPlan.setQuery(query);
+		logicalPlan.setCurrentNode(query);
+	}
+	
 	@Test
 	public void testLogicalPLan() {
-		LogicalPlan logicalPLan = new LogicalPlan("TEST PLAN");
-		
-		TreeNode rootNode = new TreeNode("CEO");
-		rootNode.setRootNode(true);
-		TreeNode cfo = new TreeNode("CFO");
-		TreeNode cto = new TreeNode("CTO");
-		TreeNode arch1 = new TreeNode("ARCHITECT-1");
-		TreeNode arch2 = new TreeNode("ARCHITECT-2");
-		TreeNode lead1 = new TreeNode("LEAD-1");
-		TreeNode lead2 = new TreeNode("LEAD-2");
-		TreeNode dev1 = new TreeNode("DEV-1");
-		TreeNode dev2 = new TreeNode("DEV-2");
-		TreeNode dev3 = new TreeNode("DEV-3");
-		TreeNode dev4 = new TreeNode("DEV-4");
-		TreeNode dev5 = new TreeNode("DEV-5");
-		
-		rootNode.addChildNode(cfo);
-		rootNode.addChildNode(cto);
-		cto.addChildNode(arch1);
-		cto.addChildNode(arch2);
-		arch1.addChildNode(lead1);
-		lead1.addChildNode(dev1);
-		lead1.addChildNode(dev2);
-		arch2.addChildNode(lead2);
-		lead2.addChildNode(dev3);
-		lead2.addChildNode(dev4);
-		lead2.addChildNode(dev5);
-		//rootNode.traverse(rootNode.getChildNode(1).getChildNode(1));
-		rootNode.traverse();
-		System.out.println("\n*********==================***********\n");
-		logicalPLan.setCurrentNode(cto);
-		logicalPLan.getCurrentNode().traverse();
-		System.out.println("\n*********==================***********\n");
-		logicalPLan.setCurrentNode(cfo);
-		TreeNode bm1 = new TreeNode("BUSINESS MANAGER -1");
-		TreeNode bm2 = new TreeNode("BUSINESS MANAGER -2");
-		logicalPLan.getCurrentNode().addChildNode(bm1);
-		logicalPLan.getCurrentNode().addChildNode(bm2);
-		logicalPLan.getCurrentNode().traverse();
-		System.out.println("\n*********==================***********\n");
+		FromItem fromItem = new FromItem();
+		logicalPlan.getCurrentNode().addChildNode(fromItem);
+		assertEquals(2, logicalPlan.getCurrentNode().getChildNodes().size());
+		logicalPlan.setCurrentNode(fromItem);
+		Table table = new Table("table1");
+		logicalPlan.getCurrentNode().addChildNode(table);
+		logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent().getChildNode(0));
+		Column col1 = new Column("column1");
+		Column col2 = new Column("column2");
+		logicalPlan.getCurrentNode().addChildNode(col1);
+		logicalPlan.getCurrentNode().addChildNode(col2);
+		logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent());
+		printQuery(logicalPlan.getCurrentNode());
+		assertEquals(logicalPlan.getCurrentNode().getDescription(), Query.DESCRIPTION);
+		assertEquals(logicalPlan.getCurrentNode().getChildNode(0).getDescription(), SelectItem.DESCRIPTION);
+		assertEquals(logicalPlan.getCurrentNode().getChildNode(1).getDescription(), FromItem.DESCRIPTION);
+		assertEquals(logicalPlan.getCurrentNode().getChildNode(0).getChildNode(0).getDescription(), Column.DESCRIPTION + ":" + "column1");
+		assertEquals(logicalPlan.getCurrentNode().getChildNode(0).getChildNode(1).getDescription(), Column.DESCRIPTION + ":" + "column2");
+		assertEquals(logicalPlan.getCurrentNode().getChildNode(1).getDescription(), FromItem.DESCRIPTION);
+		assertEquals(logicalPlan.getCurrentNode().getChildNode(1).getChildNode(0).getDescription(), Table.DESCRIPTION + ":" + "table1");
+	}
+	
+	private void printQuery(TreeNode rootNode) {
 		rootNode.traverse();
 	}
+	
+	
 
 }
