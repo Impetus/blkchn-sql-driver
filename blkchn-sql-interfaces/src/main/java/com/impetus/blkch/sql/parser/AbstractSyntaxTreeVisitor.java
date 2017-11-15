@@ -196,7 +196,7 @@ import com.impetus.blkch.sql.generated.SqlBaseParser.WindowRefContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.WindowsContext;
 import com.impetus.blkch.sql.parser.LogicalPlan;
 
-public class AbstractSyntaxTreeVisitor extends	AbstractParseTreeVisitor<LogicalPlan> implements
+public abstract class AbstractSyntaxTreeVisitor extends	AbstractParseTreeVisitor<LogicalPlan> implements
 		SqlBaseVisitor<LogicalPlan> {
 
 	private static final Logger logger = LoggerFactory.getLogger(AbstractSyntaxTreeVisitor.class);

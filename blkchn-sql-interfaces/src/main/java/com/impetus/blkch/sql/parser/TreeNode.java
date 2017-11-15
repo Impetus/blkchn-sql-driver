@@ -91,4 +91,36 @@ public class TreeNode{
             str1.append(str);           
         return str1.toString();         
     }
+	
+	public boolean hasChildType(Class<? extends TreeNode> clazz) {
+		for(TreeNode child : childNodes) {
+			if(child.getClass().isAssignableFrom(clazz)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public <T extends TreeNode> List<T> getChildType(Class<T> clazz) {
+		List<T> children = new ArrayList<>();
+		for(TreeNode child : childNodes) {
+			if(child.getClass().isAssignableFrom(clazz)) {
+				children.add((T)child);
+			}
+		}
+		return children;
+	}
+	
+	public <T extends TreeNode> T getChildType(Class<T> clazz, int index) {
+		int i = -1;
+		for(TreeNode child : childNodes) {
+			if(child.getClass().isAssignableFrom(clazz)) {
+				i++;
+				if(i == index) {
+					return (T)child;
+				}
+			}
+		}
+		return null;
+	}
 }

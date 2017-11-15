@@ -12,11 +12,15 @@ public class FilterItem extends LogicalPlan {
 	
 	private Object operand;
 	
-	public FilterItem(Column column, OperatorType operator, Object operand, String description) {
+	public FilterItem(Column column, OperatorType operator, Object operand) {
 		super(DESCRIPTION);
 		this.column = column;
 		this.operator = operator;
 		this.operand = operand;
+	}
+	
+	public FilterItem() {
+		this(null, null, null);
 	}
 
 	public Column getColumn() {
