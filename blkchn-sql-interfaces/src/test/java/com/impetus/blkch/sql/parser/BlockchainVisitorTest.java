@@ -8,7 +8,6 @@ import org.junit.Test;
 import com.impetus.blkch.sql.generated.SqlBaseLexer;
 import com.impetus.blkch.sql.generated.SqlBaseParser;
 import com.impetus.blkch.sql.query.LimitClause;
-import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.SelectClause;
 import com.impetus.blkch.sql.query.SelectItem;
 

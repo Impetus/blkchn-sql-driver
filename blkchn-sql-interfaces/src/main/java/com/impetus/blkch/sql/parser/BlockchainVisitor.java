@@ -17,6 +17,7 @@ import com.impetus.blkch.sql.generated.SqlBaseParser.NumericLiteralContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.QueryOrganizationContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.SingleStatementContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.SortItemContext;
+import com.impetus.blkch.sql.generated.SqlBaseParser.StringLiteralContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.TableIdentifierContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.UnquotedIdentifierContext;
 import com.impetus.blkch.sql.query.Column;
@@ -210,6 +211,13 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor{
 	@Override
 	public LogicalPlan visitNumericLiteral(NumericLiteralContext ctx) {
 		logger.trace("In visitNumericLiteral " + ctx.getText());
+		logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText()));
+		return visitChildren(ctx);
+	}
+	
+	@Override
+	public LogicalPlan visitStringLiteral(StringLiteralContext ctx) {
+		logger.trace("In visitStringLiteral " + ctx.getText());
 		logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText()));
 		return visitChildren(ctx);
 	}
