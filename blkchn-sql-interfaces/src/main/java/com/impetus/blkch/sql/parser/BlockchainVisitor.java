@@ -17,6 +17,7 @@ import com.impetus.blkch.sql.generated.SqlBaseParser.NumericLiteralContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.QueryOrganizationContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.SingleStatementContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.SortItemContext;
+import com.impetus.blkch.sql.generated.SqlBaseParser.StarContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.StringLiteralContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.TableIdentifierContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.UnquotedIdentifierContext;
@@ -38,6 +39,7 @@ import com.impetus.blkch.sql.query.OrderingDirection.Direction;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.SelectClause;
 import com.impetus.blkch.sql.query.SelectItem;
+import com.impetus.blkch.sql.query.StarNode;
 import com.impetus.blkch.sql.query.Table;
 import com.impetus.blkch.sql.query.WhereClause;
 
@@ -83,6 +85,16 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor{
 		logicalPlan.getCurrentNode().addChildNode(column);
 		logicalPlan.setCurrentNode(column);
 		return visitChildrenAndResetNode(ctx);
+	}
+	
+	@Override
+	public LogicalPlan visitStar(StarContext ctx) {
+		if(ctx.qualifiedName() != null) {
+			logicalPlan.getCurrentNode().addChildNode(new StarNode(ctx.qualifiedName().getText()));
+		} else {
+			logicalPlan.getCurrentNode().addChildNode(new StarNode());
+		}
+		return defaultResult();
 	}
 	
 	
