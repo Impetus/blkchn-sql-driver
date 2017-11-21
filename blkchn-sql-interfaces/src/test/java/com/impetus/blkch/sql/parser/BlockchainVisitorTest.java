@@ -15,7 +15,7 @@ public class BlockchainVisitorTest {
 
 	@Test
 	public void testBlockchainVisitor() {
-		String sql = "select count(tt) as cnt,transactionid as trans, t.blocknum from TRANSACTION t where trans=123 and t.blocknum < 5 or blockhash='sdf' or previousHash='2' GROUP BY t.blocknum having blocknum > 2"
+		String sql = "select count(sum(tt)) as cnt,transactionid as trans, t.blocknum from TRANSACTION t where trans=123 and t.blocknum < 5 or blockhash='sdf' or previousHash='2' GROUP BY t.blocknum having blocknum > 2"
 				+ " order BY blockhash, transactionhash desc limit 100";
 		LogicalPlan plan = getLogicalPlan(sql);
 		assertNotNull(plan);

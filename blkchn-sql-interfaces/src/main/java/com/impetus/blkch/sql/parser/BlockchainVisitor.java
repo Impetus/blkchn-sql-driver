@@ -10,11 +10,13 @@ import com.impetus.blkch.sql.generated.SqlBaseParser.ComparisonContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.ComparisonOperatorContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.DereferenceContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.FromClauseContext;
+import com.impetus.blkch.sql.generated.SqlBaseParser.FunctionCallContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.LogicalBinaryContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.NamedExpressionContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.NamedExpressionSeqContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.NumericLiteralContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.QueryOrganizationContext;
+import com.impetus.blkch.sql.generated.SqlBaseParser.SetQuantifierContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.SingleStatementContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.SortItemContext;
 import com.impetus.blkch.sql.generated.SqlBaseParser.StarContext;
@@ -26,6 +28,7 @@ import com.impetus.blkch.sql.query.Comparator;
 import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
 import com.impetus.blkch.sql.query.FilterItem;
 import com.impetus.blkch.sql.query.FromItem;
+import com.impetus.blkch.sql.query.FunctionNode;
 import com.impetus.blkch.sql.query.GroupByClause;
 import com.impetus.blkch.sql.query.HavingClause;
 import com.impetus.blkch.sql.query.IdentifierNode;
@@ -36,6 +39,8 @@ import com.impetus.blkch.sql.query.OrderByClause;
 import com.impetus.blkch.sql.query.OrderItem;
 import com.impetus.blkch.sql.query.OrderingDirection;
 import com.impetus.blkch.sql.query.OrderingDirection.Direction;
+import com.impetus.blkch.sql.query.QuantifierNode.Quantifier;
+import com.impetus.blkch.sql.query.QuantifierNode;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.SelectClause;
 import com.impetus.blkch.sql.query.SelectItem;
@@ -72,10 +77,14 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor{
 	@Override
 	public LogicalPlan visitNamedExpression(NamedExpressionContext ctx) {
 		logger.trace("In visitNamedExpression " + ctx.getText());
-		SelectItem selectItem = new SelectItem();
-		logicalPlan.getCurrentNode().addChildNode(selectItem);
-		logicalPlan.setCurrentNode(selectItem);
-		return visitChildrenAndResetNode(ctx);
+		if(logicalPlan.getCurrentNode() instanceof SelectClause) {
+			SelectItem selectItem = new SelectItem();
+			logicalPlan.getCurrentNode().addChildNode(selectItem);
+			logicalPlan.setCurrentNode(selectItem);
+			return visitChildrenAndResetNode(ctx);
+		} else {
+			return visitChildren(ctx);
+		}
 	}
 	
 	@Override
@@ -89,12 +98,33 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor{
 	
 	@Override
 	public LogicalPlan visitStar(StarContext ctx) {
+		logger.trace("In visitStar " + ctx.getText());
 		if(ctx.qualifiedName() != null) {
 			logicalPlan.getCurrentNode().addChildNode(new StarNode(ctx.qualifiedName().getText()));
 		} else {
 			logicalPlan.getCurrentNode().addChildNode(new StarNode());
 		}
 		return defaultResult();
+	}
+	
+	@Override
+	public LogicalPlan visitFunctionCall(FunctionCallContext ctx) {
+		logger.trace("In visitFunctionCall " + ctx.getText());
+		FunctionNode functionNode = new FunctionNode();
+		logicalPlan.getCurrentNode().addChildNode(functionNode);
+		logicalPlan.setCurrentNode(functionNode);
+		return visitChildrenAndResetNode(ctx);
+	}
+	
+	@Override
+	public LogicalPlan visitSetQuantifier(SetQuantifierContext ctx) {
+		logger.trace("In visitSetQuantifier " + ctx.getText());
+		if(ctx.DISTINCT() != null) {
+			logicalPlan.getCurrentNode().addChildNode(new QuantifierNode(Quantifier.DISTINCT));
+		} else {
+			logicalPlan.getCurrentNode().addChildNode(new QuantifierNode(Quantifier.ALL));
+		}
+		return visitChildren(ctx);
 	}
 	
 	
