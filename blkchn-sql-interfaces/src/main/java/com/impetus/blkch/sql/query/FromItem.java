@@ -4,25 +4,25 @@ import com.impetus.blkch.sql.parser.LogicalPlan;
 
 public class FromItem extends LogicalPlan {
 
-	public static final String DESCRIPTION = "FROM_ITEM";
-	
-	private Table table;
-	
-	private String alias;
-	
-	public FromItem() {
-		super(DESCRIPTION);
-	}
-	
-	public Table getTable() {
-		return table;
-	}
+    public static final String DESCRIPTION = "FROM_ITEM";
 
-	public String getAlias() {
-		return alias;
-	}
-	
-	public void setTable(Table table) {
-		this.table = table;
-	}
+    private Table table;
+
+    private String alias;
+
+    public FromItem() {
+        super(DESCRIPTION);
+    }
+
+    public Table getTable() {
+        return table;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setTable(Table table) {
+        this.table = table;
+    }
 }

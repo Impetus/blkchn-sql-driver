@@ -13,32 +13,32 @@ import com.impetus.blkch.sql.query.SelectItem;
 
 public class BlockchainVisitorTest {
 
-	@Test
-	public void testBlockchainVisitor() {
-		String sql = "select count(sum(tt)) as cnt,transactionid as trans, t.blocknum from TRANSACTION t where trans=123 and t.blocknum < 5 or blockhash='sdf' or previousHash='2' GROUP BY t.blocknum having blocknum > 2"
-				+ " order BY blockhash, transactionhash desc limit 100";
-		LogicalPlan plan = getLogicalPlan(sql);
-		assertNotNull(plan);
-	}
+    @Test
+    public void testBlockchainVisitor() {
+        String sql = "select count(sum(tt)) as cnt,transactionid as trans, t.blocknum from TRANSACTION t where trans=123 and t.blocknum < 5 or blockhash='sdf' or previousHash='2' GROUP BY t.blocknum having blocknum > 2"
+                + " order BY blockhash, transactionhash desc limit 100";
+        LogicalPlan plan = getLogicalPlan(sql);
+        assertNotNull(plan);
+    }
 
-	public LogicalPlan getLogicalPlan(String sqlText) {
-		LogicalPlan logicalPlan = null;
-		SqlBaseParser parser = getParser(sqlText);
-		AbstractSyntaxTreeVisitor astBuilder = new BlockchainVisitor();
-		logicalPlan = (LogicalPlan) astBuilder.visitSingleStatement(parser.singleStatement());
-		logicalPlan.getQuery().traverse();
-		System.out.println(logicalPlan.getQuery().hasChildType(LimitClause.class));
-		SelectClause clause = logicalPlan.getQuery().getChildType(SelectClause.class, 0);
-		System.out.println(clause);
-		System.out.println(clause.getChildType(SelectItem.class));
-		return logicalPlan;
-	}
+    public LogicalPlan getLogicalPlan(String sqlText) {
+        LogicalPlan logicalPlan = null;
+        SqlBaseParser parser = getParser(sqlText);
+        AbstractSyntaxTreeVisitor astBuilder = new BlockchainVisitor();
+        logicalPlan = (LogicalPlan) astBuilder.visitSingleStatement(parser.singleStatement());
+        logicalPlan.getQuery().traverse();
+        System.out.println(logicalPlan.getQuery().hasChildType(LimitClause.class));
+        SelectClause clause = logicalPlan.getQuery().getChildType(SelectClause.class, 0);
+        System.out.println(clause);
+        System.out.println(clause.getChildType(SelectItem.class));
+        return logicalPlan;
+    }
 
-	public SqlBaseParser getParser(String sqlText) {
-		SqlBaseLexer lexer = new SqlBaseLexer(new CaseInsensitiveCharStream(sqlText));
-		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		SqlBaseParser parser = new SqlBaseParser(tokens);
-		return parser;
-	}
-	
+    public SqlBaseParser getParser(String sqlText) {
+        SqlBaseLexer lexer = new SqlBaseLexer(new CaseInsensitiveCharStream(sqlText));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        SqlBaseParser parser = new SqlBaseParser(tokens);
+        return parser;
+    }
+
 }

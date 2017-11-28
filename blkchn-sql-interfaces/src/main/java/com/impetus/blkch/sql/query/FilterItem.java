@@ -4,35 +4,35 @@ import com.impetus.blkch.sql.parser.LogicalPlan;
 
 public class FilterItem extends LogicalPlan {
 
-	public static final String DESCRIPTION = "FILTER_ITEM";
-	
-	private Column column;
-	
-	private OperatorType operator;
-	
-	private Object operand;
-	
-	public FilterItem(Column column, OperatorType operator, Object operand) {
-		super(DESCRIPTION);
-		this.column = column;
-		this.operator = operator;
-		this.operand = operand;
-	}
-	
-	public FilterItem() {
-		this(null, null, null);
-	}
+    public static final String DESCRIPTION = "FILTER_ITEM";
 
-	public Column getColumn() {
-		return column;
-	}
+    private Column column;
 
-	public OperatorType getOperator() {
-		return operator;
-	}
+    private OperatorType operator;
 
-	public Object getOperand() {
-		return operand;
-	}
-	
+    private Object operand;
+
+    public FilterItem(Column column, OperatorType operator, Object operand) {
+        super(DESCRIPTION);
+        this.column = column;
+        this.operator = operator;
+        this.operand = operand;
+    }
+
+    public FilterItem() {
+        this(null, null, null);
+    }
+
+    public Column getColumn() {
+        return column;
+    }
+
+    public OperatorType getOperator() {
+        return operator;
+    }
+
+    public Object getOperand() {
+        return operand;
+    }
+
 }

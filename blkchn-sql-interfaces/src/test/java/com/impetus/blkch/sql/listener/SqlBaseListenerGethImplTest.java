@@ -15,43 +15,42 @@ import com.impetus.blkch.sql.generated.SqlBaseLexer;
 import com.impetus.blkch.sql.generated.SqlBaseListener;
 import com.impetus.blkch.sql.generated.SqlBaseParser;
 
-
 public class SqlBaseListenerGethImplTest {
 
-	@BeforeClass
-	public static void runOnceBeforeClass() {
-	}
+    @BeforeClass
+    public static void runOnceBeforeClass() {
+    }
 
-	@AfterClass
-	public static void runOnceAfterClass() {
-	}
+    @AfterClass
+    public static void runOnceAfterClass() {
+    }
 
-	@Before
-	public void runBeforeTestMethod() {
-	}
+    @Before
+    public void runBeforeTestMethod() {
+    }
 
-	@After
-	public void runAfterTestMethod() {
-	}
+    @After
+    public void runAfterTestMethod() {
+    }
 
-	@Test
-	public void test_nona_tracer() {
-		CharStream input = null;
-		ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource("sql/input.sql").getFile());
-		try {
-			input = new ANTLRInputStream(new FileInputStream(file));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		SqlBaseLexer lexer = new SqlBaseLexer(input);
+    @Test
+    public void test_nona_tracer() {
+        CharStream input = null;
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("sql/input.sql").getFile());
+        try {
+            input = new ANTLRInputStream(new FileInputStream(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        SqlBaseLexer lexer = new SqlBaseLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         SqlBaseParser parser = new SqlBaseParser(tokens);
-        ParseTree tree = parser.singleStatement(); 
+        ParseTree tree = parser.singleStatement();
 
-        ParseTreeWalker walker = new ParseTreeWalker(); 
+        ParseTreeWalker walker = new ParseTreeWalker();
         SqlBaseListener extractor = new SqlBaseListenerGethImpl(parser);
-        walker.walk(extractor, tree); 
-	}
+        walker.walk(extractor, tree);
+    }
 
 }
