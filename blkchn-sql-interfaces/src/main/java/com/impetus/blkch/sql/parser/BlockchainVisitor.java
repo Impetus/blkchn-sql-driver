@@ -83,7 +83,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitNamedExpressionSeq(NamedExpressionSeqContext ctx) {
         logger.trace("In visitNamedExpressionSeq " + ctx.getText());
-        SelectClause selectClause = new SelectClause();
+        TreeNode selectClause = new SelectClause();
         logicalPlan.getCurrentNode().addChildNode(selectClause);
         logicalPlan.setCurrentNode(selectClause);
         return visitChildrenAndResetNode(ctx);
@@ -93,7 +93,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     public LogicalPlan visitNamedExpression(NamedExpressionContext ctx) {
         logger.trace("In visitNamedExpression " + ctx.getText());
         if (logicalPlan.getCurrentNode() instanceof SelectClause) {
-            SelectItem selectItem = new SelectItem();
+            TreeNode selectItem = new SelectItem();
             logicalPlan.getCurrentNode().addChildNode(selectItem);
             logicalPlan.setCurrentNode(selectItem);
             return visitChildrenAndResetNode(ctx);
@@ -105,7 +105,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitColumnReference(ColumnReferenceContext ctx) {
         logger.trace("In visitColumnReference " + ctx.getText());
-        Column column = new Column(ctx.getText());
+        TreeNode column = new Column();
         logicalPlan.getCurrentNode().addChildNode(column);
         logicalPlan.setCurrentNode(column);
         return visitChildrenAndResetNode(ctx);
@@ -125,7 +125,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitFunctionCall(FunctionCallContext ctx) {
         logger.trace("In visitFunctionCall " + ctx.getText());
-        FunctionNode functionNode = new FunctionNode();
+        TreeNode functionNode = new FunctionNode();
         logicalPlan.getCurrentNode().addChildNode(functionNode);
         logicalPlan.setCurrentNode(functionNode);
         return visitChildrenAndResetNode(ctx);
@@ -145,7 +145,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitFromClause(FromClauseContext ctx) {
         logger.trace("In visitFromClause " + ctx.getText());
-        FromItem fromItem = new FromItem();
+        TreeNode fromItem = new FromItem();
         logicalPlan.getCurrentNode().addChildNode(fromItem);
         logicalPlan.setCurrentNode(fromItem);
         return visitChildrenAndResetNode(ctx);
@@ -154,7 +154,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitUnquotedIdentifier(UnquotedIdentifierContext ctx) {
         logger.trace("In visitUnquotedIdentifier " + ctx.getText());
-        IdentifierNode node = new IdentifierNode(ctx.getText());
+        TreeNode node = new IdentifierNode(ctx.getText());
         logicalPlan.getCurrentNode().addChildNode(node);
         return visitChildren(ctx);
     }
@@ -162,7 +162,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitTableIdentifier(TableIdentifierContext ctx) {
         logger.trace("In visitTableIdentifier " + ctx.getText());
-        Table table = new Table(ctx.getText());
+        TreeNode table = new Table();
         logicalPlan.getCurrentNode().addChildNode(table);
         logicalPlan.setCurrentNode(table);
         return visitChildrenAndResetNode(ctx);
@@ -182,26 +182,26 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logger.trace("In visitLogicalBinary " + ctx.getText());
         if (logicalPlan.getCurrentNode() instanceof Query) {
             if (logicalPlan.getQuery().getChildNodes().size() < 3) {
-                WhereClause whereClause = new WhereClause();
+                TreeNode whereClause = new WhereClause();
                 logicalPlan.getCurrentNode().addChildNode(whereClause);
                 if (ctx.AND() != null) {
-                    LogicalOperation andNode = new LogicalOperation(Operator.AND);
+                    TreeNode andNode = new LogicalOperation(Operator.AND);
                     whereClause.addChildNode(andNode);
                     logicalPlan.setCurrentNode(andNode);
                 } else if (ctx.OR() != null) {
-                    LogicalOperation orNode = new LogicalOperation(Operator.OR);
+                    TreeNode orNode = new LogicalOperation(Operator.OR);
                     whereClause.addChildNode(orNode);
                     logicalPlan.setCurrentNode(orNode);
                 }
             } else {
-                HavingClause havingClause = new HavingClause();
+                TreeNode havingClause = new HavingClause();
                 logicalPlan.getCurrentNode().addChildNode(havingClause);
                 if (ctx.AND() != null) {
-                    LogicalOperation andNode = new LogicalOperation(Operator.AND);
+                    TreeNode andNode = new LogicalOperation(Operator.AND);
                     havingClause.addChildNode(andNode);
                     logicalPlan.setCurrentNode(andNode);
                 } else if (ctx.OR() != null) {
-                    LogicalOperation orNode = new LogicalOperation(Operator.OR);
+                    TreeNode orNode = new LogicalOperation(Operator.OR);
                     havingClause.addChildNode(orNode);
                     logicalPlan.setCurrentNode(orNode);
                 }
@@ -213,11 +213,11 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
             }
         } else {
             if (ctx.AND() != null) {
-                LogicalOperation andNode = new LogicalOperation(Operator.AND);
+                TreeNode andNode = new LogicalOperation(Operator.AND);
                 logicalPlan.getCurrentNode().addChildNode(andNode);
                 logicalPlan.setCurrentNode(andNode);
             } else if (ctx.OR() != null) {
-                LogicalOperation orNode = new LogicalOperation(Operator.OR);
+                TreeNode orNode = new LogicalOperation(Operator.OR);
                 logicalPlan.getCurrentNode().addChildNode(orNode);
                 logicalPlan.setCurrentNode(orNode);
             }
@@ -230,15 +230,15 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logger.trace("In visitComparison " + ctx.getText());
         if (logicalPlan.getCurrentNode() instanceof Query) {
             if (logicalPlan.getQuery().getChildNodes().size() < 3) {
-                WhereClause whereClause = new WhereClause();
+                TreeNode whereClause = new WhereClause();
                 logicalPlan.getCurrentNode().addChildNode(whereClause);
-                FilterItem filterItem = new FilterItem();
+                TreeNode filterItem = new FilterItem();
                 whereClause.addChildNode(filterItem);
                 logicalPlan.setCurrentNode(filterItem);
             } else {
-                HavingClause havingClause = new HavingClause();
+                TreeNode havingClause = new HavingClause();
                 logicalPlan.getCurrentNode().addChildNode(havingClause);
-                FilterItem filterItem = new FilterItem();
+                TreeNode filterItem = new FilterItem();
                 havingClause.addChildNode(filterItem);
                 logicalPlan.setCurrentNode(filterItem);
             }
@@ -248,7 +248,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
                 logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent());
             }
         } else {
-            FilterItem filterItem = new FilterItem();
+            TreeNode filterItem = new FilterItem();
             logicalPlan.getCurrentNode().addChildNode(filterItem);
             logicalPlan.setCurrentNode(filterItem);
             return visitChildrenAndResetNode(ctx);
@@ -258,7 +258,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitComparisonOperator(ComparisonOperatorContext ctx) {
         logger.trace("In visitComparisonOperator " + ctx.getText());
-        Comparator node = new Comparator(ComparisionOperator.getOp(ctx.getText().trim()));
+        TreeNode node = new Comparator(ComparisionOperator.getOp(ctx.getText().trim()));
         node.addChildNode(new IdentifierNode(ctx.getText()));
         logicalPlan.getCurrentNode().addChildNode(node);
         return visitChildren(ctx);
@@ -281,7 +281,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitAggregation(AggregationContext ctx) {
         logger.trace("In visitComparisonOperator " + ctx.getText());
-        GroupByClause groupByClause = new GroupByClause();
+        TreeNode groupByClause = new GroupByClause();
         logicalPlan.getCurrentNode().addChildNode(groupByClause);
         logicalPlan.setCurrentNode(groupByClause);
         return visitChildrenAndResetNode(ctx);
@@ -291,7 +291,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     public LogicalPlan visitQueryOrganization(QueryOrganizationContext ctx) {
         logger.trace("In visitQueryOrganization " + ctx.getText());
         if (ctx.ORDER() != null && ctx.BY() != null) {
-            OrderByClause orderByClause = new OrderByClause();
+            TreeNode orderByClause = new OrderByClause();
             logicalPlan.getCurrentNode().addChildNode(orderByClause);
             logicalPlan.setCurrentNode(orderByClause);
             for (SortItemContext sortItem : ctx.order) {
@@ -300,7 +300,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
             logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent());
         }
         if (ctx.LIMIT() != null) {
-            LimitClause limitClause = new LimitClause();
+            TreeNode limitClause = new LimitClause();
             logicalPlan.getCurrentNode().addChildNode(limitClause);
             logicalPlan.setCurrentNode(limitClause);
             ctx.limit.accept(this);
@@ -312,7 +312,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitSortItem(SortItemContext ctx) {
         logger.trace("In visitSortItem " + ctx.getText());
-        OrderItem orderItem = new OrderItem();
+        TreeNode orderItem = new OrderItem();
         logicalPlan.getCurrentNode().addChildNode(orderItem);
         logicalPlan.setCurrentNode(orderItem);
         if (ctx.DESC() != null) {

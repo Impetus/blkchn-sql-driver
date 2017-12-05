@@ -15,19 +15,18 @@
 ******************************************************************************/
 package com.impetus.blkch.sql.parser;
 
-import static org.junit.Assert.*;
+import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.impetus.blkch.sql.parser.LogicalPlan;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.FromItem;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.SelectItem;
 import com.impetus.blkch.sql.query.Table;
 
-public class LogicalPlanTest {
+public class LogicalPlanTest extends TestCase {
 
     LogicalPlan logicalPlan;
 
@@ -48,11 +47,11 @@ public class LogicalPlanTest {
         logicalPlan.getCurrentNode().addChildNode(fromItem);
         assertEquals(2, logicalPlan.getCurrentNode().getChildNodes().size());
         logicalPlan.setCurrentNode(fromItem);
-        Table table = new Table("table1");
+        Table table = new Table();
         logicalPlan.getCurrentNode().addChildNode(table);
         logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent().getChildNode(0));
-        Column col1 = new Column("column1");
-        Column col2 = new Column("column2");
+        Column col1 = new Column();
+        Column col2 = new Column();
         logicalPlan.getCurrentNode().addChildNode(col1);
         logicalPlan.getCurrentNode().addChildNode(col2);
         logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent());
@@ -60,13 +59,10 @@ public class LogicalPlanTest {
         assertEquals(logicalPlan.getCurrentNode().getDescription(), Query.DESCRIPTION);
         assertEquals(logicalPlan.getCurrentNode().getChildNode(0).getDescription(), SelectItem.DESCRIPTION);
         assertEquals(logicalPlan.getCurrentNode().getChildNode(1).getDescription(), FromItem.DESCRIPTION);
-        assertEquals(logicalPlan.getCurrentNode().getChildNode(0).getChildNode(0).getDescription(), Column.DESCRIPTION
-                + ":" + "column1");
-        assertEquals(logicalPlan.getCurrentNode().getChildNode(0).getChildNode(1).getDescription(), Column.DESCRIPTION
-                + ":" + "column2");
+        assertEquals(logicalPlan.getCurrentNode().getChildNode(0).getChildNode(0).getDescription(), Column.DESCRIPTION);
+        assertEquals(logicalPlan.getCurrentNode().getChildNode(0).getChildNode(1).getDescription(), Column.DESCRIPTION);
         assertEquals(logicalPlan.getCurrentNode().getChildNode(1).getDescription(), FromItem.DESCRIPTION);
-        assertEquals(logicalPlan.getCurrentNode().getChildNode(1).getChildNode(0).getDescription(), Table.DESCRIPTION
-                + ":" + "table1");
+        assertEquals(logicalPlan.getCurrentNode().getChildNode(1).getChildNode(0).getDescription(), Table.DESCRIPTION);
     }
 
     private void printQuery(TreeNode rootNode) {
