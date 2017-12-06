@@ -52,8 +52,6 @@ public class BlockchainVisitorTest {
         SqlBaseParser parser = getParser(sqlText);
         AbstractSyntaxTreeVisitor astBuilder = new BlockchainVisitor();
         logicalPlan = (LogicalPlan) astBuilder.visitSingleStatement(parser.singleStatement());
-        logicalPlan.getQuery().traverse();
-        SelectClause clause = logicalPlan.getQuery().getChildType(SelectClause.class, 0);
         return logicalPlan;
     }
 

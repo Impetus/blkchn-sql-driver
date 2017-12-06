@@ -143,10 +143,8 @@ public class TreeNode {
     
     @Override
     public boolean equals(Object obj) {
-        //No performance gain in comparing this == obj (return true), as hashcode is calculated recursively.
-    	if (obj == null) {
-            return false;
-        }
+    	if (this == obj) return true;
+    	if (obj == null) return false;
         if (!TreeNode.class.isAssignableFrom(obj.getClass())) {
             return false;
         }

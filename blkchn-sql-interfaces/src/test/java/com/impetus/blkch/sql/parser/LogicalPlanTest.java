@@ -15,58 +15,77 @@
  ******************************************************************************/
 package com.impetus.blkch.sql.parser;
 
+import static org.junit.Assert.assertNotNull;
 import junit.framework.TestCase;
 
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.impetus.blkch.sql.generated.SqlBaseLexer;
+import com.impetus.blkch.sql.generated.SqlBaseParser;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.FromItem;
+import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.Query;
+import com.impetus.blkch.sql.query.SelectClause;
 import com.impetus.blkch.sql.query.SelectItem;
 import com.impetus.blkch.sql.query.Table;
 
 public class LogicalPlanTest extends TestCase {
 
-    LogicalPlan logicalPlan;
-
-    @Before
-    public void setUp() {
-        logicalPlan = new LogicalPlan("TEST PLAN");
+	@Test
+    public void testSimpleSelect() {
+        String sql = "select a, b from TRANSACTION t";
+        LogicalPlan plan = getLogicalPlan(sql);
+        
+        LogicalPlan logicalPlan = new LogicalPlan("BlockchainVisitor");
         Query query = new Query();
-        query.setRootNode(true);
-        SelectItem selectItem = new SelectItem();
-        query.addChildNode(selectItem);
         logicalPlan.setQuery(query);
         logicalPlan.setCurrentNode(query);
+        TreeNode selectClause1 = new SelectClause();
+        logicalPlan.getCurrentNode().addChildNode(selectClause1);
+        TreeNode selectItem1 = new SelectItem();
+    	selectClause1.addChildNode(selectItem1);
+    	TreeNode column1 = new Column();
+    	selectItem1.addChildNode(column1);
+    	TreeNode ident1 = new IdentifierNode("a");
+    	column1.addChildNode(ident1);
+    	TreeNode selectItem2 = new SelectItem();
+    	selectClause1.addChildNode(selectItem2);
+    	TreeNode column2 = new Column();
+    	selectItem2.addChildNode(column2);
+    	TreeNode ident2 = new IdentifierNode("b");
+    	column2.addChildNode(ident2);
+    	
+    	TreeNode fromItem = new FromItem();
+    	logicalPlan.getCurrentNode().addChildNode(fromItem);
+    	TreeNode table = new Table();
+    	fromItem.addChildNode(table);
+    	TreeNode ident3 = new IdentifierNode("t");
+    	fromItem.addChildNode(ident3);
+    	TreeNode ident4 = new IdentifierNode("TRANSACTION");
+        table.addChildNode(ident4);
+        logicalPlan.getQuery().traverse();
+        plan.getQuery().traverse();
+        assertTrue(logicalPlan.equals(plan));
+    }
+	
+
+    public LogicalPlan getLogicalPlan(String sqlText) {
+        LogicalPlan logicalPlan = null;
+        SqlBaseParser parser = getParser(sqlText);
+        AbstractSyntaxTreeVisitor astBuilder = new BlockchainVisitor();
+        logicalPlan = (LogicalPlan) astBuilder.visitSingleStatement(parser.singleStatement());
+        return logicalPlan;
     }
 
-    @Test
-    public void testLogicalPLan() {
-        FromItem fromItem = new FromItem();
-        logicalPlan.getCurrentNode().addChildNode(fromItem);
-        assertEquals(2, logicalPlan.getCurrentNode().getChildNodes().size());
-        logicalPlan.setCurrentNode(fromItem);
-        Table table = new Table();
-        logicalPlan.getCurrentNode().addChildNode(table);
-        logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent().getChildNode(0));
-        Column col1 = new Column();
-        Column col2 = new Column();
-        logicalPlan.getCurrentNode().addChildNode(col1);
-        logicalPlan.getCurrentNode().addChildNode(col2);
-        logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent());
-        printQuery(logicalPlan.getCurrentNode());
-        assertEquals(logicalPlan.getCurrentNode().getDescription(), Query.DESCRIPTION);
-        assertEquals(logicalPlan.getCurrentNode().getChildNode(0).getDescription(), SelectItem.DESCRIPTION);
-        assertEquals(logicalPlan.getCurrentNode().getChildNode(1).getDescription(), FromItem.DESCRIPTION);
-        assertEquals(logicalPlan.getCurrentNode().getChildNode(0).getChildNode(0).getDescription(), Column.DESCRIPTION);
-        assertEquals(logicalPlan.getCurrentNode().getChildNode(0).getChildNode(1).getDescription(), Column.DESCRIPTION);
-        assertEquals(logicalPlan.getCurrentNode().getChildNode(1).getDescription(), FromItem.DESCRIPTION);
-        assertEquals(logicalPlan.getCurrentNode().getChildNode(1).getChildNode(0).getDescription(), Table.DESCRIPTION);
+    public SqlBaseParser getParser(String sqlText) {
+        SqlBaseLexer lexer = new SqlBaseLexer(new CaseInsensitiveCharStream(sqlText));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        SqlBaseParser parser = new SqlBaseParser(tokens);
+        return parser;
     }
-
-    private void printQuery(TreeNode rootNode) {
-        rootNode.traverse();
-    }
+    
 
 }
