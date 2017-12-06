@@ -140,4 +140,38 @@ public class TreeNode {
         }
         return null;
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+        //No performance gain in comparing this == obj (return true), as hashcode is calculated recursively.
+    	if (obj == null) {
+            return false;
+        }
+        if (!TreeNode.class.isAssignableFrom(obj.getClass())) {
+            return false;
+        }
+        final TreeNode other = (TreeNode) obj;
+        if ((this.description == null) ? (other.description != null) : !this.description.equals(other.description)) {
+            return false;
+        }
+        if(this.getChildNodes().size() != other.getChildNodes().size()){
+        	return false;
+        }
+        for(int i = 0; i < this.getChildNodes().size(); i++){
+        	if(!this.getChildNode(i).equals(other.getChildNode(i))){
+        		return false;
+        	}
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 53 * hash + (this.description != null ? this.description.hashCode() : 0);
+        for(int i = 0; i < this.getChildNodes().size(); i++){
+        	hash += this.getChildNode(i).hashCode();
+        }
+        return hash;
+    }
 }
