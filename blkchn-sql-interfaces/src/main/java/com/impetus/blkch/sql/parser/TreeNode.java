@@ -170,7 +170,7 @@ public class TreeNode {
     
     private int hashWithDepth(int level) {
         int hash = 3;
-        hash = 53 * (hash * (level + 1)) + (this.description != null ? this.description.hashCode() : 0);
+        hash = 53 * (hash + (this.description != null ? this.description.hashCode() : 0)) * (level + 1);
         for(int i = 0; i < this.getChildNodes().size(); i++){
         	hash += this.getChildNode(i).hashWithDepth(level + 1) * (i + 1);
         }
