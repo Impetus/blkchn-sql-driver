@@ -15,22 +15,31 @@
  ******************************************************************************/
 package com.impetus.blkch.sql.parser;
 
-import static org.junit.Assert.assertNotNull;
 import junit.framework.TestCase;
 
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.impetus.blkch.sql.generated.SqlBaseLexer;
 import com.impetus.blkch.sql.generated.SqlBaseParser;
 import com.impetus.blkch.sql.query.Column;
+import com.impetus.blkch.sql.query.Comparator;
+import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
+import com.impetus.blkch.sql.query.OrderingDirection.Direction;
+import com.impetus.blkch.sql.query.FilterItem;
 import com.impetus.blkch.sql.query.FromItem;
+import com.impetus.blkch.sql.query.GroupByClause;
+import com.impetus.blkch.sql.query.HavingClause;
 import com.impetus.blkch.sql.query.IdentifierNode;
+import com.impetus.blkch.sql.query.LimitClause;
+import com.impetus.blkch.sql.query.OrderByClause;
+import com.impetus.blkch.sql.query.OrderItem;
+import com.impetus.blkch.sql.query.OrderingDirection;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.SelectClause;
 import com.impetus.blkch.sql.query.SelectItem;
 import com.impetus.blkch.sql.query.Table;
+import com.impetus.blkch.sql.query.WhereClause;
 
 public class LogicalPlanTest extends TestCase {
 
@@ -39,6 +48,133 @@ public class LogicalPlanTest extends TestCase {
         String sql = "select a, b from TRANSACTION t";
         LogicalPlan plan = getLogicalPlan(sql);
         
+        LogicalPlan logicalPlan = buildSimpleSelect();
+        logicalPlan.getQuery().traverse();
+        plan.getQuery().traverse();
+        assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
+    }
+
+    @Test
+    public void testSimpleSelectWithWhereClause()
+    {
+        String sql = "select a, b from TRANSACTION t where a = 'hello world'";
+        LogicalPlan plan = getLogicalPlan(sql);
+
+        LogicalPlan logicalPlan = buildSelectWithWhere();
+
+        logicalPlan.getQuery().traverse();
+        plan.getQuery().traverse();
+        assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
+    }
+    
+    @Test
+    public void testSimpleSelectWithWhereClauseAndGroupBy()
+    {
+        String sql = "select a, b from TRANSACTION t where a = 'hello world' group by c";
+        LogicalPlan plan = getLogicalPlan(sql);
+
+        LogicalPlan logicalPlan = buildSelectWithGroupBy();
+
+        logicalPlan.getQuery().traverse();
+        plan.getQuery().traverse();
+        assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
+    }
+    
+    @Test
+    public void testSelectWithHaving()
+    {
+        String sql = "select a, b from TRANSACTION t where a = 'hello world' group by c having b > 100";
+        LogicalPlan plan = getLogicalPlan(sql);
+
+        LogicalPlan logicalPlan = buildHaving();
+
+        logicalPlan.getQuery().traverse();
+        plan.getQuery().traverse();
+        assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
+    }
+    
+    @Test
+    public void testSelectWithHavingAndOrderBy()
+    {
+        String sql = "select a, b from TRANSACTION t where a = 'hello world' group by c having b > 100 order by b desc";
+        LogicalPlan plan = getLogicalPlan(sql);
+
+        LogicalPlan logicalPlan = buildOrderByClause();
+
+        logicalPlan.getQuery().traverse();
+        plan.getQuery().traverse();
+        assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
+    }
+    
+    @Test
+    public void testSelectWithHavingOrderByAndLimit()
+    {
+        String sql = "select a, b from TRANSACTION t where a = 'hello world' group by c having b > 100 order by b desc limit 10";
+        LogicalPlan plan = getLogicalPlan(sql);
+
+        LogicalPlan logicalPlan = buildOrderByClause();
+        TreeNode limit = new LimitClause();
+        logicalPlan.getCurrentNode().addChildNode(limit);
+        TreeNode ident = new IdentifierNode("10");
+        limit.addChildNode(ident);
+
+        logicalPlan.getQuery().traverse();
+        plan.getQuery().traverse();
+        assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
+    }
+
+    private LogicalPlan buildOrderByClause()
+    {
+        LogicalPlan logicalPlan = buildHaving();
+        TreeNode orderByClause = new OrderByClause();
+        logicalPlan.getCurrentNode().addChildNode(orderByClause);
+        TreeNode orderItem = new OrderItem();
+        orderByClause.addChildNode(orderItem);
+        TreeNode orderDir = new OrderingDirection(Direction.DESC);
+        orderItem.addChildNode(orderDir);
+        TreeNode column = new Column();
+        orderItem.addChildNode(column);
+        TreeNode ident = new IdentifierNode("b");
+        column.addChildNode(ident);
+        return logicalPlan;
+    }
+
+    private LogicalPlan buildHaving()
+    {
+        LogicalPlan logicalPlan = buildSelectWithGroupBy();
+        
+        TreeNode havingClause = new HavingClause();
+        logicalPlan.getCurrentNode().addChildNode(havingClause);
+        TreeNode filterItem = new FilterItem();
+        havingClause.addChildNode(filterItem);
+        TreeNode column3 = new Column();
+        filterItem.addChildNode(column3);
+        TreeNode ident5 = new IdentifierNode("b");
+        column3.addChildNode(ident5);
+        TreeNode comparator = new Comparator(ComparisionOperator.GT);
+        filterItem.addChildNode(comparator);
+        TreeNode ident6 = new IdentifierNode(">");
+        comparator.addChildNode(ident6);
+        TreeNode ident7 = new IdentifierNode("100");
+        filterItem.addChildNode(ident7);
+        return logicalPlan;
+    }
+
+    private LogicalPlan buildSelectWithGroupBy()
+    {
+        LogicalPlan logicalPlan = buildSelectWithWhere();
+        
+        TreeNode groupBy  = new GroupByClause();
+        logicalPlan.getCurrentNode().addChildNode(groupBy);
+        TreeNode column1 = new Column();
+        groupBy.addChildNode(column1);
+        TreeNode ident1 = new IdentifierNode("c");
+        column1.addChildNode(ident1);
+        return logicalPlan;
+    }
+
+    private LogicalPlan buildSimpleSelect()
+    {
         LogicalPlan logicalPlan = new LogicalPlan("BlockchainVisitor");
         Query query = new Query();
         logicalPlan.setQuery(query);
@@ -66,11 +202,29 @@ public class LogicalPlanTest extends TestCase {
     	fromItem.addChildNode(ident3);
     	TreeNode ident4 = new IdentifierNode("TRANSACTION");
         table.addChildNode(ident4);
-        logicalPlan.getQuery().traverse();
-        plan.getQuery().traverse();
-        assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
+        return logicalPlan;
     }
-	
+
+    private LogicalPlan buildSelectWithWhere()
+    {
+        LogicalPlan logicalPlan = buildSimpleSelect();
+        
+        TreeNode whereClause = new WhereClause();
+        logicalPlan.getCurrentNode().addChildNode(whereClause);
+        TreeNode filterItem = new FilterItem();
+        whereClause.addChildNode(filterItem);
+        TreeNode column3 = new Column();
+        filterItem.addChildNode(column3);
+        TreeNode ident5 = new IdentifierNode("a");
+        column3.addChildNode(ident5);
+        TreeNode comparator = new Comparator(ComparisionOperator.EQ);
+        filterItem.addChildNode(comparator);
+        TreeNode ident6 = new IdentifierNode("=");
+        comparator.addChildNode(ident6);
+        TreeNode ident7 = new IdentifierNode("'hello world'");
+        filterItem.addChildNode(ident7);
+        return logicalPlan;
+    }
 
     public LogicalPlan getLogicalPlan(String sqlText) {
         LogicalPlan logicalPlan = null;
