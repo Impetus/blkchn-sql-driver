@@ -147,6 +147,30 @@ public class TreeNodeTest {
     }
     
     @Test
+    public void testEqualsOverridingFalse2(){
+    TreeNode selectClause1 = new SelectClause();
+    TreeNode selectClause2 = new SelectClause();
+    TreeNode selectItem1 = new SelectItem();
+    TreeNode selectItem2 = new SelectItem();
+    TreeNode column1 = new Column();
+    TreeNode column2 = new Column();
+    TreeNode ident1 = new IdentifierNode("a");
+    TreeNode ident2 = new IdentifierNode("a");
+    selectClause1.addChildNode(selectItem1);
+    selectItem1.addChildNode(column1);
+    column1.addChildNode(ident1);
+    
+    //swapped levels of child nodes
+    selectClause2.addChildNode(column2);
+    column2.addChildNode(selectItem2);
+    selectItem2.addChildNode(ident2);
+    
+    assertFalse(selectClause1.equals(selectClause2));
+    assertFalse(selectClause1.hashCode() == selectClause2.hashCode());
+    assertFalse(selectClause1 == selectClause2);
+    }
+    
+    @Test
     public void testEqualsOverridingTrue(){
     	TreeNode otherRootNode = new TreeNode("CEO");
     	otherRootNode.setRootNode(true);
