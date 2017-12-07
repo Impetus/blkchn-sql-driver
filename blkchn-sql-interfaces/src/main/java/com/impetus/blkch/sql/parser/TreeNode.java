@@ -145,7 +145,7 @@ public class TreeNode {
     public boolean equals(Object obj) {
     	if (this == obj) return true;
     	if (obj == null) return false;
-        if (!TreeNode.class.isAssignableFrom(obj.getClass())) {
+        if (!this.getClass().isAssignableFrom(obj.getClass())) {
             return false;
         }
         final TreeNode other = (TreeNode) obj;

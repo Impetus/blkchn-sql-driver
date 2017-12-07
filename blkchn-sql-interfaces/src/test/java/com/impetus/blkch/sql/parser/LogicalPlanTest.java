@@ -68,7 +68,7 @@ public class LogicalPlanTest extends TestCase {
         table.addChildNode(ident4);
         logicalPlan.getQuery().traverse();
         plan.getQuery().traverse();
-        assertTrue(logicalPlan.equals(plan));
+        assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
 	
 
