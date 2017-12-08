@@ -1,8 +1,4 @@
 package com.impetus.blkch.sql.parser;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
 import com.impetus.blkch.sql.query.Column;

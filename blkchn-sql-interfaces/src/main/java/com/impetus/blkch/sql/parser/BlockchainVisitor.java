@@ -41,6 +41,7 @@ import com.impetus.blkch.sql.generated.SqlBaseParser.UnquotedIdentifierContext;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.Comparator;
 import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
+import com.impetus.blkch.sql.query.DereferenceNode;
 import com.impetus.blkch.sql.query.FilterItem;
 import com.impetus.blkch.sql.query.FromItem;
 import com.impetus.blkch.sql.query.FunctionNode;
@@ -171,7 +172,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitDereference(DereferenceContext ctx) {
         logger.trace("In visitDereference " + ctx.getText());
-        TreeNode node = new TreeNode("DEREFERENCE");
+        TreeNode node = new DereferenceNode();
         logicalPlan.getCurrentNode().addChildNode(node);
         logicalPlan.setCurrentNode(node);
         return visitChildrenAndResetNode(ctx);

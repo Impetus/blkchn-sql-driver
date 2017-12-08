@@ -10,6 +10,7 @@ import com.impetus.blkch.sql.generated.SqlBaseParser;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.Comparator;
 import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
+import com.impetus.blkch.sql.query.DereferenceNode;
 import com.impetus.blkch.sql.query.FilterItem;
 import com.impetus.blkch.sql.query.FromItem;
 import com.impetus.blkch.sql.query.FunctionNode;
@@ -481,7 +482,7 @@ public class LogicalPlanTestMultiple extends TestCase {
         logicalPlan.getCurrentNode().addChildNode(selectClause);
         TreeNode selectItem = new SelectItem();
         
-        TreeNode deference = new TreeNode("DEREFERENCE");
+        TreeNode deference = new DereferenceNode();
         TreeNode deferCol= new Column();
         TreeNode deferColIdent= new IdentifierNode("t");
         deferCol.addChildNode(deferColIdent);
