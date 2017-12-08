@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.impetus.blkch.sql.parser;
 
+import com.impetus.blkch.sql.query.*;
 import junit.framework.TestCase;
 
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -22,24 +23,8 @@ import org.junit.Test;
 
 import com.impetus.blkch.sql.generated.SqlBaseLexer;
 import com.impetus.blkch.sql.generated.SqlBaseParser;
-import com.impetus.blkch.sql.query.Column;
-import com.impetus.blkch.sql.query.Comparator;
 import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
 import com.impetus.blkch.sql.query.OrderingDirection.Direction;
-import com.impetus.blkch.sql.query.FilterItem;
-import com.impetus.blkch.sql.query.FromItem;
-import com.impetus.blkch.sql.query.GroupByClause;
-import com.impetus.blkch.sql.query.HavingClause;
-import com.impetus.blkch.sql.query.IdentifierNode;
-import com.impetus.blkch.sql.query.LimitClause;
-import com.impetus.blkch.sql.query.OrderByClause;
-import com.impetus.blkch.sql.query.OrderItem;
-import com.impetus.blkch.sql.query.OrderingDirection;
-import com.impetus.blkch.sql.query.Query;
-import com.impetus.blkch.sql.query.SelectClause;
-import com.impetus.blkch.sql.query.SelectItem;
-import com.impetus.blkch.sql.query.Table;
-import com.impetus.blkch.sql.query.WhereClause;
 
 public class LogicalPlanTest extends TestCase {
 
@@ -122,6 +107,219 @@ public class LogicalPlanTest extends TestCase {
         plan.getQuery().traverse();
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
+
+
+    @Test
+    public void testSelectWithWhereClouse() {
+        String sql = "select a, b from TRANSACTION t where a = 10";
+        LogicalPlan plan = getLogicalPlan(sql);
+
+        LogicalPlan logicalPlan = new LogicalPlan("BlockChainVisitor");
+        Query query = new Query();
+        logicalPlan.setQuery(query);
+        logicalPlan.setCurrentNode(query);
+        TreeNode selectClause1 = new SelectClause();
+        logicalPlan.getCurrentNode().addChildNode(selectClause1);
+        TreeNode selectItem1 = new SelectItem();
+        selectClause1.addChildNode(selectItem1);
+        TreeNode column1 = new Column();
+
+
+
+        selectItem1.addChildNode(column1);
+        TreeNode ident1 = new IdentifierNode("a");
+        column1.addChildNode(ident1);
+        TreeNode selectItem2 = new SelectItem();
+        selectClause1.addChildNode(selectItem2);
+        TreeNode column2 = new Column();
+        selectItem2.addChildNode(column2);
+        TreeNode ident2 = new IdentifierNode("b");
+        column2.addChildNode(ident2);
+
+        TreeNode fromItem = new FromItem();
+        logicalPlan.getCurrentNode().addChildNode(fromItem);
+        TreeNode table = new Table();
+        fromItem.addChildNode(table);
+        TreeNode ident3 = new IdentifierNode("t");
+        fromItem.addChildNode(ident3);
+        TreeNode ident4 = new IdentifierNode("TRANSACTION");
+        table.addChildNode(ident4);
+
+        TreeNode whereItem = new WhereClause();
+        logicalPlan.getCurrentNode().addChildNode(whereItem);
+        TreeNode filterItem = new FilterItem();
+        whereItem.addChildNode(filterItem);
+        TreeNode col3 = new Column();
+        TreeNode ident5 = new IdentifierNode("a");
+        col3.addChildNode(ident5);
+        filterItem.addChildNode(col3);
+
+        TreeNode comprator = new Comparator(Comparator.ComparisionOperator.EQ);
+        TreeNode ident6 = new IdentifierNode("=");
+        comprator.addChildNode(ident6);
+        filterItem.addChildNode(comprator);
+
+        TreeNode ident7 = new IdentifierNode("10");
+        filterItem.addChildNode(ident7);
+
+
+        logicalPlan.getQuery().traverse();
+        plan.getQuery().traverse();
+
+        assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
+    }
+
+
+    @Test
+    public void testSelectWithWhereAndLogicalOperatorClouse() {
+        String sql = "select a, b from TRANSACTION t where a = 10 AND b = 5";
+        LogicalPlan plan = getLogicalPlan(sql);
+
+        LogicalPlan logicalPlan = new LogicalPlan("BlockChainVisitor");
+        Query query = new Query();
+        logicalPlan.setQuery(query);
+        logicalPlan.setCurrentNode(query);
+        TreeNode selectClause1 = new SelectClause();
+        logicalPlan.getCurrentNode().addChildNode(selectClause1);
+        TreeNode selectItem1 = new SelectItem();
+        selectClause1.addChildNode(selectItem1);
+        TreeNode column1 = new Column();
+
+
+
+        selectItem1.addChildNode(column1);
+        TreeNode ident1 = new IdentifierNode("a");
+        column1.addChildNode(ident1);
+        TreeNode selectItem2 = new SelectItem();
+        selectClause1.addChildNode(selectItem2);
+        TreeNode column2 = new Column();
+        selectItem2.addChildNode(column2);
+        TreeNode ident2 = new IdentifierNode("b");
+        column2.addChildNode(ident2);
+
+        TreeNode fromItem = new FromItem();
+        logicalPlan.getCurrentNode().addChildNode(fromItem);
+        TreeNode table = new Table();
+        fromItem.addChildNode(table);
+        TreeNode ident3 = new IdentifierNode("t");
+        fromItem.addChildNode(ident3);
+        TreeNode ident4 = new IdentifierNode("TRANSACTION");
+        table.addChildNode(ident4);
+
+        TreeNode whereItem = new WhereClause();
+        logicalPlan.getCurrentNode().addChildNode(whereItem);
+
+        TreeNode logicalOper = new LogicalOperation(LogicalOperation.Operator.AND);
+        whereItem.addChildNode(logicalOper);
+
+
+        TreeNode filterItem = new FilterItem();
+        logicalOper.addChildNode(filterItem);
+
+        TreeNode col3 = new Column();
+        TreeNode ident5 = new IdentifierNode("a");
+        col3.addChildNode(ident5);
+        filterItem.addChildNode(col3);
+
+        TreeNode comprator = new Comparator(Comparator.ComparisionOperator.EQ);
+        TreeNode ident6 = new IdentifierNode("=");
+        comprator.addChildNode(ident6);
+        filterItem.addChildNode(comprator);
+
+        TreeNode ident7 = new IdentifierNode("10");
+        filterItem.addChildNode(ident7);
+
+
+
+        TreeNode filterItem2 = new FilterItem();
+        logicalOper.addChildNode(filterItem2);
+
+        TreeNode col4 = new Column();
+        TreeNode ident8 = new IdentifierNode("b");
+        col4.addChildNode(ident8);
+        filterItem2.addChildNode(col4);
+
+        TreeNode comprator2 = new Comparator(Comparator.ComparisionOperator.EQ);
+        TreeNode ident9 = new IdentifierNode("=");
+        comprator2.addChildNode(ident9);
+        filterItem2.addChildNode(comprator2);
+
+        TreeNode ident10 = new IdentifierNode("5");
+        filterItem2.addChildNode(ident10);
+
+
+        logicalPlan.getQuery().traverse();
+        plan.getQuery().traverse();
+
+        assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
+    }
+
+    @Test
+    public void testSelectWithWhereAndLimitClouse() {
+        String sql = "select a, b from TRANSACTION t where a = 10 limit 3";
+        LogicalPlan plan = getLogicalPlan(sql);
+
+        LogicalPlan logicalPlan = new LogicalPlan("BlockChainVisitor");
+        Query query = new Query();
+        logicalPlan.setQuery(query);
+        logicalPlan.setCurrentNode(query);
+        TreeNode selectClause1 = new SelectClause();
+        logicalPlan.getCurrentNode().addChildNode(selectClause1);
+        TreeNode selectItem1 = new SelectItem();
+        selectClause1.addChildNode(selectItem1);
+        TreeNode column1 = new Column();
+
+
+
+        selectItem1.addChildNode(column1);
+        TreeNode ident1 = new IdentifierNode("a");
+        column1.addChildNode(ident1);
+        TreeNode selectItem2 = new SelectItem();
+        selectClause1.addChildNode(selectItem2);
+        TreeNode column2 = new Column();
+        selectItem2.addChildNode(column2);
+        TreeNode ident2 = new IdentifierNode("b");
+        column2.addChildNode(ident2);
+
+        TreeNode fromItem = new FromItem();
+        logicalPlan.getCurrentNode().addChildNode(fromItem);
+        TreeNode table = new Table();
+        fromItem.addChildNode(table);
+        TreeNode ident3 = new IdentifierNode("t");
+        fromItem.addChildNode(ident3);
+        TreeNode ident4 = new IdentifierNode("TRANSACTION");
+        table.addChildNode(ident4);
+
+        TreeNode whereItem = new WhereClause();
+        logicalPlan.getCurrentNode().addChildNode(whereItem);
+        TreeNode filterItem = new FilterItem();
+        whereItem.addChildNode(filterItem);
+        TreeNode col3 = new Column();
+        TreeNode ident5 = new IdentifierNode("a");
+        col3.addChildNode(ident5);
+        filterItem.addChildNode(col3);
+
+        TreeNode comprator = new Comparator(Comparator.ComparisionOperator.EQ);
+        TreeNode ident6 = new IdentifierNode("=");
+        comprator.addChildNode(ident6);
+        filterItem.addChildNode(comprator);
+
+        TreeNode ident7 = new IdentifierNode("10");
+        filterItem.addChildNode(ident7);
+
+
+        logicalPlan.getQuery().traverse();
+        plan.getQuery().traverse();
+
+        TreeNode limitClause = new LimitClause();
+        limitClause.addChildNode(new IdentifierNode("3"));
+        logicalPlan.getCurrentNode().addChildNode(limitClause);
+
+        assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
+    }
+
+
+
 
     private LogicalPlan buildOrderByClause()
     {
