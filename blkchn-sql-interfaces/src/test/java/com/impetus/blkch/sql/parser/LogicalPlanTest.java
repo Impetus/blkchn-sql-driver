@@ -15,16 +15,32 @@
  ******************************************************************************/
 package com.impetus.blkch.sql.parser;
 
-import com.impetus.blkch.sql.query.*;
 import junit.framework.TestCase;
 
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
 
-import com.impetus.blkch.sql.generated.SqlBaseLexer;
-import com.impetus.blkch.sql.generated.SqlBaseParser;
+import com.impetus.blkch.sql.generated.BlkchnSqlLexer;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser;
+import com.impetus.blkch.sql.query.Column;
+import com.impetus.blkch.sql.query.Comparator;
 import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
+import com.impetus.blkch.sql.query.FilterItem;
+import com.impetus.blkch.sql.query.FromItem;
+import com.impetus.blkch.sql.query.GroupByClause;
+import com.impetus.blkch.sql.query.HavingClause;
+import com.impetus.blkch.sql.query.IdentifierNode;
+import com.impetus.blkch.sql.query.LimitClause;
+import com.impetus.blkch.sql.query.LogicalOperation;
+import com.impetus.blkch.sql.query.OrderByClause;
+import com.impetus.blkch.sql.query.OrderItem;
+import com.impetus.blkch.sql.query.OrderingDirection;
 import com.impetus.blkch.sql.query.OrderingDirection.Direction;
+import com.impetus.blkch.sql.query.Query;
+import com.impetus.blkch.sql.query.SelectClause;
+import com.impetus.blkch.sql.query.SelectItem;
+import com.impetus.blkch.sql.query.Table;
+import com.impetus.blkch.sql.query.WhereClause;
 
 public class LogicalPlanTest extends TestCase {
 
@@ -426,16 +442,16 @@ public class LogicalPlanTest extends TestCase {
 
     public LogicalPlan getLogicalPlan(String sqlText) {
         LogicalPlan logicalPlan = null;
-        SqlBaseParser parser = getParser(sqlText);
+        BlkchnSqlParser parser = getParser(sqlText);
         AbstractSyntaxTreeVisitor astBuilder = new BlockchainVisitor();
         logicalPlan = (LogicalPlan) astBuilder.visitSingleStatement(parser.singleStatement());
         return logicalPlan;
     }
 
-    public SqlBaseParser getParser(String sqlText) {
-        SqlBaseLexer lexer = new SqlBaseLexer(new CaseInsensitiveCharStream(sqlText));
+    public BlkchnSqlParser getParser(String sqlText) {
+        BlkchnSqlLexer lexer = new BlkchnSqlLexer(new CaseInsensitiveCharStream(sqlText));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        SqlBaseParser parser = new SqlBaseParser(tokens);
+        BlkchnSqlParser parser = new BlkchnSqlParser(tokens);
         return parser;
     }
     
