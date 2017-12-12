@@ -203,7 +203,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitUnquotedIdentifier(UnquotedIdentifierContext ctx) {
         logger.trace("In visitUnquotedIdentifier " + ctx.getText());
-        TreeNode node = new IdentifierNode("'"+ctx.getText()+"'");
+        TreeNode node = new IdentifierNode(ctx.getText());
         logicalPlan.getCurrentNode().addChildNode(node);
         return visitChildren(ctx);
     }
