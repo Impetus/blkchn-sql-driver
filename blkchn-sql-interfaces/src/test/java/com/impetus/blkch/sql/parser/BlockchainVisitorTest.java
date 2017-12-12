@@ -20,17 +20,15 @@ import static org.junit.Assert.assertNotNull;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
 
-import com.impetus.blkch.sql.generated.SqlBaseLexer;
-import com.impetus.blkch.sql.generated.SqlBaseParser;
-import com.impetus.blkch.sql.query.LimitClause;
+import com.impetus.blkch.sql.generated.BlkchnSqlLexer;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 import com.impetus.blkch.sql.query.SelectClause;
-import com.impetus.blkch.sql.query.SelectItem;
 
 public class BlockchainVisitorTest {
 
     @Test
     public void testBlockchainVisitor() {
-        String sql = "select count(sum(tt)) as cnt,transactionid as trans, t.blocknum from TRANSACTION t where trans=123 and t.blocknum < 5 or blockhash='sdf' or previousHash='2' GROUP BY t.blocknum having blocknum > 2"
+        String sql = "select count(sum(tt)) as cnt,transactionid, t.blocknum from TRANSACTION where trans=123 and t.blocknum < 5 or blockhash='sdf' or previousHash='2' GROUP BY t.blocknum having blocknum > 2"
                 + " order BY blockhash, transactionhash desc limit 100";
         LogicalPlan plan = getLogicalPlan(sql);
         assertNotNull(plan);
@@ -38,7 +36,7 @@ public class BlockchainVisitorTest {
 
     public LogicalPlan getLogicalPlan(String sqlText) {
         LogicalPlan logicalPlan = null;
-        SqlBaseParser parser = getParser(sqlText);
+        BlkchnSqlParser parser = getParser(sqlText);
         AbstractSyntaxTreeVisitor astBuilder = new BlockchainVisitor();
         logicalPlan = (LogicalPlan) astBuilder.visitSingleStatement(parser.singleStatement());
         logicalPlan.getQuery().traverse();
@@ -46,10 +44,10 @@ public class BlockchainVisitorTest {
         return logicalPlan;
     }
 
-    public SqlBaseParser getParser(String sqlText) {
-        SqlBaseLexer lexer = new SqlBaseLexer(new CaseInsensitiveCharStream(sqlText));
+    public BlkchnSqlParser getParser(String sqlText) {
+        BlkchnSqlLexer lexer = new BlkchnSqlLexer(new CaseInsensitiveCharStream(sqlText));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        SqlBaseParser parser = new SqlBaseParser(tokens);
+        BlkchnSqlParser parser = new BlkchnSqlParser(tokens);
         return parser;
     }
 

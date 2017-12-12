@@ -18,20 +18,20 @@ package com.impetus.blkch.sql.listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.impetus.blkch.sql.generated.SqlBaseBaseListener;
-import com.impetus.blkch.sql.generated.SqlBaseParser;
+import com.impetus.blkch.sql.generated.BlkchnSqlBaseListener;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 
-public class SqlBaseListenerGethImpl extends SqlBaseBaseListener {
+public class SqlBaseListenerGethImpl extends BlkchnSqlBaseListener {
 
     private static final Logger logger = LoggerFactory.getLogger(SqlBaseListenerGethImpl.class);
 
-    SqlBaseParser parser;
+    BlkchnSqlParser parser;
 
-    public SqlBaseListenerGethImpl(SqlBaseParser parser) {
+    public SqlBaseListenerGethImpl(BlkchnSqlParser parser) {
         this.parser = parser;
     }
 
-    public void enterSingleStatement(SqlBaseParser.SingleStatementContext ctx) {
+    public void enterSingleStatement(BlkchnSqlParser.SingleStatementContext ctx) {
         logger.info("Implement listener interface just for testing availability.\n "
                 + "All actual implementation is via visitor pattern");
     }

@@ -24,11 +24,15 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-import com.impetus.blkch.sql.generated.SqlBaseLexer;
-import com.impetus.blkch.sql.generated.SqlBaseListener;
-import com.impetus.blkch.sql.generated.SqlBaseParser;
+import com.impetus.blkch.sql.generated.BlkchnSqlLexer;
+import com.impetus.blkch.sql.generated.BlkchnSqlListener;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 
 public class SqlBaseListenerGethImplTest {
 
@@ -58,13 +62,13 @@ public class SqlBaseListenerGethImplTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        SqlBaseLexer lexer = new SqlBaseLexer(input);
+        BlkchnSqlLexer lexer = new BlkchnSqlLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        SqlBaseParser parser = new SqlBaseParser(tokens);
+        BlkchnSqlParser parser = new BlkchnSqlParser(tokens);
         ParseTree tree = parser.singleStatement();
 
         ParseTreeWalker walker = new ParseTreeWalker();
-        SqlBaseListener extractor = new SqlBaseListenerGethImpl(parser);
+        BlkchnSqlListener extractor = new SqlBaseListenerGethImpl(parser);
         walker.walk(extractor, tree);
     }
 

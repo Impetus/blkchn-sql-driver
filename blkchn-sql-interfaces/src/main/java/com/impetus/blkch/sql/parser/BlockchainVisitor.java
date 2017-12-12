@@ -19,25 +19,28 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.impetus.blkch.sql.generated.SqlBaseParser.AggregationContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.ColumnReferenceContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.ComparisonContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.ComparisonOperatorContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.DereferenceContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.FromClauseContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.FunctionCallContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.LogicalBinaryContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.NamedExpressionContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.NamedExpressionSeqContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.NumericLiteralContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.QueryOrganizationContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.SetQuantifierContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.SingleStatementContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.SortItemContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.StarContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.StringLiteralContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.TableIdentifierContext;
-import com.impetus.blkch.sql.generated.SqlBaseParser.UnquotedIdentifierContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnReferenceContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonOperatorContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.DereferenceContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.FromClauseContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionCallContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.GroupByClauseContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.HavingClauseContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.LimitClauseContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.LogicalBinaryContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.NamedExpressionContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.NumericLiteralContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.OrderByClauseContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.SelectClauseContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.SetQuantifierContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.SimpleQueryContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.SortItemContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.StarContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.StringLiteralContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.TableIdentifierContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.UnquotedIdentifierContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.WhereClauseContext;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.Comparator;
 import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
@@ -54,8 +57,8 @@ import com.impetus.blkch.sql.query.OrderByClause;
 import com.impetus.blkch.sql.query.OrderItem;
 import com.impetus.blkch.sql.query.OrderingDirection;
 import com.impetus.blkch.sql.query.OrderingDirection.Direction;
-import com.impetus.blkch.sql.query.QuantifierNode.Quantifier;
 import com.impetus.blkch.sql.query.QuantifierNode;
+import com.impetus.blkch.sql.query.QuantifierNode.Quantifier;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.SelectClause;
 import com.impetus.blkch.sql.query.SelectItem;
@@ -72,8 +75,8 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     Query query;
 
     @Override
-    public LogicalPlan visitSingleStatement(SingleStatementContext ctx) {
-        logger.trace("In visitSingleStatement " + ctx.getText());
+    public LogicalPlan visitSimpleQuery(SimpleQueryContext ctx) {
+        logger.trace("In visitSimpleQuery " + ctx.getText());
         query = new Query();
         logicalPlan.setQuery(query);
         logicalPlan.setCurrentNode(query);
@@ -81,11 +84,65 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     }
 
     @Override
-    public LogicalPlan visitNamedExpressionSeq(NamedExpressionSeqContext ctx) {
-        logger.trace("In visitNamedExpressionSeq " + ctx.getText());
+    public LogicalPlan visitSelectClause(SelectClauseContext ctx) {
+        logger.trace("In visitSelectClause " + ctx.getText());
         TreeNode selectClause = new SelectClause();
         logicalPlan.getCurrentNode().addChildNode(selectClause);
         logicalPlan.setCurrentNode(selectClause);
+        return visitChildrenAndResetNode(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitFromClause(FromClauseContext ctx) {
+        logger.trace("In visitFromClause " + ctx.getText());
+        TreeNode fromItem = new FromItem();
+        logicalPlan.getCurrentNode().addChildNode(fromItem);
+        logicalPlan.setCurrentNode(fromItem);
+        return visitChildrenAndResetNode(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitWhereClause(WhereClauseContext ctx) {
+        logger.trace("In visitWhereClause " + ctx.getText());
+        TreeNode whereClause = new WhereClause();
+        logicalPlan.getCurrentNode().addChildNode(whereClause);
+        logicalPlan.setCurrentNode(whereClause);
+        return visitChildrenAndResetNode(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitGroupByClause(GroupByClauseContext ctx) {
+        logger.trace("In visitGroupByClause " + ctx.getText());
+        TreeNode groupByClause = new GroupByClause();
+        logicalPlan.getCurrentNode().addChildNode(groupByClause);
+        logicalPlan.setCurrentNode(groupByClause);
+        return visitChildrenAndResetNode(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitHavingClause(HavingClauseContext ctx) {
+        logger.trace("In visitHavingClause " + ctx.getText());
+        TreeNode havingClause = new HavingClause();
+        logicalPlan.getCurrentNode().addChildNode(havingClause);
+        logicalPlan.setCurrentNode(havingClause);
+        return visitChildrenAndResetNode(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitOrderByClause(OrderByClauseContext ctx) {
+        logger.trace("In visitOrderByClause " + ctx.getText());
+        TreeNode orderByClause = new OrderByClause();
+        logicalPlan.getCurrentNode().addChildNode(orderByClause);
+        logicalPlan.setCurrentNode(orderByClause);
+        return visitChildrenAndResetNode(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitLimitClause(LimitClauseContext ctx) {
+        logger.trace("In visitLimitClause " + ctx.getText());
+        TreeNode limitClause = new LimitClause();
+        logicalPlan.getCurrentNode().addChildNode(limitClause);
+        logicalPlan.setCurrentNode(limitClause);
         return visitChildrenAndResetNode(ctx);
     }
 
@@ -143,18 +200,9 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     }
 
     @Override
-    public LogicalPlan visitFromClause(FromClauseContext ctx) {
-        logger.trace("In visitFromClause " + ctx.getText());
-        TreeNode fromItem = new FromItem();
-        logicalPlan.getCurrentNode().addChildNode(fromItem);
-        logicalPlan.setCurrentNode(fromItem);
-        return visitChildrenAndResetNode(ctx);
-    }
-
-    @Override
     public LogicalPlan visitUnquotedIdentifier(UnquotedIdentifierContext ctx) {
         logger.trace("In visitUnquotedIdentifier " + ctx.getText());
-        TreeNode node = new IdentifierNode(ctx.getText());
+        TreeNode node = new IdentifierNode("'"+ctx.getText()+"'");
         logicalPlan.getCurrentNode().addChildNode(node);
         return visitChildren(ctx);
     }
@@ -180,79 +228,25 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitLogicalBinary(LogicalBinaryContext ctx) {
         logger.trace("In visitLogicalBinary " + ctx.getText());
-        if (logicalPlan.getCurrentNode() instanceof Query) {
-            if (logicalPlan.getQuery().getChildNodes().size() < 3) {
-                TreeNode whereClause = new WhereClause();
-                logicalPlan.getCurrentNode().addChildNode(whereClause);
-                if (ctx.AND() != null) {
-                    TreeNode andNode = new LogicalOperation(Operator.AND);
-                    whereClause.addChildNode(andNode);
-                    logicalPlan.setCurrentNode(andNode);
-                } else if (ctx.OR() != null) {
-                    TreeNode orNode = new LogicalOperation(Operator.OR);
-                    whereClause.addChildNode(orNode);
-                    logicalPlan.setCurrentNode(orNode);
-                }
-            } else {
-                TreeNode havingClause = new HavingClause();
-                logicalPlan.getCurrentNode().addChildNode(havingClause);
-                if (ctx.AND() != null) {
-                    TreeNode andNode = new LogicalOperation(Operator.AND);
-                    havingClause.addChildNode(andNode);
-                    logicalPlan.setCurrentNode(andNode);
-                } else if (ctx.OR() != null) {
-                    TreeNode orNode = new LogicalOperation(Operator.OR);
-                    havingClause.addChildNode(orNode);
-                    logicalPlan.setCurrentNode(orNode);
-                }
-            }
-            try {
-                return visitChildrenAndResetNode(ctx);
-            } finally {
-                logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent());
-            }
-        } else {
-            if (ctx.AND() != null) {
-                TreeNode andNode = new LogicalOperation(Operator.AND);
-                logicalPlan.getCurrentNode().addChildNode(andNode);
-                logicalPlan.setCurrentNode(andNode);
-            } else if (ctx.OR() != null) {
-                TreeNode orNode = new LogicalOperation(Operator.OR);
-                logicalPlan.getCurrentNode().addChildNode(orNode);
-                logicalPlan.setCurrentNode(orNode);
-            }
-            return visitChildrenAndResetNode(ctx);
+        if (ctx.AND() != null) {
+            TreeNode andNode = new LogicalOperation(Operator.AND);
+            logicalPlan.getCurrentNode().addChildNode(andNode);
+            logicalPlan.setCurrentNode(andNode);
+        } else if (ctx.OR() != null) {
+            TreeNode orNode = new LogicalOperation(Operator.OR);
+            logicalPlan.getCurrentNode().addChildNode(orNode);
+            logicalPlan.setCurrentNode(orNode);
         }
+        return visitChildrenAndResetNode(ctx);
     }
 
     @Override
     public LogicalPlan visitComparison(ComparisonContext ctx) {
         logger.trace("In visitComparison " + ctx.getText());
-        if (logicalPlan.getCurrentNode() instanceof Query) {
-            if (logicalPlan.getQuery().getChildNodes().size() < 3) {
-                TreeNode whereClause = new WhereClause();
-                logicalPlan.getCurrentNode().addChildNode(whereClause);
-                TreeNode filterItem = new FilterItem();
-                whereClause.addChildNode(filterItem);
-                logicalPlan.setCurrentNode(filterItem);
-            } else {
-                TreeNode havingClause = new HavingClause();
-                logicalPlan.getCurrentNode().addChildNode(havingClause);
-                TreeNode filterItem = new FilterItem();
-                havingClause.addChildNode(filterItem);
-                logicalPlan.setCurrentNode(filterItem);
-            }
-            try {
-                return visitChildrenAndResetNode(ctx);
-            } finally {
-                logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent());
-            }
-        } else {
-            TreeNode filterItem = new FilterItem();
-            logicalPlan.getCurrentNode().addChildNode(filterItem);
-            logicalPlan.setCurrentNode(filterItem);
-            return visitChildrenAndResetNode(ctx);
-        }
+        TreeNode filterItem = new FilterItem();
+        logicalPlan.getCurrentNode().addChildNode(filterItem);
+        logicalPlan.setCurrentNode(filterItem);
+        return visitChildrenAndResetNode(ctx);
     }
 
     @Override
@@ -278,36 +272,22 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         return visitChildren(ctx);
     }
 
-    @Override
-    public LogicalPlan visitAggregation(AggregationContext ctx) {
-        logger.trace("In visitComparisonOperator " + ctx.getText());
-        TreeNode groupByClause = new GroupByClause();
-        logicalPlan.getCurrentNode().addChildNode(groupByClause);
-        logicalPlan.setCurrentNode(groupByClause);
-        return visitChildrenAndResetNode(ctx);
-    }
-
-    @Override
-    public LogicalPlan visitQueryOrganization(QueryOrganizationContext ctx) {
-        logger.trace("In visitQueryOrganization " + ctx.getText());
-        if (ctx.ORDER() != null && ctx.BY() != null) {
-            TreeNode orderByClause = new OrderByClause();
-            logicalPlan.getCurrentNode().addChildNode(orderByClause);
-            logicalPlan.setCurrentNode(orderByClause);
-            for (SortItemContext sortItem : ctx.order) {
-                sortItem.accept(this);
-            }
-            logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent());
-        }
-        if (ctx.LIMIT() != null) {
-            TreeNode limitClause = new LimitClause();
-            logicalPlan.getCurrentNode().addChildNode(limitClause);
-            logicalPlan.setCurrentNode(limitClause);
-            ctx.limit.accept(this);
-            logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent());
-        }
-        return defaultResult();
-    }
+    /*
+     * @Override public LogicalPlan
+     * visitQueryOrganization(QueryOrganizationContext ctx) {
+     * logger.trace("In visitQueryOrganization " + ctx.getText()); if
+     * (ctx.ORDER() != null && ctx.BY() != null) { TreeNode orderByClause = new
+     * OrderByClause();
+     * logicalPlan.getCurrentNode().addChildNode(orderByClause);
+     * logicalPlan.setCurrentNode(orderByClause); for (SortItemContext sortItem
+     * : ctx.order) { sortItem.accept(this); }
+     * logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent()); }
+     * if (ctx.LIMIT() != null) { TreeNode limitClause = new LimitClause();
+     * logicalPlan.getCurrentNode().addChildNode(limitClause);
+     * logicalPlan.setCurrentNode(limitClause); ctx.limit.accept(this);
+     * logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent()); }
+     * return defaultResult(); }
+     */
 
     @Override
     public LogicalPlan visitSortItem(SortItemContext ctx) {

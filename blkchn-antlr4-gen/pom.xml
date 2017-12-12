@@ -44,7 +44,7 @@
 									<argument>com.impetus.blkch.sql.generated</argument>
 								</arguments>
 								<visitor>true</visitor>
-								<sourceDirectory>${basedir}/antlr/sparksql</sourceDirectory>
+								<sourceDirectory>${basedir}/antlr/blkchn</sourceDirectory>
 								<outputDirectory>${basedir}/src/main/java/com/impetus/blkch/sql/generated</outputDirectory>
 							</configuration>
 							<executions>
