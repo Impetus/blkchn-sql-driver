@@ -273,23 +273,6 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         return visitChildren(ctx);
     }
 
-    /*
-     * @Override public LogicalPlan
-     * visitQueryOrganization(QueryOrganizationContext ctx) {
-     * logger.trace("In visitQueryOrganization " + ctx.getText()); if
-     * (ctx.ORDER() != null && ctx.BY() != null) { TreeNode orderByClause = new
-     * OrderByClause();
-     * logicalPlan.getCurrentNode().addChildNode(orderByClause);
-     * logicalPlan.setCurrentNode(orderByClause); for (SortItemContext sortItem
-     * : ctx.order) { sortItem.accept(this); }
-     * logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent()); }
-     * if (ctx.LIMIT() != null) { TreeNode limitClause = new LimitClause();
-     * logicalPlan.getCurrentNode().addChildNode(limitClause);
-     * logicalPlan.setCurrentNode(limitClause); ctx.limit.accept(this);
-     * logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent()); }
-     * return defaultResult(); }
-     */
-
     @Override
     public LogicalPlan visitSortItem(SortItemContext ctx) {
         logger.trace("In visitSortItem " + ctx.getText());
