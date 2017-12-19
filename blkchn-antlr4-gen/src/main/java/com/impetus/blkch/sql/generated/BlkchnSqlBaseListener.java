@@ -101,6 +101,18 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSetOperation(BlkchnSqlParser.SetOperationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSetOperation(BlkchnSqlParser.SetOperationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterQueryPrimaryDefault(BlkchnSqlParser.QueryPrimaryDefaultContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -108,30 +120,6 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitQueryPrimaryDefault(BlkchnSqlParser.QueryPrimaryDefaultContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTable(BlkchnSqlParser.TableContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTable(BlkchnSqlParser.TableContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterInlineTableDefault1(BlkchnSqlParser.InlineTableDefault1Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInlineTableDefault1(BlkchnSqlParser.InlineTableDefault1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

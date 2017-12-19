@@ -53,13 +53,12 @@ limitClause
     ;
     
 queryTerm
-    : queryPrimary                                                                         #queryTermDefault
+    : queryPrimary                                                                                    #queryTermDefault
+    | left=queryTerm operator=(INTERSECT | UNION | EXCEPT | SETMINUS) setQuantifier? right=queryTerm  #setOperation
     ;
     
 queryPrimary
     : querySpecification                                                    #queryPrimaryDefault
-    | TABLE tableIdentifier                                                 #table
-    | inlineTable                                                           #inlineTableDefault1
     | '(' query  ')'                                                        #subquery
     ;
     

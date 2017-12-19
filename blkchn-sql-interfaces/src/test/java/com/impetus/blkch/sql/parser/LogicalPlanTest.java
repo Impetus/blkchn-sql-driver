@@ -44,72 +44,57 @@ import com.impetus.blkch.sql.query.WhereClause;
 
 public class LogicalPlanTest extends TestCase {
 
-	@Test
+    @Test
     public void testSimpleSelect() {
         String sql = "select a, b from TRANSACTION t";
         LogicalPlan plan = getLogicalPlan(sql);
-        
+
         LogicalPlan logicalPlan = buildSimpleSelect();
-        logicalPlan.getQuery().traverse();
-        plan.getQuery().traverse();
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
 
     @Test
-    public void testSimpleSelectWithWhereClause()
-    {
+    public void testSimpleSelectWithWhereClause() {
         String sql = "select a, b from TRANSACTION t where a = 'hello world'";
         LogicalPlan plan = getLogicalPlan(sql);
 
         LogicalPlan logicalPlan = buildSelectWithWhere();
 
-        logicalPlan.getQuery().traverse();
-        plan.getQuery().traverse();
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
-    
+
     @Test
-    public void testSimpleSelectWithWhereClauseAndGroupBy()
-    {
+    public void testSimpleSelectWithWhereClauseAndGroupBy() {
         String sql = "select a, b from TRANSACTION t where a = 'hello world' group by c";
         LogicalPlan plan = getLogicalPlan(sql);
 
         LogicalPlan logicalPlan = buildSelectWithGroupBy();
 
-        logicalPlan.getQuery().traverse();
-        plan.getQuery().traverse();
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
-    
+
     @Test
-    public void testSelectWithHaving()
-    {
+    public void testSelectWithHaving() {
         String sql = "select a, b from TRANSACTION t where a = 'hello world' group by c having b > 100";
         LogicalPlan plan = getLogicalPlan(sql);
 
         LogicalPlan logicalPlan = buildHaving();
 
-        logicalPlan.getQuery().traverse();
-        plan.getQuery().traverse();
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
-    
+
     @Test
-    public void testSelectWithHavingAndOrderBy()
-    {
+    public void testSelectWithHavingAndOrderBy() {
         String sql = "select a, b from TRANSACTION t where a = 'hello world' group by c having b > 100 order by b desc";
         LogicalPlan plan = getLogicalPlan(sql);
 
         LogicalPlan logicalPlan = buildOrderByClause();
 
-        logicalPlan.getQuery().traverse();
-        plan.getQuery().traverse();
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
-    
+
     @Test
-    public void testSelectWithHavingOrderByAndLimit()
-    {
+    public void testSelectWithHavingOrderByAndLimit() {
         String sql = "select a, b from TRANSACTION t where a = 'hello world' group by c having b > 100 order by b desc limit 10";
         LogicalPlan plan = getLogicalPlan(sql);
 
@@ -119,11 +104,8 @@ public class LogicalPlanTest extends TestCase {
         TreeNode ident = new IdentifierNode("10");
         limit.addChildNode(ident);
 
-        logicalPlan.getQuery().traverse();
-        plan.getQuery().traverse();
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
-
 
     @Test
     public void testSelectWithWhereClouse() {
@@ -139,8 +121,6 @@ public class LogicalPlanTest extends TestCase {
         TreeNode selectItem1 = new SelectItem();
         selectClause1.addChildNode(selectItem1);
         TreeNode column1 = new Column();
-
-
 
         selectItem1.addChildNode(column1);
         TreeNode ident1 = new IdentifierNode("a");
@@ -178,13 +158,8 @@ public class LogicalPlanTest extends TestCase {
         TreeNode ident7 = new IdentifierNode("10");
         filterItem.addChildNode(ident7);
 
-
-        logicalPlan.getQuery().traverse();
-        plan.getQuery().traverse();
-
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
-
 
     @Test
     public void testSelectWithWhereAndLogicalOperatorClouse() {
@@ -200,8 +175,6 @@ public class LogicalPlanTest extends TestCase {
         TreeNode selectItem1 = new SelectItem();
         selectClause1.addChildNode(selectItem1);
         TreeNode column1 = new Column();
-
-
 
         selectItem1.addChildNode(column1);
         TreeNode ident1 = new IdentifierNode("a");
@@ -228,7 +201,6 @@ public class LogicalPlanTest extends TestCase {
         TreeNode logicalOper = new LogicalOperation(LogicalOperation.Operator.AND);
         whereItem.addChildNode(logicalOper);
 
-
         TreeNode filterItem = new FilterItem();
         logicalOper.addChildNode(filterItem);
 
@@ -245,8 +217,6 @@ public class LogicalPlanTest extends TestCase {
         TreeNode ident7 = new IdentifierNode("10");
         filterItem.addChildNode(ident7);
 
-
-
         TreeNode filterItem2 = new FilterItem();
         logicalOper.addChildNode(filterItem2);
 
@@ -262,10 +232,6 @@ public class LogicalPlanTest extends TestCase {
 
         TreeNode ident10 = new IdentifierNode("5");
         filterItem2.addChildNode(ident10);
-
-
-        logicalPlan.getQuery().traverse();
-        plan.getQuery().traverse();
 
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
@@ -284,8 +250,6 @@ public class LogicalPlanTest extends TestCase {
         TreeNode selectItem1 = new SelectItem();
         selectClause1.addChildNode(selectItem1);
         TreeNode column1 = new Column();
-
-
 
         selectItem1.addChildNode(column1);
         TreeNode ident1 = new IdentifierNode("a");
@@ -323,10 +287,6 @@ public class LogicalPlanTest extends TestCase {
         TreeNode ident7 = new IdentifierNode("10");
         filterItem.addChildNode(ident7);
 
-
-        logicalPlan.getQuery().traverse();
-        plan.getQuery().traverse();
-
         TreeNode limitClause = new LimitClause();
         limitClause.addChildNode(new IdentifierNode("3"));
         logicalPlan.getCurrentNode().addChildNode(limitClause);
@@ -334,11 +294,7 @@ public class LogicalPlanTest extends TestCase {
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
 
-
-
-
-    private LogicalPlan buildOrderByClause()
-    {
+    private LogicalPlan buildOrderByClause() {
         LogicalPlan logicalPlan = buildHaving();
         TreeNode orderByClause = new OrderByClause();
         logicalPlan.getCurrentNode().addChildNode(orderByClause);
@@ -353,10 +309,9 @@ public class LogicalPlanTest extends TestCase {
         return logicalPlan;
     }
 
-    private LogicalPlan buildHaving()
-    {
+    private LogicalPlan buildHaving() {
         LogicalPlan logicalPlan = buildSelectWithGroupBy();
-        
+
         TreeNode havingClause = new HavingClause();
         logicalPlan.getCurrentNode().addChildNode(havingClause);
         TreeNode filterItem = new FilterItem();
@@ -374,11 +329,10 @@ public class LogicalPlanTest extends TestCase {
         return logicalPlan;
     }
 
-    private LogicalPlan buildSelectWithGroupBy()
-    {
+    private LogicalPlan buildSelectWithGroupBy() {
         LogicalPlan logicalPlan = buildSelectWithWhere();
-        
-        TreeNode groupBy  = new GroupByClause();
+
+        TreeNode groupBy = new GroupByClause();
         logicalPlan.getCurrentNode().addChildNode(groupBy);
         TreeNode column1 = new Column();
         groupBy.addChildNode(column1);
@@ -387,8 +341,7 @@ public class LogicalPlanTest extends TestCase {
         return logicalPlan;
     }
 
-    private LogicalPlan buildSimpleSelect()
-    {
+    private LogicalPlan buildSimpleSelect() {
         LogicalPlan logicalPlan = new LogicalPlan("BlockchainVisitor");
         Query query = new Query();
         logicalPlan.setQuery(query);
@@ -396,33 +349,32 @@ public class LogicalPlanTest extends TestCase {
         TreeNode selectClause1 = new SelectClause();
         logicalPlan.getCurrentNode().addChildNode(selectClause1);
         TreeNode selectItem1 = new SelectItem();
-    	selectClause1.addChildNode(selectItem1);
-    	TreeNode column1 = new Column();
-    	selectItem1.addChildNode(column1);
-    	TreeNode ident1 = new IdentifierNode("a");
-    	column1.addChildNode(ident1);
-    	TreeNode selectItem2 = new SelectItem();
-    	selectClause1.addChildNode(selectItem2);
-    	TreeNode column2 = new Column();
-    	selectItem2.addChildNode(column2);
-    	TreeNode ident2 = new IdentifierNode("b");
-    	column2.addChildNode(ident2);
-    	
-    	TreeNode fromItem = new FromItem();
-    	logicalPlan.getCurrentNode().addChildNode(fromItem);
-    	TreeNode table = new Table();
-    	fromItem.addChildNode(table);
-    	TreeNode ident3 = new IdentifierNode("t");
-    	fromItem.addChildNode(ident3);
-    	TreeNode ident4 = new IdentifierNode("TRANSACTION");
+        selectClause1.addChildNode(selectItem1);
+        TreeNode column1 = new Column();
+        selectItem1.addChildNode(column1);
+        TreeNode ident1 = new IdentifierNode("a");
+        column1.addChildNode(ident1);
+        TreeNode selectItem2 = new SelectItem();
+        selectClause1.addChildNode(selectItem2);
+        TreeNode column2 = new Column();
+        selectItem2.addChildNode(column2);
+        TreeNode ident2 = new IdentifierNode("b");
+        column2.addChildNode(ident2);
+
+        TreeNode fromItem = new FromItem();
+        logicalPlan.getCurrentNode().addChildNode(fromItem);
+        TreeNode table = new Table();
+        fromItem.addChildNode(table);
+        TreeNode ident3 = new IdentifierNode("t");
+        fromItem.addChildNode(ident3);
+        TreeNode ident4 = new IdentifierNode("TRANSACTION");
         table.addChildNode(ident4);
         return logicalPlan;
     }
 
-    private LogicalPlan buildSelectWithWhere()
-    {
+    private LogicalPlan buildSelectWithWhere() {
         LogicalPlan logicalPlan = buildSimpleSelect();
-        
+
         TreeNode whereClause = new WhereClause();
         logicalPlan.getCurrentNode().addChildNode(whereClause);
         TreeNode filterItem = new FilterItem();
@@ -454,6 +406,5 @@ public class LogicalPlanTest extends TestCase {
         BlkchnSqlParser parser = new BlkchnSqlParser(tokens);
         return parser;
     }
-    
 
 }

@@ -50,7 +50,6 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.IdentifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.IdentifierListContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.IdentifierSeqContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.InlineTableContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.InlineTableDefault1Context;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.InlineTableDefault2Context;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.IntegerLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.IntervalContext;
@@ -86,6 +85,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.RelationContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.RowConstructorContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SearchedCaseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SelectClauseContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.SetOperationContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SetQuantifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SimpleCaseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SimpleQueryContext;
@@ -98,7 +98,6 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.StringLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SubqueryContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SubqueryExpressionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SubscriptContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.TableContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.TableIdentifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.TableNameContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.TimeFunctionCallContext;
@@ -110,7 +109,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.WhenClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.WhereClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlVisitor;
 
-public class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan> implements
+public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan> implements
         BlkchnSqlVisitor<LogicalPlan> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractSyntaxTreeVisitor.class);
@@ -138,20 +137,6 @@ public class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalP
     @Override
     public LogicalPlan visitQueryPrimaryDefault(QueryPrimaryDefaultContext ctx) {
         logger.trace("In visitQueryPrimaryDefault " + ctx.getText());
-        return visitChildren(ctx);
-
-    }
-
-    @Override
-    public LogicalPlan visitTable(TableContext ctx) {
-        logger.trace("In visitTable " + ctx.getText());
-        return visitChildren(ctx);
-
-    }
-
-    @Override
-    public LogicalPlan visitInlineTableDefault1(InlineTableDefault1Context ctx) {
-        logger.trace("In visitInlineTableDefault1 " + ctx.getText());
         return visitChildren(ctx);
 
     }
@@ -725,6 +710,12 @@ public class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalP
     @Override
     public LogicalPlan visitInlineTableDefault2(InlineTableDefault2Context ctx) {
         logger.trace("In visitInlineTableDefault2 " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitSetOperation(SetOperationContext ctx) {
+        logger.trace("In visitSetOperation " + ctx.getText());
         return visitChildren(ctx);
     }
 

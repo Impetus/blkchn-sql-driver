@@ -85,6 +85,18 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitQueryTermDefault(BlkchnSqlParser.QueryTermDefaultContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code setOperation}
+	 * labeled alternative in {@link BlkchnSqlParser#queryTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterSetOperation(BlkchnSqlParser.SetOperationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code setOperation}
+	 * labeled alternative in {@link BlkchnSqlParser#queryTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitSetOperation(BlkchnSqlParser.SetOperationContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code queryPrimaryDefault}
 	 * labeled alternative in {@link BlkchnSqlParser#queryPrimary}.
 	 * @param ctx the parse tree
@@ -96,30 +108,6 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitQueryPrimaryDefault(BlkchnSqlParser.QueryPrimaryDefaultContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code table}
-	 * labeled alternative in {@link BlkchnSqlParser#queryPrimary}.
-	 * @param ctx the parse tree
-	 */
-	void enterTable(BlkchnSqlParser.TableContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code table}
-	 * labeled alternative in {@link BlkchnSqlParser#queryPrimary}.
-	 * @param ctx the parse tree
-	 */
-	void exitTable(BlkchnSqlParser.TableContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code inlineTableDefault1}
-	 * labeled alternative in {@link BlkchnSqlParser#queryPrimary}.
-	 * @param ctx the parse tree
-	 */
-	void enterInlineTableDefault1(BlkchnSqlParser.InlineTableDefault1Context ctx);
-	/**
-	 * Exit a parse tree produced by the {@code inlineTableDefault1}
-	 * labeled alternative in {@link BlkchnSqlParser#queryPrimary}.
-	 * @param ctx the parse tree
-	 */
-	void exitInlineTableDefault1(BlkchnSqlParser.InlineTableDefault1Context ctx);
 	/**
 	 * Enter a parse tree produced by the {@code subquery}
 	 * labeled alternative in {@link BlkchnSqlParser#queryPrimary}.

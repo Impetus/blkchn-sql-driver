@@ -57,26 +57,19 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitQueryTermDefault(BlkchnSqlParser.QueryTermDefaultContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code setOperation}
+	 * labeled alternative in {@link BlkchnSqlParser#queryTerm}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSetOperation(BlkchnSqlParser.SetOperationContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code queryPrimaryDefault}
 	 * labeled alternative in {@link BlkchnSqlParser#queryPrimary}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitQueryPrimaryDefault(BlkchnSqlParser.QueryPrimaryDefaultContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code table}
-	 * labeled alternative in {@link BlkchnSqlParser#queryPrimary}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTable(BlkchnSqlParser.TableContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code inlineTableDefault1}
-	 * labeled alternative in {@link BlkchnSqlParser#queryPrimary}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitInlineTableDefault1(BlkchnSqlParser.InlineTableDefault1Context ctx);
 	/**
 	 * Visit a parse tree produced by the {@code subquery}
 	 * labeled alternative in {@link BlkchnSqlParser#queryPrimary}.
