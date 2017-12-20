@@ -33,9 +33,36 @@ singleStatement
     ;
     
 statement
-    : query                                                         #statementDefault
+    : query                                                        #statementDefault
+    | insertInto                                                   #singleInsert
+    | createFunction										   	   #createFunctionRule
+    | callFunction											   	   #callFunctionRule
     ;
     
+insertInto
+    : INSERT INTO tableIdentifier ('(' columnNames ')')? VALUES '(' columnValues ')'
+    ;
+	
+columnNames
+	: identifierSeq
+	;
+	
+columnValues
+	: identifierSeq
+	;
+    
+createFunction
+	: CREATE FUNCTION qualifiedName AS className=STRING
+	;
+	
+callFunction
+	: CALL qualifiedName '(' parameterValues? ')'
+	;
+
+parameterValues
+	: identifierSeq
+	;
+	
 query
     : queryTerm queryOrganization                                   #simpleQuery
     ;
@@ -389,6 +416,7 @@ RESET: 'RESET';
 COMMIT: 'COMMIT';
 ROLLBACK: 'ROLLBACK';
 IGNORE: 'IGNORE';
+CALL: 'CALL';
 
 IF: 'IF';
 

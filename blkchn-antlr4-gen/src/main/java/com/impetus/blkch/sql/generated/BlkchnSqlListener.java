@@ -31,6 +31,102 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitStatementDefault(BlkchnSqlParser.StatementDefaultContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code singleInsert}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterSingleInsert(BlkchnSqlParser.SingleInsertContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code singleInsert}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitSingleInsert(BlkchnSqlParser.SingleInsertContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code createFunctionRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCreateFunctionRule(BlkchnSqlParser.CreateFunctionRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code createFunctionRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCreateFunctionRule(BlkchnSqlParser.CreateFunctionRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code callFunctionRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCallFunctionRule(BlkchnSqlParser.CallFunctionRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code callFunctionRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCallFunctionRule(BlkchnSqlParser.CallFunctionRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#insertInto}.
+	 * @param ctx the parse tree
+	 */
+	void enterInsertInto(BlkchnSqlParser.InsertIntoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#insertInto}.
+	 * @param ctx the parse tree
+	 */
+	void exitInsertInto(BlkchnSqlParser.InsertIntoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#columnNames}.
+	 * @param ctx the parse tree
+	 */
+	void enterColumnNames(BlkchnSqlParser.ColumnNamesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#columnNames}.
+	 * @param ctx the parse tree
+	 */
+	void exitColumnNames(BlkchnSqlParser.ColumnNamesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#columnValues}.
+	 * @param ctx the parse tree
+	 */
+	void enterColumnValues(BlkchnSqlParser.ColumnValuesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#columnValues}.
+	 * @param ctx the parse tree
+	 */
+	void exitColumnValues(BlkchnSqlParser.ColumnValuesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#createFunction}.
+	 * @param ctx the parse tree
+	 */
+	void enterCreateFunction(BlkchnSqlParser.CreateFunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#createFunction}.
+	 * @param ctx the parse tree
+	 */
+	void exitCreateFunction(BlkchnSqlParser.CreateFunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#callFunction}.
+	 * @param ctx the parse tree
+	 */
+	void enterCallFunction(BlkchnSqlParser.CallFunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#callFunction}.
+	 * @param ctx the parse tree
+	 */
+	void exitCallFunction(BlkchnSqlParser.CallFunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#parameterValues}.
+	 * @param ctx the parse tree
+	 */
+	void enterParameterValues(BlkchnSqlParser.ParameterValuesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#parameterValues}.
+	 * @param ctx the parse tree
+	 */
+	void exitParameterValues(BlkchnSqlParser.ParameterValuesContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code simpleQuery}
 	 * labeled alternative in {@link BlkchnSqlParser#query}.
 	 * @param ctx the parse tree

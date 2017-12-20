@@ -25,6 +25,63 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatementDefault(BlkchnSqlParser.StatementDefaultContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code singleInsert}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSingleInsert(BlkchnSqlParser.SingleInsertContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code createFunctionRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCreateFunctionRule(BlkchnSqlParser.CreateFunctionRuleContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code callFunctionRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCallFunctionRule(BlkchnSqlParser.CallFunctionRuleContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#insertInto}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInsertInto(BlkchnSqlParser.InsertIntoContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#columnNames}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnNames(BlkchnSqlParser.ColumnNamesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#columnValues}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColumnValues(BlkchnSqlParser.ColumnValuesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#createFunction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCreateFunction(BlkchnSqlParser.CreateFunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#callFunction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCallFunction(BlkchnSqlParser.CallFunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#parameterValues}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameterValues(BlkchnSqlParser.ParameterValuesContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code simpleQuery}
 	 * labeled alternative in {@link BlkchnSqlParser#query}.
 	 * @param ctx the parse tree
