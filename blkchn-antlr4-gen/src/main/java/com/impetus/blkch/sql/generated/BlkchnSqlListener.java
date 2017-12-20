@@ -107,6 +107,16 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitCreateFunction(BlkchnSqlParser.CreateFunctionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#className}.
+	 * @param ctx the parse tree
+	 */
+	void enterClassName(BlkchnSqlParser.ClassNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#className}.
+	 * @param ctx the parse tree
+	 */
+	void exitClassName(BlkchnSqlParser.ClassNameContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#callFunction}.
 	 * @param ctx the parse tree
 	 */

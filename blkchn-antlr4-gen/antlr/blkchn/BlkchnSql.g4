@@ -52,8 +52,12 @@ columnValues
 	;
     
 createFunction
-	: CREATE FUNCTION qualifiedName AS className=STRING
+	: CREATE FUNCTION qualifiedName AS className
 	;
+
+className
+    : STRING
+    ;
 	
 callFunction
 	: CALL qualifiedName '(' parameterValues? ')'

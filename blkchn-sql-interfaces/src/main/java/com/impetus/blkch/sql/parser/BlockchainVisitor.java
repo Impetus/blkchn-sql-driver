@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.impetus.blkch.sql.parser;
 
+import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +83,15 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitSimpleQuery(SimpleQueryContext ctx) {
         logger.trace("In visitSimpleQuery " + ctx.getText());
+        query = new Query();
+        logicalPlan.setQuery(query);
+        logicalPlan.setCurrentNode(query);
+        return visitChildrenAndResetNode(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitCreateFunctionRule(BlkchnSqlParser.CreateFunctionRuleContext ctx) {
+        logger.trace("In visitCreateFunctionRule " + ctx.getText());
         query = new Query();
         logicalPlan.setQuery(query);
         logicalPlan.setCurrentNode(query);

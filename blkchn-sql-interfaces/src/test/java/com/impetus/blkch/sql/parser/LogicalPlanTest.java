@@ -237,6 +237,14 @@ public class LogicalPlanTest extends TestCase {
     }
 
     @Test
+    public void testCreateFunction() {
+        String sql = "Create Function sumFunction AS '/home/xyz'";
+        LogicalPlan plan = getLogicalPlan(sql);
+        //plan.traverse();
+        plan.getQuery().traverse();
+    }
+
+    @Test
     public void testSelectWithWhereAndLimitClouse() {
         String sql = "select a, b from TRANSACTION t where a = 10 limit 3";
         LogicalPlan plan = getLogicalPlan(sql);

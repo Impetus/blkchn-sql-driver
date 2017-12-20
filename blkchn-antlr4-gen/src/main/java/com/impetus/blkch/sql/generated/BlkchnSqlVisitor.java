@@ -70,6 +70,12 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCreateFunction(BlkchnSqlParser.CreateFunctionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#className}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitClassName(BlkchnSqlParser.ClassNameContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#callFunction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

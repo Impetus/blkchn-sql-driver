@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.impetus.blkch.sql.parser;
 
+import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -739,6 +740,12 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     public LogicalPlan visitCreateFunction(CreateFunctionContext ctx)
     {
         logger.trace("In visitCreateFunction " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitClassName(BlkchnSqlParser.ClassNameContext ctx) {
+        logger.trace("In visitClassName " + ctx.getText());
         return visitChildren(ctx);
     }
 
