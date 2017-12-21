@@ -15,14 +15,14 @@
  ******************************************************************************/
 package com.impetus.blkch.sql.parser;
 
+import com.impetus.blkch.sql.function.ClassName;
+import com.impetus.blkch.sql.function.CreateFunction;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnNamesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnReferenceContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnValuesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonOperatorContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DereferenceContext;
@@ -30,7 +30,6 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.FromClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionCallContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.GroupByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.HavingClauseContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.InsertIntoContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.LimitClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.LogicalBinaryContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.NamedExpressionContext;
@@ -39,7 +38,6 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.OrderByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SelectClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SetQuantifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SimpleQueryContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.SingleInsertContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SortItemContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.StarContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.StringLiteralContext;
@@ -79,6 +77,8 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     LogicalPlan logicalPlan = new LogicalPlan("BlockchainVisitor");
 
     Query query;
+    CreateFunction crtFunction;
+    ClassName className;
 
     @Override
     public LogicalPlan visitSimpleQuery(SimpleQueryContext ctx) {
@@ -92,9 +92,18 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitCreateFunctionRule(BlkchnSqlParser.CreateFunctionRuleContext ctx) {
         logger.trace("In visitCreateFunctionRule " + ctx.getText());
-        query = new Query();
-        logicalPlan.setQuery(query);
-        logicalPlan.setCurrentNode(query);
+        crtFunction = new CreateFunction();
+        logicalPlan.setCreateFunction(crtFunction);
+        logicalPlan.setCurrentNode(crtFunction);
+        return visitChildrenAndResetNode(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitClassName(BlkchnSqlParser.ClassNameContext ctx){
+        logger.trace("In visitClassName " + ctx.getText());
+        className = new ClassName(ctx.getText());
+        logicalPlan.getCurrentNode().addChildNode(className);
+        logicalPlan.setCurrentNode(className);
         return visitChildrenAndResetNode(ctx);
     }
 

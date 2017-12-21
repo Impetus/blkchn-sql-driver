@@ -241,7 +241,7 @@ public class LogicalPlanTest extends TestCase {
         String sql = "Create Function sumFunction AS '/home/xyz'";
         LogicalPlan plan = getLogicalPlan(sql);
         //plan.traverse();
-        plan.getQuery().traverse();
+        plan.getCreateFunction().traverse();
     }
 
     @Test
