@@ -45,6 +45,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComplexColTypeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComplexColTypeListContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComplexDataTypeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ConstantDefaultContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ConstantSeqContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateFunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateFunctionRuleContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DecimalLiteralContext;
@@ -124,7 +125,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.VersionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.WhenClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.WhereClauseContext;
 
-public class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan> implements
+public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan> implements
         BlkchnSqlVisitor<LogicalPlan> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractSyntaxTreeVisitor.class);
@@ -836,6 +837,13 @@ public class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalP
     @Override
     public LogicalPlan visitArgParam(ArgParamContext ctx) {
         logger.trace("In visitArgParam " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitConstantSeq(ConstantSeqContext ctx)
+    {
+        logger.trace("In visitConstantSeq " + ctx.getText());
         return visitChildren(ctx);
     }
 

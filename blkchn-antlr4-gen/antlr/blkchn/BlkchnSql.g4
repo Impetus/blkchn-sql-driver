@@ -48,8 +48,13 @@ columnNames
 	;
 	
 columnValues
-	: identifierSeq
+	: constantSeq
 	;
+	
+constantSeq
+	: constant (',' constant)*
+	;
+
     
 createFunction
 	: CREATE FUNCTION qualifiedName AS className version? endorsers? args?

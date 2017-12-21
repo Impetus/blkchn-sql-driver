@@ -26,7 +26,9 @@ import com.impetus.blkch.sql.function.Endorsers;
 import com.impetus.blkch.sql.function.Version;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArgsContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnNamesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnReferenceContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnValuesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonOperatorContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DereferenceContext;
@@ -44,6 +46,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.OrderByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SelectClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SetQuantifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SimpleQueryContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.SingleInsertContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SortItemContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.StarContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.StringLiteralContext;
@@ -51,6 +54,9 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.TableIdentifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.UnquotedIdentifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.VersionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.WhereClauseContext;
+import com.impetus.blkch.sql.insert.ColumnName;
+import com.impetus.blkch.sql.insert.ColumnValue;
+import com.impetus.blkch.sql.insert.Insert;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.Comparator;
 import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
@@ -86,6 +92,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     Query query;
     CreateFunction crtFunction;
     ClassName className;
+    Insert insert;
 
     @Override
     public LogicalPlan visitSimpleQuery(SimpleQueryContext ctx) {
@@ -93,6 +100,16 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         query = new Query();
         logicalPlan.setQuery(query);
         logicalPlan.setCurrentNode(query);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitSingleInsert(SingleInsertContext ctx)
+    {
+        logger.trace("In visitSingleInsert " + ctx.getText());
+        insert = new Insert();
+        logicalPlan.setInsert(insert);
+        logicalPlan.setCurrentNode(insert);
         return visitChildrenAndResetNode(ctx);
     }
 
@@ -362,6 +379,26 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         Args args = new Args();
         logicalPlan.getCurrentNode().addChildNode(args);
         logicalPlan.setCurrentNode(args);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitColumnNames(ColumnNamesContext ctx)
+    {
+        logger.trace("In visitColumnNames " + ctx.getText());
+        ColumnName columnName = new ColumnName();
+        logicalPlan.getCurrentNode().addChildNode(columnName);
+        logicalPlan.setCurrentNode(columnName);
+        return visitChildrenAndResetNode(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitColumnValues(ColumnValuesContext ctx)
+    {
+        logger.trace("In visitColumnValues " + ctx.getText());
+        ColumnValue columnValue = new ColumnValue();
+        logicalPlan.getCurrentNode().addChildNode(columnValue);
+        logicalPlan.setCurrentNode(columnValue);
         return visitChildrenAndResetNode(ctx);
     }
 

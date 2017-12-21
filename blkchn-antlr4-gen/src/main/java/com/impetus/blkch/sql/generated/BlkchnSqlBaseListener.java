@@ -113,6 +113,18 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterConstantSeq(BlkchnSqlParser.ConstantSeqContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConstantSeq(BlkchnSqlParser.ConstantSeqContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCreateFunction(BlkchnSqlParser.CreateFunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}

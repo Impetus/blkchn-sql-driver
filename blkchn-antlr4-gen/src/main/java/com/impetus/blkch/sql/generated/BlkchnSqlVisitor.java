@@ -64,6 +64,12 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitColumnValues(BlkchnSqlParser.ColumnValuesContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#constantSeq}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConstantSeq(BlkchnSqlParser.ConstantSeqContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#createFunction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

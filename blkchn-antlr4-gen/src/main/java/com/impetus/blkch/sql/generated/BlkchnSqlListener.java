@@ -97,6 +97,16 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitColumnValues(BlkchnSqlParser.ColumnValuesContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#constantSeq}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstantSeq(BlkchnSqlParser.ConstantSeqContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#constantSeq}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstantSeq(BlkchnSqlParser.ConstantSeqContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#createFunction}.
 	 * @param ctx the parse tree
 	 */
