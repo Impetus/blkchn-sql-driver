@@ -52,11 +52,37 @@ columnValues
 	;
     
 createFunction
-	: CREATE FUNCTION qualifiedName AS className
+	: CREATE FUNCTION qualifiedName AS className version? endorsers? args?
 	;
 
 className
     : STRING
+    ;
+    
+version
+    : WITH VERSION STRING
+    ;
+    
+endorsers
+    : WITH ENDORSERS endorserDetails
+    ;
+    
+endorserDetails
+    : ENDORSER
+    | (AND | OR) '(' endorserDetails (',' endorserDetails)* ')'
+    ;
+    
+args
+    : WITH ARGS argParamSeq
+    ;
+    
+argParamSeq
+    : argParam (',' argParam)*
+    ;
+    
+argParam
+    : strictIdentifier
+    | constant
     ;
 	
 callFunction
@@ -421,6 +447,10 @@ COMMIT: 'COMMIT';
 ROLLBACK: 'ROLLBACK';
 IGNORE: 'IGNORE';
 CALL: 'CALL';
+WITH: 'WITH';
+VERSION: 'VERSION';
+ENDORSERS: 'ENDORSERS';
+ARGS: 'ARGS';
 
 IF: 'IF';
 
@@ -509,6 +539,10 @@ BIGDECIMAL_LITERAL
 
 IDENTIFIER
     : (LETTER | DIGIT | '_')+
+    ;
+    
+ENDORSER
+    : (LETTER | DIGIT | '.')+
     ;
 
 BACKQUOTED_IDENTIFIER

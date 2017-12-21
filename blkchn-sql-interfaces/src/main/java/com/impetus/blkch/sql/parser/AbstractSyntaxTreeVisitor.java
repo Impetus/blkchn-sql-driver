@@ -15,13 +15,16 @@
  ******************************************************************************/
 package com.impetus.blkch.sql.parser;
 
-import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.impetus.blkch.sql.generated.*;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.AliasedQueryContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.AliasedRelationContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArgParamContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArgParamSeqContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArgsContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArithmeticBinaryContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArithmeticOperatorContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArithmeticUnaryContext;
@@ -47,6 +50,8 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateFunctionRuleContext
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DecimalLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DereferenceContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DoubleLiteralContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorserDetailsContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorsersContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ExpressionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FirstContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FromClauseContext;
@@ -115,11 +120,11 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.TinyIntLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.TypeConstructorContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.UnquotedIdentifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ValueExpressionDefaultContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.VersionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.WhenClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.WhereClauseContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlVisitor;
 
-public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan> implements
+public class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan> implements
         BlkchnSqlVisitor<LogicalPlan> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractSyntaxTreeVisitor.class);
@@ -797,5 +802,42 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
         logger.trace("In visitParameterValues " + ctx.getText());
         return visitChildren(ctx);
     }
+
+    @Override
+    public LogicalPlan visitVersion(VersionContext ctx) {
+        logger.trace("In visitVersion " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitEndorsers(EndorsersContext ctx) {
+        logger.trace("In visitEndorsers " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitEndorserDetails(EndorserDetailsContext ctx) {
+        logger.trace("In visitEndorserDetails " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitArgs(ArgsContext ctx) {
+        logger.trace("In visitArgs " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitArgParamSeq(ArgParamSeqContext ctx) {
+        logger.trace("In visitArgParamSeq " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitArgParam(ArgParamContext ctx) {
+        logger.trace("In visitArgParam " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
 
 }

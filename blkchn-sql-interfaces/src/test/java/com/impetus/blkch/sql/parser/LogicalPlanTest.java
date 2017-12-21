@@ -238,7 +238,8 @@ public class LogicalPlanTest extends TestCase {
 
     @Test
     public void testCreateFunction() {
-        String sql = "Create Function sumFunction AS '/home/xyz'";
+        String sql = "Create Function someFunction AS '/home/xyz' WITH VERSION '1.0' WITH ENDORSERS AND(Org1.member, OR(Org2.member, Org3.member)) "
+                + "WITH ARGS init, 500, 230";
         LogicalPlan plan = getLogicalPlan(sql);
         //plan.traverse();
         plan.getCreateFunction().traverse();

@@ -15,17 +15,23 @@
  ******************************************************************************/
 package com.impetus.blkch.sql.parser;
 
-import com.impetus.blkch.sql.function.ClassName;
-import com.impetus.blkch.sql.function.CreateFunction;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.impetus.blkch.sql.function.Args;
+import com.impetus.blkch.sql.function.ClassName;
+import com.impetus.blkch.sql.function.CreateFunction;
+import com.impetus.blkch.sql.function.Endorsers;
+import com.impetus.blkch.sql.function.Version;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArgsContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnReferenceContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonOperatorContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DereferenceContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorserDetailsContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorsersContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FromClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionCallContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.GroupByClauseContext;
@@ -43,6 +49,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.StarContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.StringLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.TableIdentifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.UnquotedIdentifierContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.VersionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.WhereClauseContext;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.Comparator;
@@ -307,6 +314,54 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         } else {
             logicalPlan.getCurrentNode().addChildNode(new OrderingDirection(Direction.ASC));
         }
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitVersion(VersionContext ctx) {
+        logger.trace("In visitVersion " + ctx.getText());
+        Version version = new Version(ctx.STRING().getText());
+        logicalPlan.getCurrentNode().addChildNode(version);
+        logicalPlan.setCurrentNode(version);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitEndorsers(EndorsersContext ctx) {
+        logger.trace("In visitEndorsers " + ctx.getText());
+        Endorsers endorsers = new Endorsers();
+        logicalPlan.getCurrentNode().addChildNode(endorsers);
+        logicalPlan.setCurrentNode(endorsers);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitEndorserDetails(EndorserDetailsContext ctx) {
+        logger.trace("In visitEndorserDetails " + ctx.getText());
+        if(ctx.ENDORSER() != null) {
+            IdentifierNode node = new IdentifierNode(ctx.ENDORSER().getText());
+            logicalPlan.getCurrentNode().addChildNode(node);
+            logicalPlan.setCurrentNode(node);
+        } else {
+            if(ctx.AND() != null) {
+                LogicalOperation oper = new LogicalOperation(Operator.AND);
+                logicalPlan.getCurrentNode().addChildNode(oper);
+                logicalPlan.setCurrentNode(oper);
+            } else {
+                LogicalOperation oper = new LogicalOperation(Operator.OR);
+                logicalPlan.getCurrentNode().addChildNode(oper);
+                logicalPlan.setCurrentNode(oper);
+            }
+        }
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitArgs(ArgsContext ctx) {
+        logger.trace("In visitArgs " + ctx.getText());
+        Args args = new Args();
+        logicalPlan.getCurrentNode().addChildNode(args);
+        logicalPlan.setCurrentNode(args);
         return visitChildrenAndResetNode(ctx);
     }
 

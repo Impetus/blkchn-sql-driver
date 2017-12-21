@@ -76,6 +76,42 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitClassName(BlkchnSqlParser.ClassNameContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#version}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVersion(BlkchnSqlParser.VersionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#endorsers}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEndorsers(BlkchnSqlParser.EndorsersContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#endorserDetails}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEndorserDetails(BlkchnSqlParser.EndorserDetailsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#args}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArgs(BlkchnSqlParser.ArgsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#argParamSeq}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArgParamSeq(BlkchnSqlParser.ArgParamSeqContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#argParam}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArgParam(BlkchnSqlParser.ArgParamContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#callFunction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
