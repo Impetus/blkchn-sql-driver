@@ -95,7 +95,7 @@ callFunction
 	;
 
 parameterValues
-	: identifierSeq
+	: argParamSeq
 	;
 	
 query

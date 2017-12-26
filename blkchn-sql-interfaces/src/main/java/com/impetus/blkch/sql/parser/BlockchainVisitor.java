@@ -20,12 +20,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.impetus.blkch.sql.function.Args;
+import com.impetus.blkch.sql.function.CallFunction;
 import com.impetus.blkch.sql.function.ClassName;
 import com.impetus.blkch.sql.function.CreateFunction;
 import com.impetus.blkch.sql.function.Endorsers;
+import com.impetus.blkch.sql.function.Parameters;
 import com.impetus.blkch.sql.function.Version;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArgsContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.CallFunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnNamesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnReferenceContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnValuesContext;
@@ -43,6 +46,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.LogicalBinaryContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.NamedExpressionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.NumericLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.OrderByClauseContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ParameterValuesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SelectClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SetQuantifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SimpleQueryContext;
@@ -93,6 +97,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     CreateFunction crtFunction;
     ClassName className;
     Insert insert;
+    CallFunction callFunction;
 
     @Override
     public LogicalPlan visitSimpleQuery(SimpleQueryContext ctx) {
@@ -119,6 +124,15 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         crtFunction = new CreateFunction();
         logicalPlan.setCreateFunction(crtFunction);
         logicalPlan.setCurrentNode(crtFunction);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitCallFunction(CallFunctionContext ctx) {
+        logger.trace("In visitCallFunction " + ctx.getText());
+        callFunction = new CallFunction();
+        logicalPlan.setCallFunction(callFunction);
+        logicalPlan.setCurrentNode(callFunction);
         return visitChildrenAndResetNode(ctx);
     }
 
@@ -399,6 +413,15 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         ColumnValue columnValue = new ColumnValue();
         logicalPlan.getCurrentNode().addChildNode(columnValue);
         logicalPlan.setCurrentNode(columnValue);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitParameterValues(ParameterValuesContext ctx) {
+        logger.trace("In visitParameterValues " + ctx.getText());
+        Parameters parameters = new Parameters();
+        logicalPlan.getCurrentNode().addChildNode(parameters);
+        logicalPlan.setCurrentNode(parameters);
         return visitChildrenAndResetNode(ctx);
     }
 

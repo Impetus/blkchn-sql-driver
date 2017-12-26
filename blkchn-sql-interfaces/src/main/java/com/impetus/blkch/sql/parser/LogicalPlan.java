@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.impetus.blkch.sql.parser;
 
+import com.impetus.blkch.sql.function.CallFunction;
 import com.impetus.blkch.sql.function.ClassName;
 import com.impetus.blkch.sql.function.CreateFunction;
 import com.impetus.blkch.sql.insert.Insert;
@@ -32,6 +33,8 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
     private ClassName className;
     
     private Insert insert;
+    
+    private CallFunction callFunction;
 
     public LogicalPlan(String description) {
         super(description);
@@ -73,6 +76,14 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
     public void setInsert(Insert insert)
     {
         this.insert = insert;
+    }
+    
+    public CallFunction getCallFunction() {
+        return callFunction;
+    }
+
+    public void setCallFunction(CallFunction callFunction) {
+        this.callFunction = callFunction;
     }
 
 

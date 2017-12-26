@@ -244,6 +244,13 @@ public class LogicalPlanTest extends TestCase {
         //plan.traverse();
         plan.getCreateFunction().traverse();
     }
+    
+    @Test
+    public void testCallFunction() {
+        String sql = "CALL someFunc(xyz, abc, 300)";
+        LogicalPlan plan = getLogicalPlan(sql);
+        plan.getCallFunction().traverse();
+    }
 
     @Test
     public void testSelectWithWhereAndLimitClouse() {
