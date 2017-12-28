@@ -61,6 +61,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.WhereClauseContext;
 import com.impetus.blkch.sql.insert.ColumnName;
 import com.impetus.blkch.sql.insert.ColumnValue;
 import com.impetus.blkch.sql.insert.Insert;
+import com.impetus.blkch.sql.parser.LogicalPlan.SQLType;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.Comparator;
 import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
@@ -105,6 +106,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         query = new Query();
         logicalPlan.setQuery(query);
         logicalPlan.setCurrentNode(query);
+        logicalPlan.setType(SQLType.QUERY);
         return visitChildrenAndResetNode(ctx);
     }
     
@@ -115,6 +117,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         insert = new Insert();
         logicalPlan.setInsert(insert);
         logicalPlan.setCurrentNode(insert);
+        logicalPlan.setType(SQLType.INSERT);
         return visitChildrenAndResetNode(ctx);
     }
 
@@ -124,6 +127,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         crtFunction = new CreateFunction();
         logicalPlan.setCreateFunction(crtFunction);
         logicalPlan.setCurrentNode(crtFunction);
+        logicalPlan.setType(SQLType.CREATE_FUNCTION);
         return visitChildrenAndResetNode(ctx);
     }
     
@@ -133,6 +137,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         callFunction = new CallFunction();
         logicalPlan.setCallFunction(callFunction);
         logicalPlan.setCurrentNode(callFunction);
+        logicalPlan.setType(SQLType.CALL_FUNCTION);
         return visitChildrenAndResetNode(ctx);
     }
 

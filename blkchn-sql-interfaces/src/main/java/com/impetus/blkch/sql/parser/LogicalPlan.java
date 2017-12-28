@@ -35,6 +35,8 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
     private Insert insert;
     
     private CallFunction callFunction;
+    
+    private SQLType type;
 
     public LogicalPlan(String description) {
         super(description);
@@ -85,6 +87,24 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
     public void setCallFunction(CallFunction callFunction) {
         this.callFunction = callFunction;
     }
+    
+    public SQLType getType() {
+        return type;
+    }
+    
+    public void setType(SQLType type) {
+        this.type = type;
+    }
 
+    public static enum SQLType {
+        
+        QUERY,
+        
+        INSERT,
+        
+        CREATE_FUNCTION,
+        
+        CALL_FUNCTION
+    }
 
 }

@@ -251,6 +251,13 @@ public class LogicalPlanTest extends TestCase {
         LogicalPlan plan = getLogicalPlan(sql);
         plan.getCallFunction().traverse();
     }
+    
+    @Test
+    public void testInsert() {
+       String sql = "INSERT INTO someTable VALUES(first, second, third, 4)";
+       LogicalPlan plan = getLogicalPlan(sql);
+       plan.getInsert().traverse();
+    }
 
     @Test
     public void testSelectWithWhereAndLimitClouse() {
