@@ -316,6 +316,13 @@ public class LogicalPlanTest extends TestCase {
 
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
+    
+    @Test
+    public void testForRange() {
+        String sql = "SELECT * FROM block where blockno > 10 and blockno<30 or (blockno > 50 and tid='0xabcdf233') or blockno=55";
+        LogicalPlan plan = getLogicalPlan(sql);
+        plan.getQuery().traverse();
+    }
 
     private LogicalPlan buildOrderByClause() {
         LogicalPlan logicalPlan = buildHaving();
