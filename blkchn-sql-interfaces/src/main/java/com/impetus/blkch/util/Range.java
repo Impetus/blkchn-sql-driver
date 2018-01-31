@@ -19,4 +19,9 @@ public class Range<T extends Number & Comparable<T>> {
         return max;
     }
     
+    @Override
+    public String toString() {
+        return "[" + min + "-" + max + "]";
+    }
+    
 }

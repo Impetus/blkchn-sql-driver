@@ -1,6 +1,5 @@
 package com.impetus.blkch.sql.parser;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.impetus.blkch.BlkchnException;
@@ -14,7 +13,6 @@ import com.impetus.blkch.sql.query.LogicalOperation.Operator;
 import com.impetus.blkch.sql.query.RangeNode;
 import com.impetus.blkch.sql.query.Table;
 import com.impetus.blkch.sql.query.WhereClause;
-import com.impetus.blkch.util.LongRangeOperations;
 import com.impetus.blkch.util.RangeOperations;
 
 public abstract class PhysicalPlan extends TreeNode {

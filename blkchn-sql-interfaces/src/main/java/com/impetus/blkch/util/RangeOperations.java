@@ -1,5 +1,12 @@
 package com.impetus.blkch.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.impetus.blkch.BlkchnException;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.Comparator;
 import com.impetus.blkch.sql.query.FilterItem;
@@ -8,6 +15,8 @@ import com.impetus.blkch.sql.query.LogicalOperation;
 import com.impetus.blkch.sql.query.RangeNode;
 
 public abstract class RangeOperations<T extends Number & Comparable<T>> {
+    
+    private static final Logger logger = LoggerFactory.getLogger(RangeOperations.class);
 
     public RangeList<T> and(Range<T> r1, Range<T> r2) {
         if (checkDiscrete(r1, r2)) {
@@ -48,6 +57,11 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
         String column = filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
         String valueString = filterItem.getChildType(IdentifierNode.class, 0).getValue();
         T value = getValue(valueString);
+        if(value.compareTo(getMinValue()) < 0 || value.compareTo(getMaxValue()) > 0){
+            String errMsg = "Value: " + value + " is not in valid range";
+            logger.error(errMsg);
+            throw new BlkchnException(errMsg);
+        }
         RangeNode<T> rangeNode = new RangeNode<>(column);
         if (comparator.isEQ()) {
             Range<T> range = new Range<T>(value, value);
@@ -79,11 +93,54 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
 
         for (Range<T> r1 : left.getRangeList().getRanges()) {
             for (Range<T> r2 : right.getRangeList().getRanges()) {
-                resultRange.addAllRanges(or(r1, r2).getRanges());
+                RangeList<T> combinedRange = or(r1, r2);
+                resultRange.addAllRanges(combinedRange.getRanges());
             }
         }
-
+        resultNode.getRangeList().addAllRanges(processOrList(resultRange.getRanges()));
         return resultNode;
+    }
+    
+    
+    private List<Range<T>> processOrList(List<Range<T>> list) {
+        List<Range<T>> temp = new ArrayList<>();
+        int delIndex = -1;
+        for(Range<T> r : list) {
+            boolean isDiscrete = true;
+            RangeList<T> merged = null;
+            for(Range<T> t : temp) {
+                if(!checkDiscrete(r, t)) {
+                    merged = or(r, t);
+                    delIndex = temp.indexOf(t);
+                    isDiscrete = false;
+                    break;
+                }
+            }
+            if (isDiscrete) {
+                temp.add(r);
+            } else {
+                temp.remove(delIndex);
+                temp.addAll(merged.getRanges());
+            }
+        }
+        if(checkDiscreteList(temp)){
+            return temp;
+        }
+        else{
+            return processOrList(temp);
+        }
+    }
+
+    private boolean checkDiscreteList(List<Range<T>> temp)
+    {
+        for(int i = 0 ; i < temp.size() - 1 ; i++) {
+            for(int j = i + 1 ; j < temp.size() ; j++) {
+                if(!checkDiscrete(temp.get(i), temp.get(j))) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public RangeNode<T> rangeNodeAnd(RangeNode<T> left, RangeNode<T> right) {

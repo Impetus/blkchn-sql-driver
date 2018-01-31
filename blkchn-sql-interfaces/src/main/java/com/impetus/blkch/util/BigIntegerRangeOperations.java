@@ -16,7 +16,7 @@ public class BigIntegerRangeOperations extends RangeOperations<BigInteger> {
 
     @Override
     public BigInteger getMaxValue() {
-        return new BigInteger(Integer.toString(Integer.MAX_VALUE));
+        return new BigInteger(Long.toString(Long.MAX_VALUE));
     }
 
     @Override
