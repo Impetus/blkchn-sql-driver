@@ -319,7 +319,8 @@ public class LogicalPlanTest extends TestCase {
     
     @Test
     public void testForRange() {
-        String sql = "SELECT * FROM block where blockno > 10 and blockno<30 or (blockno > 50 and tid='0xabcdf233') or blockno=55";
+        String sql = "SELECT * FROM block where blockno > 10 and blockno<30 or (blockno > 50 and tid='0xabcdf233') or (blockno=55 and from='hari')";
+//        String sql = "SELECT * FROM block where blockno > 10 and blockno<30 and blockno != 20";
         LogicalPlan plan = getLogicalPlan(sql);
         plan.getQuery().traverse();
     }

@@ -1,9 +1,22 @@
 package com.impetus.blkch.util;
 
-public interface Range<T extends Comparable<T>> {
-
-    public T getMin();
+public class Range<T extends Number & Comparable<T>> {
     
-    public T getMax();
+    private T min;
+    
+    private T max;
+    
+    public Range(T min, T max) {
+        this.min = min;
+        this.max = max;
+    }
+
+    public T getMin() {
+        return min;
+    }
+    
+    public T getMax() {
+        return max;
+    }
     
 }
