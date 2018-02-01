@@ -3,6 +3,7 @@ package com.impetus.blkch.sql.parser;
 import java.util.List;
 
 import com.impetus.blkch.BlkchnException;
+import com.impetus.blkch.sql.parser.LogicalPlan.SQLType;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.DirectAPINode;
 import com.impetus.blkch.sql.query.FilterItem;
@@ -10,6 +11,7 @@ import com.impetus.blkch.sql.query.FromItem;
 import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.LogicalOperation;
 import com.impetus.blkch.sql.query.LogicalOperation.Operator;
+import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.RangeNode;
 import com.impetus.blkch.sql.query.Table;
 import com.impetus.blkch.sql.query.WhereClause;
@@ -86,5 +88,56 @@ public abstract class PhysicalPlan extends TreeNode {
     public abstract List<String> getQueryCols(String table);
     
     public abstract RangeOperations<?> getRangeOperations(String table, String column);
+    
+    public boolean validateLogicalPlan() {
+        Color color = Color.GREEN;
+        if(logicalPlan.getType() == SQLType.QUERY) {
+            Query query = logicalPlan.getQuery();
+            if(query.hasChildType(WhereClause.class)) {
+                WhereClause whereClause = query.getChildType(WhereClause.class, 0);
+                color = validateNode(whereClause.getChildNode(0));
+            }
+        }
+        return color == Color.GREEN;
+    }
+    
+    private static Color validateNode(TreeNode node) {
+        if(node instanceof LogicalOperation) {
+            Color first = validateNode(node.getChildNode(0));
+            Color second = validateNode(node.getChildNode(1));
+            if(((LogicalOperation)node).isAnd()) {
+                return Color.and(first, second);
+            } else {
+                return Color.or(first, second);
+            }
+        } else {
+            if(node instanceof FilterItem) {
+                return Color.RED;
+            } else {
+                return Color.GREEN;
+            }
+        }
+    }
+    
+    private enum Color {
+        RED,
+        GREEN;
+        
+        public static Color and(Color first, Color second) {
+            if(first == RED && second == RED) {
+                return RED;
+            } else {
+                return GREEN;
+            }
+        }
+        
+        public static Color or(Color first, Color second) {
+            if(first == GREEN && second == GREEN) {
+                return GREEN;
+            } else {
+                return RED;
+            }
+        }
+    }
 
 }
