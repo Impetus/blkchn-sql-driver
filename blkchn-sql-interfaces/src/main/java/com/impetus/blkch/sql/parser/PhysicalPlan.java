@@ -20,22 +20,33 @@ import com.impetus.blkch.util.RangeOperations;
 public abstract class PhysicalPlan extends TreeNode {
 
     private LogicalPlan logicalPlan;
+    
+    private WhereClause whereClause;
 
     public PhysicalPlan(String description, LogicalPlan logicalPlan) {
         super(description);
         this.logicalPlan = logicalPlan;
+        if(logicalPlan.getType() == SQLType.QUERY) {
+            if(logicalPlan.getQuery().hasChildType(WhereClause.class)) {
+                this.whereClause = getPhysicalWhereClause();
+            }
+        }
+    }
+    
+    public WhereClause getWhereClause() {
+        return whereClause;
     }
 
     public WhereClause getPhysicalWhereClause() {
+        WhereClause whereClause = new WhereClause();
         if (logicalPlan.getQuery().getChildType(WhereClause.class, 0).hasChildType(FilterItem.class)) {
-            return logicalPlan.getQuery().getChildType(WhereClause.class, 0);
+            whereClause.addChildNode(processFilterItem(logicalPlan.getQuery().getChildType(WhereClause.class, 0).getChildType(FilterItem.class, 0)));
         } else {
-            TreeNode whereClauseNodes = processLogicalOperation((LogicalOperation)logicalPlan.getQuery().getChildType(WhereClause.class, 0).
+            TreeNode whereClauseNodes = processLogicalOperation(logicalPlan.getQuery().getChildType(WhereClause.class, 0).
                     getChildType(LogicalOperation.class, 0));
-            WhereClause whereClause = new WhereClause();
             whereClause.addChildNode(whereClauseNodes);
-            return whereClause;
         }
+        return whereClause;
     }
 
     private TreeNode processLogicalOperation(LogicalOperation logicalOperation) {
@@ -82,19 +93,11 @@ public abstract class PhysicalPlan extends TreeNode {
             return filterItem;
         }
     }
-
-    public abstract List<String> getRangeCols(String table);
-
-    public abstract List<String> getQueryCols(String table);
-    
-    public abstract RangeOperations<?> getRangeOperations(String table, String column);
     
     public boolean validateLogicalPlan() {
         Color color = Color.GREEN;
         if(logicalPlan.getType() == SQLType.QUERY) {
-            Query query = logicalPlan.getQuery();
-            if(query.hasChildType(WhereClause.class)) {
-                WhereClause whereClause = query.getChildType(WhereClause.class, 0);
+            if(whereClause != null) {
                 color = validateNode(whereClause.getChildNode(0));
             }
         }
@@ -118,6 +121,12 @@ public abstract class PhysicalPlan extends TreeNode {
             }
         }
     }
+
+    public abstract List<String> getRangeCols(String table);
+
+    public abstract List<String> getQueryCols(String table);
+    
+    public abstract RangeOperations<?> getRangeOperations(String table, String column);
     
     private enum Color {
         RED,
