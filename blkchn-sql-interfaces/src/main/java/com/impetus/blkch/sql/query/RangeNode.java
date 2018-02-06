@@ -8,13 +8,20 @@ public class RangeNode<T extends Number & Comparable<T>> extends TreeNode {
     
     private static final String DESCRIPTION = "RANGE:";
     
+    private String table;
+    
     private String column;
     
     private RangeList<T> rangeList = new RangeList<>();
 
-    public RangeNode(String column) {
+    public RangeNode(String table, String column) {
         super(DESCRIPTION + column);
+        this.table = table;
         this.column = column;
+    }
+    
+    public String getTable() {
+        return table;
     }
     
     public String getColumn() {

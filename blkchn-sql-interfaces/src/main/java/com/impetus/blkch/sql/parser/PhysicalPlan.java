@@ -68,7 +68,8 @@ public abstract class PhysicalPlan extends TreeNode {
         if((firstChild instanceof RangeNode<?>) && (secondChild instanceof RangeNode<?>)) {
             RangeNode<?> firstRange = (RangeNode<?>)firstChild;
             RangeNode<?> secondRange = (RangeNode<?>)secondChild;
-            if(firstRange.getColumn().equals(secondRange.getColumn())) {
+            if(firstRange.getColumn().equals(secondRange.getColumn()) &&
+                    firstRange.getTable().equals(secondRange.getTable())) {
                 String table = logicalPlan.getQuery().getChildType(FromItem.class, 0).getChildType(Table.class, 0).getChildType(IdentifierNode.class, 0).getValue();
                 RangeOperations<?> rangeOperations = getRangeOperations(table, firstRange.getColumn());
                 return rangeOperations.processRangeNodes(firstRange, secondRange, logicalOperation);
@@ -85,7 +86,7 @@ public abstract class PhysicalPlan extends TreeNode {
         String column = filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
         if(getRangeCols(table).contains(column)) {
             RangeOperations<?> rangeOperations =  getRangeOperations(table, column);
-            return rangeOperations.processFilterItem(filterItem);
+            return rangeOperations.processFilterItem(filterItem, table);
         } else if(getQueryCols(table).contains(column)) {
             String value = filterItem.getChildType(IdentifierNode.class, 0).getValue();
             return new DirectAPINode(table, column, value);

@@ -52,7 +52,7 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
     }
 
     @SuppressWarnings("unchecked")
-    public RangeNode<T> processFilterItem(FilterItem filterItem) {
+    public RangeNode<T> processFilterItem(FilterItem filterItem, String table) {
         Comparator comparator = filterItem.getChildType(Comparator.class, 0);
         String column = filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
         String valueString = filterItem.getChildType(IdentifierNode.class, 0).getValue();
@@ -62,7 +62,7 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
             logger.error(errMsg);
             throw new BlkchnException(errMsg);
         }
-        RangeNode<T> rangeNode = new RangeNode<>(column);
+        RangeNode<T> rangeNode = new RangeNode<>(table, column);
         if (comparator.isEQ()) {
             Range<T> range = new Range<T>(value, value);
             rangeNode.getRangeList().addRange(range);
@@ -88,7 +88,7 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
     }
 
     public RangeNode<T> rangeNodeOr(RangeNode<T> left, RangeNode<T> right) {
-        RangeNode<T> resultNode = new RangeNode<T>(left.getColumn());
+        RangeNode<T> resultNode = new RangeNode<T>(left.getTable(), left.getColumn());
         RangeList<T> resultRange = new RangeList<>();
 
         for (Range<T> r1 : left.getRangeList().getRanges()) {
@@ -144,7 +144,7 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
     }
 
     public RangeNode<T> rangeNodeAnd(RangeNode<T> left, RangeNode<T> right) {
-        RangeNode<T> resultNode = new RangeNode<>(left.getColumn());
+        RangeNode<T> resultNode = new RangeNode<>(left.getTable(), left.getColumn());
         RangeList<T> resultRange = new RangeList<>();
         for (Range<T> r1 : left.getRangeList().getRanges()) {
             for (Range<T> r2 : right.getRangeList().getRanges()) {
