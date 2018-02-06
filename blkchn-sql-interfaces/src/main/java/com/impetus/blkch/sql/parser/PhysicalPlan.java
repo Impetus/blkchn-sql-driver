@@ -37,7 +37,7 @@ public abstract class PhysicalPlan extends TreeNode {
         return whereClause;
     }
 
-    public WhereClause getPhysicalWhereClause() {
+    private WhereClause getPhysicalWhereClause() {
         WhereClause whereClause = new WhereClause();
         if (logicalPlan.getQuery().getChildType(WhereClause.class, 0).hasChildType(FilterItem.class)) {
             whereClause.addChildNode(processFilterItem(logicalPlan.getQuery().getChildType(WhereClause.class, 0).getChildType(FilterItem.class, 0)));
@@ -88,7 +88,7 @@ public abstract class PhysicalPlan extends TreeNode {
             return rangeOperations.processFilterItem(filterItem);
         } else if(getQueryCols(table).contains(column)) {
             String value = filterItem.getChildType(IdentifierNode.class, 0).getValue();
-            return new DirectAPINode(column, value);
+            return new DirectAPINode(table, column, value);
         } else {
             return filterItem;
         }
