@@ -58,6 +58,10 @@ public abstract class PhysicalPlan extends TreeNode {
     public WhereClause getWhereClause() {
         return whereClause;
     }
+    
+    public Map<String, String> getColumnAliasMapping() {
+        return columnAliasMapping;
+    }
 
     private WhereClause getPhysicalWhereClause() {
         WhereClause whereClause = new WhereClause();
@@ -130,7 +134,7 @@ public abstract class PhysicalPlan extends TreeNode {
         return color == Color.GREEN;
     }
     
-    private static Color validateNode(TreeNode node) {
+    public Color validateNode(TreeNode node) {
         if(node instanceof LogicalOperation) {
             Color first = validateNode(node.getChildNode(0));
             Color second = validateNode(node.getChildNode(1));
@@ -154,7 +158,7 @@ public abstract class PhysicalPlan extends TreeNode {
     
     public abstract RangeOperations<?> getRangeOperations(String table, String column);
     
-    private enum Color {
+    public static enum Color {
         RED,
         GREEN;
         
