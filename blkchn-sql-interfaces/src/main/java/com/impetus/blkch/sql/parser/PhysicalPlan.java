@@ -1,6 +1,8 @@
 package com.impetus.blkch.sql.parser;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.impetus.blkch.BlkchnException;
 import com.impetus.blkch.sql.parser.LogicalPlan.SQLType;
@@ -11,8 +13,9 @@ import com.impetus.blkch.sql.query.FromItem;
 import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.LogicalOperation;
 import com.impetus.blkch.sql.query.LogicalOperation.Operator;
-import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.RangeNode;
+import com.impetus.blkch.sql.query.SelectClause;
+import com.impetus.blkch.sql.query.SelectItem;
 import com.impetus.blkch.sql.query.Table;
 import com.impetus.blkch.sql.query.WhereClause;
 import com.impetus.blkch.util.RangeOperations;
@@ -22,17 +25,36 @@ public abstract class PhysicalPlan extends TreeNode {
     private LogicalPlan logicalPlan;
     
     private WhereClause whereClause;
+    
+    private Map<String, String> columnAliasMapping = new HashMap<>();
 
     public PhysicalPlan(String description, LogicalPlan logicalPlan) {
         super(description);
         this.logicalPlan = logicalPlan;
         if(logicalPlan.getType() == SQLType.QUERY) {
+            //process aliases and add to map
+            processAliasMapping(logicalPlan.getQuery().getChildType(SelectClause.class, 0));
             if(logicalPlan.getQuery().hasChildType(WhereClause.class)) {
                 this.whereClause = getPhysicalWhereClause();
             }
         }
     }
     
+
+    private void processAliasMapping(SelectClause selectClause)
+    {
+        //TODO: handle functions with alias
+        for (SelectItem item : selectClause.getChildType(SelectItem.class))
+        {
+            if (item.getChildType(IdentifierNode.class, 0) != null && item.hasChildType(Column.class))
+            {
+                columnAliasMapping.put(item.getChildType(IdentifierNode.class, 0).getValue(),
+                        item.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue());
+            }
+        }
+    }
+
+
     public WhereClause getWhereClause() {
         return whereClause;
     }
@@ -84,9 +106,12 @@ public abstract class PhysicalPlan extends TreeNode {
     private TreeNode processFilterItem(FilterItem filterItem) {
         String table = logicalPlan.getQuery().getChildType(FromItem.class, 0).getChildType(Table.class, 0).getChildType(IdentifierNode.class, 0).getValue();
         String column = filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
+        if(columnAliasMapping.get(column) != null){
+            column = columnAliasMapping.get(column);
+        }
         if(getRangeCols(table).contains(column)) {
             RangeOperations<?> rangeOperations =  getRangeOperations(table, column);
-            return rangeOperations.processFilterItem(filterItem, table);
+            return rangeOperations.processFilterItem(filterItem, table, column);
         } else if(getQueryCols(table).contains(column)) {
             String value = filterItem.getChildType(IdentifierNode.class, 0).getValue();
             return new DirectAPINode(table, column, value);

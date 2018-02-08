@@ -52,9 +52,9 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
     }
 
     @SuppressWarnings("unchecked")
-    public RangeNode<T> processFilterItem(FilterItem filterItem, String table) {
+    public RangeNode<T> processFilterItem(FilterItem filterItem, String table, String columnName) {
         Comparator comparator = filterItem.getChildType(Comparator.class, 0);
-        String column = filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
+        String column = columnName == null? filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue() : columnName;
         String valueString = filterItem.getChildType(IdentifierNode.class, 0).getValue();
         T value = getValue(valueString);
         if(value.compareTo(getMinValue()) < 0 || value.compareTo(getMaxValue()) > 0){
