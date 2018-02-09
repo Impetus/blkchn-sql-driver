@@ -1,5 +1,6 @@
 package com.impetus.blkch.sql.parser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,8 @@ public abstract class PhysicalPlan extends TreeNode {
     
     private WhereClause whereClause;
     
+    private List<SelectItem> selectItems = new ArrayList<>();
+    
     private Map<String, String> columnAliasMapping = new HashMap<>();
 
     public PhysicalPlan(String description, LogicalPlan logicalPlan) {
@@ -46,6 +49,7 @@ public abstract class PhysicalPlan extends TreeNode {
         //TODO: handle functions with alias
         for (SelectItem item : selectClause.getChildType(SelectItem.class))
         {
+            selectItems.add(item);
             if (item.getChildType(IdentifierNode.class, 0) != null && item.hasChildType(Column.class))
             {
                 columnAliasMapping.put(item.getChildType(IdentifierNode.class, 0).getValue(),
@@ -61,6 +65,10 @@ public abstract class PhysicalPlan extends TreeNode {
     
     public Map<String, String> getColumnAliasMapping() {
         return columnAliasMapping;
+    }
+    
+    public List<SelectItem> getSelectItems() {
+        return selectItems;
     }
 
     private WhereClause getPhysicalWhereClause() {
