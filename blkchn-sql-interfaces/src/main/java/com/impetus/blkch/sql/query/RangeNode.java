@@ -6,7 +6,7 @@ import com.impetus.blkch.util.RangeList;
 
 public class RangeNode<T extends Number & Comparable<T>> extends TreeNode {
     
-    private static final String DESCRIPTION = "RANGE:";
+    private static final String DESCRIPTION = "RANGE";
     
     private String table;
     
@@ -15,7 +15,7 @@ public class RangeNode<T extends Number & Comparable<T>> extends TreeNode {
     private RangeList<T> rangeList = new RangeList<>();
 
     public RangeNode(String table, String column) {
-        super(DESCRIPTION + column);
+        super(DESCRIPTION + ":" + table + ":" + column);
         this.table = table;
         this.column = column;
     }
@@ -34,6 +34,15 @@ public class RangeNode<T extends Number & Comparable<T>> extends TreeNode {
     
     public RangeList<T> getRangeList() {
         return rangeList;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof RangeNode<?>)) {
+            return false;
+        }
+        RangeNode<?> other = (RangeNode<?>) obj; 
+        return super.equals(obj) && this.rangeList.equals(other.rangeList);
     }
     
     @Override

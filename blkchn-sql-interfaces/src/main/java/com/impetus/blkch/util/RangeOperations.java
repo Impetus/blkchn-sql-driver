@@ -30,7 +30,6 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public RangeList<T> or(Range<T> r1, Range<T> r2) {
         RangeList<T> rangeList = new RangeList<>();
         if (checkDiscrete(r1, r2)) {
@@ -51,7 +50,6 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
         return false;
     }
 
-    @SuppressWarnings("unchecked")
     public RangeNode<T> processFilterItem(FilterItem filterItem, String table, String columnName) {
         Comparator comparator = filterItem.getChildType(Comparator.class, 0);
         String column = columnName == null? filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue() : columnName;
