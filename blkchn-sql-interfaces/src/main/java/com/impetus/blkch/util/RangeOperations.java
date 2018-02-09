@@ -161,7 +161,7 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
     @SuppressWarnings("unchecked")
     public RangeNode<T> processRangeNodes(RangeNode<?> left, RangeNode<?> right, LogicalOperation logicalOperation) {
         RangeNode<T> firstRange = (RangeNode<T>) left;
-        RangeNode<T> secondRange = (RangeNode<T>) left;
+        RangeNode<T> secondRange = (RangeNode<T>) right;
         if (logicalOperation.isAnd()) {
             return rangeNodeAnd(firstRange, secondRange);
         } else {
