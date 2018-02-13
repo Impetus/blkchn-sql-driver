@@ -54,9 +54,11 @@ public final class RangeList<T extends Number & Comparable<T>> {
     public int hashCode() {
         int prime = 31;
         int hashCode = 1;
+        int listHashCode = 1;
         for(Range<T> range : ranges) {
-            hashCode = prime * hashCode + range.hashCode();
+            listHashCode += range.hashCode();
         }
+        hashCode = prime * hashCode + listHashCode;
         return hashCode;
     }
     

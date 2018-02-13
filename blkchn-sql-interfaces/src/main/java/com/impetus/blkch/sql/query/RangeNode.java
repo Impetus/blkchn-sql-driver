@@ -46,6 +46,16 @@ public class RangeNode<T extends Number & Comparable<T>> extends TreeNode {
     }
     
     @Override
+    public int hashCode() {
+        int prime = 31;
+        int hashCode = 1;
+        hashCode = prime * hashCode + table.hashCode();
+        hashCode = prime * hashCode + column.hashCode();
+        hashCode = prime * hashCode + rangeList.hashCode();
+        return hashCode;
+    }
+    
+    @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
         sb.append(super.getDescription() + ":[");
