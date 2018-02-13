@@ -179,6 +179,96 @@ public class TestAbstractQueryExecutor extends TestCase {
             fail(stringWriter.toString());
         }
     }
+    
+    public void testOptimize() {
+        LogicalOperation root = new LogicalOperation(Operator.AND);
+        LogicalOperation firstLeft = new LogicalOperation(Operator.AND);
+        LogicalOperation firstRight = new LogicalOperation(Operator.OR);
+        LogicalOperation secondLeftLeft = new LogicalOperation(Operator.OR);
+        LogicalOperation secondLeftRight = new LogicalOperation(Operator.OR);
+        secondLeftLeft.addChildNode(createFilterItem("filterField", ComparisionOperator.EQ, "value1"));
+        secondLeftLeft.addChildNode(new DataNode<>("test", Arrays.asList(1l, 4l, 5l)));
+        RangeNode<Long> rangeNode1 = new RangeNode<>("test", "column1");
+        rangeNode1.getRangeList().addAllRanges(new Range<>(2l, 4l), new Range<>(7l, 9l));
+        secondLeftRight.addChildNode(rangeNode1);
+        secondLeftRight.addChildNode(new DataNode<>("test", Arrays.asList(3l, 5l, 7l, 11l)));
+        firstLeft.addChildNode(secondLeftLeft);
+        firstLeft.addChildNode(secondLeftRight);
+        root.addChildNode(firstLeft);
+        
+        LogicalOperation secondRightLeft = new LogicalOperation(Operator.OR);
+        LogicalOperation secondRightRight = new LogicalOperation(Operator.OR);
+        RangeNode<Long> rangeNode2 = new RangeNode<>("test", "column1");
+        rangeNode2.getRangeList().addRange(new Range<>(4l, 8l));
+        secondRightLeft.addChildNode(rangeNode2);
+        secondRightLeft.addChildNode(new DataNode<>("test", Arrays.asList(1l, 3l, 5l)));
+        LogicalOperation thirdRightRightLeft = new LogicalOperation(Operator.AND);
+        thirdRightRightLeft.addChildNode(createFilterItem("filterField", ComparisionOperator.NEQ, "value1"));
+        thirdRightRightLeft.addChildNode(new DataNode<>("test", Arrays.asList(7l, 8l, 9l, 10l)));
+        LogicalOperation thirdRightRightRight = new LogicalOperation(Operator.AND);
+        thirdRightRightRight.addChildNode(createFilterItem("filterField", ComparisionOperator.EQ, "value1"));
+        RangeNode<Long> rangeNode3 = new RangeNode<>("test", "column1");
+        rangeNode3.getRangeList().addAllRanges(new Range<>(1l, 3l), new Range<>(11l, 15l));
+        thirdRightRightRight.addChildNode(rangeNode3);
+        secondRightRight.addChildNode(thirdRightRightLeft);
+        secondRightRight.addChildNode(thirdRightRightRight);
+        firstRight.addChildNode(secondRightLeft);
+        firstRight.addChildNode(secondRightRight);
+        root.addChildNode(firstRight);
+        
+        DummyQueryExecutor dummyQueryExecutor = new DummyQueryExecutor(
+                getLogicalPlan("SELECT * FROM test Where column1 < 12"));
+        dummyQueryExecutor.addToDataMap("1", new TestQueryObject(1, 2, "qval1", "qval2", "value1"));
+        dummyQueryExecutor.addToDataMap("2", new TestQueryObject(2, 2, "qval1", "qval2", "value2"));
+        dummyQueryExecutor.addToDataMap("3", new TestQueryObject(3, 2, "qval1", "qval2", "value2"));
+        dummyQueryExecutor.addToDataMap("4", new TestQueryObject(4, 2, "qval1", "qval2", "value1"));
+        dummyQueryExecutor.addToDataMap("5", new TestQueryObject(5, 3, "qval1", "qval2", "value1"));
+        dummyQueryExecutor.addToDataMap("6", new TestQueryObject(6, 2, "qval1", "qval2", "value1"));
+        dummyQueryExecutor.addToDataMap("7", new TestQueryObject(7, 2, "qval1", "qval2", "value3"));
+        dummyQueryExecutor.addToDataMap("8", new TestQueryObject(8, 2, "qval1", "qval2", "value2"));
+        dummyQueryExecutor.addToDataMap("9", new TestQueryObject(9, 2, "qval1", "qval2", "value1"));
+        dummyQueryExecutor.addToDataMap("10", new TestQueryObject(10, 2, "qval1", "qval2", "value1"));
+        dummyQueryExecutor.addToDataMap("11", new TestQueryObject(11, 2, "qval1", "qval2", "value3"));
+        dummyQueryExecutor.addToDataMap("12", new TestQueryObject(12, 2, "qval1", "qval2", "value1"));
+        
+        try {
+            TreeNode actual = (TreeNode) ReflectionUtils.invoke(dummyQueryExecutor,
+                    "optimize", new Class[] { TreeNode.class }, new Object[] {root});
+            
+            TreeNode expected = new LogicalOperation(Operator.AND);
+            TreeNode eFirstLeft = new LogicalOperation(Operator.AND);
+            LogicalOperation eSecondLeftLeft = new LogicalOperation(Operator.OR);
+            eSecondLeftLeft.addChildNode(createFilterItem("filterField", ComparisionOperator.EQ, "value1"));
+            eSecondLeftLeft.addChildNode(new DataNode<>("test", Arrays.asList(1l, 4l, 5l)));
+            RangeNode<Long> eRangeNode1 = new RangeNode<>("test", "column1");
+            eRangeNode1.getRangeList().addAllRanges(new Range<>(2l, 4l), new Range<>(5l, 5l), new Range<>(7l, 9l), new Range<>(11l, 11l));
+            eFirstLeft.addChildNode(eSecondLeftLeft);
+            eFirstLeft.addChildNode(eRangeNode1);
+            expected.addChildNode(eFirstLeft);
+            
+            TreeNode eFirstRight = new LogicalOperation(Operator.OR);
+            RangeNode<Long> eRangeNode2 = new RangeNode<>("test", "column1");
+            eRangeNode2.getRangeList().addAllRanges(new Range<>(1l, 1l), new Range<>(3l, 3l), new Range<>(4l, 8l));
+            TreeNode eSecondRightRight = new LogicalOperation(Operator.OR);
+            eSecondRightRight.addChildNode(new DataNode<>("test", Arrays.asList(7l, 8l)));
+            TreeNode eThirdRightRightRight = new LogicalOperation(Operator.AND);
+            eThirdRightRightRight.addChildNode(createFilterItem("filterField", ComparisionOperator.EQ, "value1"));
+            RangeNode<Long> eRangeNode3 = new RangeNode<>("test", "column1");
+            eRangeNode3.getRangeList().addAllRanges(new Range<>(1l, 3l), new Range<>(11l, 15l));
+            eThirdRightRightRight.addChildNode(eRangeNode3);
+            eSecondRightRight.addChildNode(eThirdRightRightRight);
+            eFirstRight.addChildNode(eRangeNode2);
+            eFirstRight.addChildNode(eSecondRightRight);
+            expected.addChildNode(eFirstRight);
+            actual.traverse();
+            expected.traverse();
+            assertEquals(expected, actual);
+        } catch (Throwable e) {
+            StringWriter stringWriter = new StringWriter();
+            e.printStackTrace(new PrintWriter(stringWriter));
+            fail(stringWriter.toString());
+        }
+    }
 
     private LogicalPlan getLogicalPlan(String query) {
         BlkchnSqlLexer lexer = new BlkchnSqlLexer(new CaseInsensitiveCharStream(query));
