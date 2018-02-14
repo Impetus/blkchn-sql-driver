@@ -31,15 +31,15 @@ public class DummyQueryExecutor extends AbstractQueryExecutor {
 
     @Override
     protected <T extends Number & Comparable<T>> DataNode<T> executeRangeNode(RangeNode<T> rangeNode) {
-        List<Long> keys = new ArrayList<>();
+        List<T> keys = new ArrayList<>();
         for (Range<T> range : rangeNode.getRangeList().getRanges()) {
             Long min = (Long) range.getMin() < 0 ? 0l : (Long) range.getMin();
             Long max = (Long) range.getMax() > 20 ? 20l : (Long) range.getMax();
-            for (long i = min; i <= max; i++) {
-                keys.add(i);
+            for (Long i = min; i <= max; i++) {
+                keys.add((T)i);
             }
         }
-        return new DataNode<>(rangeNode.getTable(), (List<T>) keys);
+        return new DataNode<>(rangeNode.getTable(), keys);
     }
 
     @Override
