@@ -13,12 +13,10 @@ import com.impetus.blkch.sql.query.Comparator;
 import com.impetus.blkch.sql.query.DataNode;
 import com.impetus.blkch.sql.query.DirectAPINode;
 import com.impetus.blkch.sql.query.FilterItem;
-import com.impetus.blkch.sql.query.FromItem;
 import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.LogicalOperation;
-import com.impetus.blkch.sql.query.RangeNode;
-import com.impetus.blkch.sql.query.Table;
 import com.impetus.blkch.sql.query.LogicalOperation.Operator;
+import com.impetus.blkch.sql.query.RangeNode;
 import com.impetus.blkch.util.RangeOperations;
 
 public abstract class AbstractQueryExecutor {
