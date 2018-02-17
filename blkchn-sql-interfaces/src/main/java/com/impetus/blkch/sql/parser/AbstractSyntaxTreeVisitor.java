@@ -28,6 +28,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArgsContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArithmeticBinaryContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArithmeticOperatorContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArithmeticUnaryContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.AssetContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.BigDecimalLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.BigIntLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.BooleanDefaultContext;
@@ -36,6 +37,9 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.BooleanValueContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CallFunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CallFunctionRuleContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CastContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ChaincodeContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColTypeContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColTypeListContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnNamesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnReferenceContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnValuesContext;
@@ -46,6 +50,8 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComplexColTypeListContext
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComplexDataTypeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ConstantDefaultContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ConstantSeqContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateAssetContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateAssetRuleContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateFunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateFunctionRuleContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DecimalLiteralContext;
@@ -54,9 +60,11 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.DoubleLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorserDetailsContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorsersContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ExpressionContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.FieldDelimiterContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FirstContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FromClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionCallContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.GroupByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.HavingClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.IdentifierContext;
@@ -96,6 +104,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.QuerySpecificationContext
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.QueryTermDefaultContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.QuotedIdentifierAlternativeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.QuotedIdentifierContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.RecordDelimiterContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.RelationContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.RowConstructorContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SearchedCaseContext;
@@ -110,6 +119,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.SmallIntLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SortItemContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.StarContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.StatementDefaultContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.StorageTypeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.StringLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SubqueryContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SubqueryExpressionContext;
@@ -844,6 +854,66 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     public LogicalPlan visitConstantSeq(ConstantSeqContext ctx)
     {
         logger.trace("In visitConstantSeq " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitCreateAssetRule(CreateAssetRuleContext ctx) {
+        logger.trace("In visitCreateAssetRule " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitCreateAsset(CreateAssetContext ctx) {
+        logger.trace("In visitCreateAsset " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitAsset(AssetContext ctx) {
+        logger.trace("In visitAsset " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitChaincode(ChaincodeContext ctx) {
+        logger.trace("In visitChaincode " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitFunction(FunctionContext ctx) {
+        logger.trace("In visitFunction " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitStorageType(StorageTypeContext ctx) {
+        logger.trace("In visitStorageType " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitFieldDelimiter(FieldDelimiterContext ctx) {
+        logger.trace("In visitFieldDelimiter " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitRecordDelimiter(RecordDelimiterContext ctx) {
+        logger.trace("In visitRecordDelimiter " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitColTypeList(ColTypeListContext ctx) {
+        logger.trace("In visitColTypeList " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitColType(ColTypeContext ctx) {
+        logger.trace("In visitColType " + ctx.getText());
         return visitChildren(ctx);
     }
 

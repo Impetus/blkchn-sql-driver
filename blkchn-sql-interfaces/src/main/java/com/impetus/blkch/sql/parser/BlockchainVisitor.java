@@ -19,6 +19,15 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.impetus.blkch.sql.asset.Asset;
+import com.impetus.blkch.sql.asset.Chaincode;
+import com.impetus.blkch.sql.asset.ColumnType;
+import com.impetus.blkch.sql.asset.ColumnTypeList;
+import com.impetus.blkch.sql.asset.CreateAsset;
+import com.impetus.blkch.sql.asset.FieldDelimiter;
+import com.impetus.blkch.sql.asset.Function;
+import com.impetus.blkch.sql.asset.RecordDelimiter;
+import com.impetus.blkch.sql.asset.StorageType;
 import com.impetus.blkch.sql.function.Args;
 import com.impetus.blkch.sql.function.CallFunction;
 import com.impetus.blkch.sql.function.ClassName;
@@ -28,17 +37,24 @@ import com.impetus.blkch.sql.function.Parameters;
 import com.impetus.blkch.sql.function.Version;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArgsContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.AssetContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CallFunctionContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ChaincodeContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColTypeContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColTypeListContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnNamesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnReferenceContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnValuesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonOperatorContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateAssetContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DereferenceContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorserDetailsContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorsersContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.FieldDelimiterContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FromClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionCallContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.GroupByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.HavingClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.LimitClauseContext;
@@ -47,12 +63,14 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.NamedExpressionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.NumericLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.OrderByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ParameterValuesContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.RecordDelimiterContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SelectClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SetQuantifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SimpleQueryContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SingleInsertContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SortItemContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.StarContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.StorageTypeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.StringLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.TableIdentifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.UnquotedIdentifierContext;
@@ -99,6 +117,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     ClassName className;
     Insert insert;
     CallFunction callFunction;
+    CreateAsset createAsset;
 
     @Override
     public LogicalPlan visitSimpleQuery(SimpleQueryContext ctx) {
@@ -428,6 +447,92 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.getCurrentNode().addChildNode(parameters);
         logicalPlan.setCurrentNode(parameters);
         return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitCreateAsset(CreateAssetContext ctx) {
+        logger.trace("In visitCreateAsset " + ctx.getText());
+        createAsset = new CreateAsset();
+        logicalPlan.setCreateAsset(createAsset);
+        logicalPlan.setCurrentNode(createAsset);
+        logicalPlan.setType(SQLType.CREATE_ASSET);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitAsset(AssetContext ctx) {
+        logger.trace("In visitAsset " + ctx.getText());
+        Asset asset = new Asset();
+        logicalPlan.getCurrentNode().addChildNode(asset);
+        logicalPlan.setCurrentNode(asset);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitChaincode(ChaincodeContext ctx) {
+        logger.trace("In visitChaincode " + ctx.getText());
+        Chaincode chaincode = new Chaincode();
+        logicalPlan.getCurrentNode().addChildNode(chaincode);
+        logicalPlan.setCurrentNode(chaincode);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitFunction(FunctionContext ctx) {
+        logger.trace("In visitFunction " + ctx.getText());
+        Function function = new Function();
+        logicalPlan.getCurrentNode().addChildNode(function);
+        logicalPlan.setCurrentNode(function);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitColTypeList(ColTypeListContext ctx) {
+        logger.trace("In visitColTypeList " + ctx.getText());
+        ColumnTypeList columnTypeList = new ColumnTypeList();
+        logicalPlan.getCurrentNode().addChildNode(columnTypeList);
+        logicalPlan.setCurrentNode(columnTypeList);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitColType(ColTypeContext ctx) {
+        logger.trace("In visitColType " + ctx.getText());
+        ColumnType columnType = new ColumnType();
+        logicalPlan.getCurrentNode().addChildNode(columnType);
+        logicalPlan.setCurrentNode(columnType);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitStorageType(StorageTypeContext ctx) {
+        logger.trace("In visitStorageType " + ctx.getText());
+        StorageType storageType = new StorageType();
+        if(ctx.JSON() != null) {
+            storageType.addChildNode(new IdentifierNode("JSON"));
+        } else {
+            storageType.addChildNode(new IdentifierNode("CSV"));
+        }
+        logicalPlan.getCurrentNode().addChildNode(storageType);
+        return visitChildren(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitFieldDelimiter(FieldDelimiterContext ctx) {
+        logger.trace("In visitFieldDelimiter " + ctx.getText());
+        FieldDelimiter fieldDelimiter = new FieldDelimiter();
+        fieldDelimiter.addChildNode(new IdentifierNode(ctx.STRING().getText().replace("'", "").replace("\"", "")));
+        logicalPlan.getCurrentNode().addChildNode(fieldDelimiter);
+        return visitChildren(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitRecordDelimiter(RecordDelimiterContext ctx) {
+        logger.trace("In visitRecordDelimiter " + ctx.getText());
+        RecordDelimiter recordDelimiter = new RecordDelimiter();
+        recordDelimiter.addChildNode(new IdentifierNode(ctx.STRING().getText().replace("'", "").replace("\"", "")));
+        logicalPlan.getCurrentNode().addChildNode(recordDelimiter);
+        return visitChildren(ctx);
     }
 
     @Override

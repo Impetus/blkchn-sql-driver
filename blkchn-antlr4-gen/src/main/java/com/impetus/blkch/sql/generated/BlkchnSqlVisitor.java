@@ -46,6 +46,13 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCallFunctionRule(BlkchnSqlParser.CallFunctionRuleContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code createAssetRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCreateAssetRule(BlkchnSqlParser.CreateAssetRuleContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#insertInto}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -75,6 +82,48 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCreateFunction(BlkchnSqlParser.CreateFunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#createAsset}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCreateAsset(BlkchnSqlParser.CreateAssetContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#asset}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAsset(BlkchnSqlParser.AssetContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#chaincode}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitChaincode(BlkchnSqlParser.ChaincodeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#function}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunction(BlkchnSqlParser.FunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#storageType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStorageType(BlkchnSqlParser.StorageTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#fieldDelimiter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFieldDelimiter(BlkchnSqlParser.FieldDelimiterContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#recordDelimiter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRecordDelimiter(BlkchnSqlParser.RecordDelimiterContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#className}.
 	 * @param ctx the parse tree
@@ -588,6 +637,18 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPrimitiveDataType(BlkchnSqlParser.PrimitiveDataTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#colTypeList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColTypeList(BlkchnSqlParser.ColTypeListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#colType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColType(BlkchnSqlParser.ColTypeContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#complexColTypeList}.
 	 * @param ctx the parse tree
