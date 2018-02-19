@@ -24,7 +24,7 @@ import com.impetus.blkch.sql.asset.StorageType;
 import com.impetus.blkch.sql.parser.LogicalPlan.SQLType;
 import com.impetus.blkch.sql.query.IdentifierNode;
 
-public abstract class AbstractAssetCreator {
+public abstract class AbstractAssetManager {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(BlockchainVisitor.class);
     
@@ -67,7 +67,40 @@ public abstract class AbstractAssetCreator {
         saveSchemaInDB(asset, json);
     }
     
+    public void executeDropAsset() {
+        if (!logicalPlan.getType().equals(SQLType.DROP_ASSET)) {
+            throw new BlkchnException("Statement executed is not of type 'DROP ASSET'");
+        }
+        TreeNode dropAsset = logicalPlan.getDropAsset();
+        String asset = dropAsset.getChildType(Asset.class, 0).getChildType(IdentifierNode.class, 0).getValue().trim();
+        removeSchemaInDB(asset);
+    }
+    
     private void saveSchemaInDB(String asset, JSONObject json) {
+        String query = "INSERT INTO asset_schema (asset_name, chaincode_name, function_name, schema_json) VALUES('%s', '%s', '%s', '%s')";
+        try {
+            Connection conn = getConnection();
+            Statement stat = conn.createStatement();
+            stat.execute(String.format(query, asset, json.get("chaincodeName").toString(), json.get("functionName").toString(), json.toJSONString()));
+        } catch (SQLException e) {
+            LOGGER.error("Error inserting asset type " + asset + " into database", e);
+            throw new BlkchnException("Error inserting asset type " + asset + " into database", e);
+        }
+    }
+    
+    private void removeSchemaInDB(String asset) {
+        String query = "DELETE FROM asset_schema WHERE asset_name='%s'";
+        try {
+            Connection conn = getConnection();
+            Statement stat = conn.createStatement();
+            stat.execute(String.format(query, asset));
+        } catch (SQLException e) {
+            LOGGER.error("Error deleting asset type " + asset + " from database", e);
+            throw new BlkchnException("Error deleting asset type " + asset + " from database", e);
+        }
+    }
+    
+    private Connection getConnection() throws SQLException {
         StringBuilder sb = new StringBuilder();
         Properties props = getDBProperties();
         if(props.isEmpty()) {
@@ -77,15 +110,7 @@ public abstract class AbstractAssetCreator {
         sb.append(props.get("host") + ":" + props.getProperty("port") + "/");
         sb.append(props.get("database"));
         String jdbcUrl = sb.toString();
-        String query = "INSERT INTO asset_schema (asset_name, chaincode_name, function_name, schema_json) VALUES('%s', '%s', '%s', '%s')";
-        try {
-            Connection conn = DriverManager.getConnection(jdbcUrl, props.getProperty("username"), props.getProperty("password"));
-            Statement stat = conn.createStatement();
-            stat.execute(String.format(query, asset, json.get("chaincodeName").toString(), json.get("functionName").toString(), json.toJSONString()));
-        } catch (SQLException e) {
-            LOGGER.error("Error inserting asset type " + asset + " into database", e);
-            throw new BlkchnException("Error inserting asset type " + asset + " into database", e);
-        }
+        return DriverManager.getConnection(jdbcUrl, props.getProperty("username"), props.getProperty("password"));
     }
 
     public abstract Properties getDBProperties();

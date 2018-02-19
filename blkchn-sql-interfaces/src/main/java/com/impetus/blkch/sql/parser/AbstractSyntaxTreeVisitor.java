@@ -55,8 +55,12 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateAssetRuleContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateFunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateFunctionRuleContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DecimalLiteralContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.DeleteFunctionContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.DeleteFunctionRuleContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DereferenceContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DoubleLiteralContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.DropAssetContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.DropAssetRuleContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorserDetailsContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorsersContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ExpressionContext;
@@ -914,6 +918,30 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     @Override
     public LogicalPlan visitColType(ColTypeContext ctx) {
         logger.trace("In visitColType " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitDeleteFunctionRule(DeleteFunctionRuleContext ctx) {
+        logger.trace("In visitDeleteFunctionRule " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitDeleteFunction(DeleteFunctionContext ctx) {
+        logger.trace("In visitDeleteFunction " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitDropAssetRule(DropAssetRuleContext ctx) {
+        logger.trace("In visitDropAssetRule " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitDropAsset(DropAssetContext ctx) {
+        logger.trace("In visitDropAsset " + ctx.getText());
         return visitChildren(ctx);
     }
 

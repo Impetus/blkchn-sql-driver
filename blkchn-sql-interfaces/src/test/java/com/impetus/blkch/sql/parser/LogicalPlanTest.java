@@ -337,6 +337,20 @@ public class LogicalPlanTest extends TestCase {
         LogicalPlan plan = getLogicalPlan(sql);
         plan.getCreateAsset().traverse();
     }
+    
+    @Test
+    public void testDeleteFunction() {
+        String sql = "DELETE chaincod(deleteFunc, USER, 1001)";
+        LogicalPlan plan = getLogicalPlan(sql);
+        plan.getDeleteFunction().traverse();
+    }
+    
+    @Test
+    public void testDropAsset() {
+        String sql = "DROP ASSET assetchain";
+        LogicalPlan plan = getLogicalPlan(sql);
+        plan.getDropAsset().traverse();
+    }
 
     private LogicalPlan buildOrderByClause() {
         LogicalPlan logicalPlan = buildHaving();

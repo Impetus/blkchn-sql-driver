@@ -53,6 +53,20 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCreateAssetRule(BlkchnSqlParser.CreateAssetRuleContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code deleteFunctionRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeleteFunctionRule(BlkchnSqlParser.DeleteFunctionRuleContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code dropAssetRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDropAssetRule(BlkchnSqlParser.DropAssetRuleContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#insertInto}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -124,6 +138,18 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitRecordDelimiter(BlkchnSqlParser.RecordDelimiterContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#deleteFunction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeleteFunction(BlkchnSqlParser.DeleteFunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#dropAsset}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDropAsset(BlkchnSqlParser.DropAssetContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#className}.
 	 * @param ctx the parse tree

@@ -38,6 +38,8 @@ statement
     | createFunction										   	   #createFunctionRule
     | callFunction											   	   #callFunctionRule
     | createAsset                                                  #createAssetRule
+    | deleteFunction                                               #deleteFunctionRule
+    | dropAsset                                                    #dropAssetRule
     ;
     
 insertInto
@@ -89,6 +91,14 @@ fieldDelimiter
     
 recordDelimiter
     : RECORDS DELIMITED BY STRING
+    ;
+    
+deleteFunction
+    : DELETE qualifiedName '(' parameterValues? ')'
+    ;
+    
+dropAsset
+    : DROP ASSET asset
     ;
 
 className

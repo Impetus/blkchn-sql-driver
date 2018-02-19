@@ -24,6 +24,7 @@ import com.impetus.blkch.sql.asset.Chaincode;
 import com.impetus.blkch.sql.asset.ColumnType;
 import com.impetus.blkch.sql.asset.ColumnTypeList;
 import com.impetus.blkch.sql.asset.CreateAsset;
+import com.impetus.blkch.sql.asset.DropAsset;
 import com.impetus.blkch.sql.asset.FieldDelimiter;
 import com.impetus.blkch.sql.asset.Function;
 import com.impetus.blkch.sql.asset.RecordDelimiter;
@@ -32,6 +33,7 @@ import com.impetus.blkch.sql.function.Args;
 import com.impetus.blkch.sql.function.CallFunction;
 import com.impetus.blkch.sql.function.ClassName;
 import com.impetus.blkch.sql.function.CreateFunction;
+import com.impetus.blkch.sql.function.DeleteFunction;
 import com.impetus.blkch.sql.function.Endorsers;
 import com.impetus.blkch.sql.function.Parameters;
 import com.impetus.blkch.sql.function.Version;
@@ -48,7 +50,9 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnValuesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonOperatorContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateAssetContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.DeleteFunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DereferenceContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.DropAssetContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorserDetailsContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorsersContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FieldDelimiterContext;
@@ -118,6 +122,8 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     Insert insert;
     CallFunction callFunction;
     CreateAsset createAsset;
+    DeleteFunction deleteFunction;
+    DropAsset dropAsset;
 
     @Override
     public LogicalPlan visitSimpleQuery(SimpleQueryContext ctx) {
@@ -533,6 +539,26 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         recordDelimiter.addChildNode(new IdentifierNode(ctx.STRING().getText().replace("'", "").replace("\"", "")));
         logicalPlan.getCurrentNode().addChildNode(recordDelimiter);
         return visitChildren(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitDeleteFunction(DeleteFunctionContext ctx) {
+        logger.trace("In visitDeleteFunction " + ctx.getText());
+        deleteFunction = new DeleteFunction();
+        logicalPlan.setDeleteFunction(deleteFunction);
+        logicalPlan.setCurrentNode(deleteFunction);
+        logicalPlan.setType(SQLType.DELETE_FUNCTION);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitDropAsset(DropAssetContext ctx) {
+        logger.trace("In visitDropAsset " + ctx.getText());
+        dropAsset = new DropAsset();
+        logicalPlan.setDropAsset(dropAsset);
+        logicalPlan.setCurrentNode(dropAsset);
+        logicalPlan.setType(SQLType.DROP_ASSET);
+        return visitChildrenAndResetNode(ctx);
     }
 
     @Override

@@ -16,9 +16,11 @@
 package com.impetus.blkch.sql.parser;
 
 import com.impetus.blkch.sql.asset.CreateAsset;
+import com.impetus.blkch.sql.asset.DropAsset;
 import com.impetus.blkch.sql.function.CallFunction;
 import com.impetus.blkch.sql.function.ClassName;
 import com.impetus.blkch.sql.function.CreateFunction;
+import com.impetus.blkch.sql.function.DeleteFunction;
 import com.impetus.blkch.sql.insert.Insert;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.QueryItemInterface;
@@ -38,6 +40,10 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
     private CallFunction callFunction;
     
     private CreateAsset createAsset;
+    
+    private DeleteFunction deleteFunction;
+    
+    private DropAsset dropAsset;
     
     private SQLType type;
 
@@ -99,6 +105,22 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
         this.createAsset = createAsset;
     }
     
+    public DeleteFunction getDeleteFunction() {
+        return deleteFunction;
+    }
+    
+    public void setDeleteFunction(DeleteFunction deleteFunction) {
+        this.deleteFunction = deleteFunction;
+    }
+    
+    public DropAsset getDropAsset() {
+        return dropAsset;
+    }
+    
+    public void setDropAsset(DropAsset dropAsset) {
+        this.dropAsset = dropAsset;
+    }
+    
     public SQLType getType() {
         return type;
     }
@@ -117,7 +139,11 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
         
         CALL_FUNCTION,
         
-        CREATE_ASSET
+        CREATE_ASSET,
+        
+        DELETE_FUNCTION,
+        
+        DROP_ASSET
     }
 
 }

@@ -89,6 +89,30 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDeleteFunctionRule(BlkchnSqlParser.DeleteFunctionRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeleteFunctionRule(BlkchnSqlParser.DeleteFunctionRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDropAssetRule(BlkchnSqlParser.DropAssetRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDropAssetRule(BlkchnSqlParser.DropAssetRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterInsertInto(BlkchnSqlParser.InsertIntoContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -228,6 +252,30 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitRecordDelimiter(BlkchnSqlParser.RecordDelimiterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDeleteFunction(BlkchnSqlParser.DeleteFunctionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeleteFunction(BlkchnSqlParser.DeleteFunctionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDropAsset(BlkchnSqlParser.DropAssetContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDropAsset(BlkchnSqlParser.DropAssetContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
