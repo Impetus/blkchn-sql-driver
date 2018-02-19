@@ -150,7 +150,7 @@ public class DataFrame {
             returnData.add(returnRec);
             columnsInitialized = true;
         }
-        return new DataFrame(returnData, columnNamesMap, aliasMapping);
+        return new DataFrame(returnData, returnCols, aliasMapping);
     }
 
     public DataFrame order(List<OrderItem> orderItems) {
