@@ -1,8 +1,8 @@
 package com.impetus.blkch.sql.asset;
 
-import com.impetus.blkch.sql.parser.TreeNode;
+import com.impetus.blkch.sql.parser.LogicalPlan;
 
-public class Function extends TreeNode {
+public class Function extends LogicalPlan {
     
     public static final String DESCRIPTION = "FUNCTION";
 
