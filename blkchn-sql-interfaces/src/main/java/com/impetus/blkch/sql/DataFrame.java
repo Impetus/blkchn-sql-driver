@@ -58,7 +58,7 @@ public class DataFrame {
     
     private Map<String, Integer> buildColumnNamesMap(List<String> columns)
     {
-        Map<String, Integer> columnsMap = new HashMap<>();
+        Map<String, Integer> columnsMap = new LinkedHashMap<>();
         int index = 0;
         for(String col : columns){
             columnsMap.put(col, index++);
@@ -86,6 +86,10 @@ public class DataFrame {
 
     public List<List<Object>> getData() {
         return data;
+    }
+    
+    public List<String> getColumns() {
+        return new ArrayList<>(getColumnNamesMap().keySet());
     }
     
     public void setRawData(Collection<Object> rawData) {
