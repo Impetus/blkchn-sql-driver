@@ -139,6 +139,36 @@ public class TestRangeOperations extends TestCase {
         expected.getRangeList().addAllRanges(new Range<>(1l, 6l), new Range<>(13l, 20l), new Range<>(7l, 10l), new Range<>(22l, 25l));
         assertEquals(expected, actual);
     }
-    
-    
+
+
+    @Test
+    public void testNullInRange(){
+        Range<Long> range1 = new Range<>(1l,4l);
+        Range<Long> range2 = null;
+        Boolean result = range1.equals(range2);
+        assert(!result);
+    }
+
+    @Test
+    public void testThreeDiscreteRangeAnd(){
+        Range<Long> range1 = new Range<>(2l,10l);
+        Range<Long> raneg2 = new Range<>(3l,8l);
+        Range<Long> range3 = new Range<>(7l,8l);
+        RangeList<Long> threeAndRange = rangeOperations.and(range1,rangeOperations.and(raneg2,range3).getRanges().get(0));
+        assertNotNull(threeAndRange);
+    }
+
+
+    @Test
+    public void testOrOperatorWithReverseRange(){
+        Range<Long> range1 = new Range<>(10l,12l);
+        Range<Long> range2 = new Range<>(7l,11l);
+        RangeList<Long> result = rangeOperations.or(range1,range2);
+        RangeList<Long> expected = new RangeList<>();
+        expected.addAllRanges(new Range<>(7l,12l));
+        assertEquals(result,expected);
+
+    }
+
+
 }

@@ -23,6 +23,7 @@ import static com.impetus.blkch.sql.UtilityClass.*;
 public class DataFrameTest extends TestCase {
     
     private DataFrame dataframe;
+    private DataFrame dataframeIntegerAsString;
     
     @Before
     protected void setUp() throws Exception {
@@ -138,5 +139,31 @@ public class DataFrameTest extends TestCase {
         DataFrame afterLimit = dataframe.limit(limitClause);
         assertEquals(3, afterLimit.getData().size());
     }
-    
+
+    @Test
+    public void testOrderByOnIntegerAsString(){
+
+        List<List<Object>> data = new ArrayList<>();
+        data.add(Arrays.asList("1", "CR7", "Real Madrid", "26", "Winger"));
+        data.add(Arrays.asList("2", "Benzema", "Real Madrid", "31", "Striker"));
+        data.add(Arrays.asList("3", "Ramos", "Real Madrid", "27", "Defender"));
+        data.add(Arrays.asList("4", "Varane", "Real Madrid", "24", "Defender"));
+        data.add(Arrays.asList("22", "Casemiro", "Real Madrid", "25", "Mid Fielder"));
+        List<String> columns = Arrays.asList("jersey_no", "name", "club", "age", "position");
+        Map<String, String> aliasMapping = new HashMap<>();
+        aliasMapping.put("jersey_name", "name");
+        dataframeIntegerAsString = new DataFrame(data, columns, aliasMapping);
+
+        List<OrderItem> orderItems = Arrays.asList(createOrderItem("jersey_no", Direction.ASC));
+        List<SelectItem> selectItems = Arrays.asList(createColSelectItem("jersey_no"),createColSelectItem("club"), createColSelectItem("age"), createColSelectItem("name"));
+        DataFrame afterOrder = dataframeIntegerAsString.order(orderItems).select(selectItems);
+        List<List<Object>> expectedData = Arrays.asList(
+                Arrays.asList("1","Real Madrid", "26", "CR7"),
+                Arrays.asList("2","Real Madrid", "31", "Benzema"),
+                Arrays.asList("3","Real Madrid", "27", "Ramos"),
+                Arrays.asList("4","Real Madrid", "24", "Varane"),
+                Arrays.asList("22","Real Madrid", "25", "Casemiro")
+        );
+        assertEquals(expectedData, afterOrder.getData());
+    }
 }
