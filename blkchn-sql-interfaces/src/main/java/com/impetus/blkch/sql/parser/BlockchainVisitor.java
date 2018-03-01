@@ -20,13 +20,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.impetus.blkch.sql.asset.Asset;
-import com.impetus.blkch.sql.asset.Chaincode;
 import com.impetus.blkch.sql.asset.ColumnType;
 import com.impetus.blkch.sql.asset.ColumnTypeList;
 import com.impetus.blkch.sql.asset.CreateAsset;
 import com.impetus.blkch.sql.asset.DropAsset;
 import com.impetus.blkch.sql.asset.FieldDelimiter;
-import com.impetus.blkch.sql.asset.Function;
 import com.impetus.blkch.sql.asset.RecordDelimiter;
 import com.impetus.blkch.sql.asset.StorageType;
 import com.impetus.blkch.sql.function.Args;
@@ -41,7 +39,6 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArgsContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.AssetContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CallFunctionContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.ChaincodeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColTypeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColTypeListContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnNamesContext;
@@ -58,7 +55,6 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorsersContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FieldDelimiterContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FromClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionCallContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.GroupByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.HavingClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.LimitClauseContext;
@@ -471,24 +467,6 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         Asset asset = new Asset();
         logicalPlan.getCurrentNode().addChildNode(asset);
         logicalPlan.setCurrentNode(asset);
-        return visitChildrenAndResetNode(ctx);
-    }
-    
-    @Override
-    public LogicalPlan visitChaincode(ChaincodeContext ctx) {
-        logger.trace("In visitChaincode " + ctx.getText());
-        Chaincode chaincode = new Chaincode();
-        logicalPlan.getCurrentNode().addChildNode(chaincode);
-        logicalPlan.setCurrentNode(chaincode);
-        return visitChildrenAndResetNode(ctx);
-    }
-    
-    @Override
-    public LogicalPlan visitFunction(FunctionContext ctx) {
-        logger.trace("In visitFunction " + ctx.getText());
-        Function function = new Function();
-        logicalPlan.getCurrentNode().addChildNode(function);
-        logicalPlan.setCurrentNode(function);
         return visitChildrenAndResetNode(ctx);
     }
     

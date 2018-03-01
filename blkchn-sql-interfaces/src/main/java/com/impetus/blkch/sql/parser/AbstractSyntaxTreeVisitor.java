@@ -37,7 +37,6 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.BooleanValueContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CallFunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CallFunctionRuleContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CastContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.ChaincodeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColTypeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColTypeListContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnNamesContext;
@@ -68,7 +67,6 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.FieldDelimiterContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FirstContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FromClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionCallContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.GroupByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.HavingClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.IdentifierContext;
@@ -876,18 +874,6 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     @Override
     public LogicalPlan visitAsset(AssetContext ctx) {
         logger.trace("In visitAsset " + ctx.getText());
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public LogicalPlan visitChaincode(ChaincodeContext ctx) {
-        logger.trace("In visitChaincode " + ctx.getText());
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public LogicalPlan visitFunction(FunctionContext ctx) {
-        logger.trace("In visitFunction " + ctx.getText());
         return visitChildren(ctx);
     }
 

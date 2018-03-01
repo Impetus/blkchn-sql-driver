@@ -173,26 +173,6 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitAsset(BlkchnSqlParser.AssetContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link BlkchnSqlParser#chaincode}.
-	 * @param ctx the parse tree
-	 */
-	void enterChaincode(BlkchnSqlParser.ChaincodeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link BlkchnSqlParser#chaincode}.
-	 * @param ctx the parse tree
-	 */
-	void exitChaincode(BlkchnSqlParser.ChaincodeContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link BlkchnSqlParser#function}.
-	 * @param ctx the parse tree
-	 */
-	void enterFunction(BlkchnSqlParser.FunctionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link BlkchnSqlParser#function}.
-	 * @param ctx the parse tree
-	 */
-	void exitFunction(BlkchnSqlParser.FunctionContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#storageType}.
 	 * @param ctx the parse tree
 	 */

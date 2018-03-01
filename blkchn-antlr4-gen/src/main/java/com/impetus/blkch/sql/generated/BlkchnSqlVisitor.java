@@ -109,18 +109,6 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAsset(BlkchnSqlParser.AssetContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link BlkchnSqlParser#chaincode}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitChaincode(BlkchnSqlParser.ChaincodeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link BlkchnSqlParser#function}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFunction(BlkchnSqlParser.FunctionContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#storageType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

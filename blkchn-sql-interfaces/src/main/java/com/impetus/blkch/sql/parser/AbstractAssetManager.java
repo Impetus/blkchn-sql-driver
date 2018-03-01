@@ -14,11 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import com.impetus.blkch.BlkchnException;
 import com.impetus.blkch.sql.asset.Asset;
-import com.impetus.blkch.sql.asset.Chaincode;
 import com.impetus.blkch.sql.asset.ColumnType;
 import com.impetus.blkch.sql.asset.ColumnTypeList;
 import com.impetus.blkch.sql.asset.FieldDelimiter;
-import com.impetus.blkch.sql.asset.Function;
 import com.impetus.blkch.sql.asset.RecordDelimiter;
 import com.impetus.blkch.sql.asset.StorageType;
 import com.impetus.blkch.sql.parser.LogicalPlan.SQLType;
@@ -38,10 +36,6 @@ public abstract class AbstractAssetManager {
         JSONObject json = new JSONObject();
         TreeNode createAsset = logicalPlan.getCreateAsset();
         String asset = createAsset.getChildType(Asset.class, 0).getChildType(IdentifierNode.class, 0).getValue();
-        json.put("chaincodeName", createAsset.getChildType(Chaincode.class, 0).getChildType(IdentifierNode.class, 0)
-                .getValue().trim());
-        json.put("functionName", createAsset.getChildType(Function.class, 0).getChildType(IdentifierNode.class, 0)
-                .getValue().trim());
         json.put("storageType", createAsset.getChildType(StorageType.class, 0).getChildType(IdentifierNode.class, 0)
                 .getValue().trim());
         if (createAsset.hasChildType(ColumnTypeList.class)) {
@@ -77,11 +71,11 @@ public abstract class AbstractAssetManager {
     }
     
     private void saveSchemaInDB(String asset, JSONObject json) {
-        String query = "INSERT INTO asset_schema (asset_name, chaincode_name, function_name, schema_json) VALUES('%s', '%s', '%s', '%s')";
+        String query = "INSERT INTO asset_schema (asset_name, schema_json) VALUES('%s', '%s')";
         try {
             Connection conn = getConnection();
             Statement stat = conn.createStatement();
-            stat.execute(String.format(query, asset, json.get("chaincodeName").toString(), json.get("functionName").toString(), json.toJSONString()));
+            stat.execute(String.format(query, asset, json.toJSONString()));
         } catch (SQLException e) {
             LOGGER.error("Error inserting asset type " + asset + " into database", e);
             throw new BlkchnException("Error inserting asset type " + asset + " into database", e);

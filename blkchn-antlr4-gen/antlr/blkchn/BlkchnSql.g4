@@ -64,19 +64,11 @@ createFunction
 	;
 	
 createAsset
-    : CREATE ASSET asset FOR (CHAINCODE | SMARTCONTRACT) chaincode AND FUNCTION function ('(' colTypeList ')')? WITH STORAGE TYPE storageType
+    : CREATE (ASSET | TABLE) asset ('(' colTypeList ')')? WITH STORAGE TYPE storageType
       fieldDelimiter? recordDelimiter?
     ;
     
 asset
-    : identifier
-    ;
-    
-chaincode
-    : identifier
-    ;
-    
-function
     : identifier
     ;
     
@@ -98,7 +90,7 @@ deleteFunction
     ;
     
 dropAsset
-    : DROP ASSET asset
+    : DROP (ASSET | TABLE) asset
     ;
 
 className
@@ -132,7 +124,7 @@ argParam
     ;
 	
 callFunction
-	: CALL qualifiedName '(' parameterValues? ')'
+	: CALL qualifiedName '(' parameterValues? ')' (AS (ASSET | TABLE) asset)?
 	;
 
 parameterValues
