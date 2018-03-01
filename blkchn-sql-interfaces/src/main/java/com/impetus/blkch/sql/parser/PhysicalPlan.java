@@ -8,6 +8,7 @@ import java.util.Map;
 import com.impetus.blkch.BlkchnException;
 import com.impetus.blkch.sql.parser.LogicalPlan.SQLType;
 import com.impetus.blkch.sql.query.Column;
+import com.impetus.blkch.sql.query.Comparator;
 import com.impetus.blkch.sql.query.DirectAPINode;
 import com.impetus.blkch.sql.query.FilterItem;
 import com.impetus.blkch.sql.query.FromItem;
@@ -124,7 +125,7 @@ public abstract class PhysicalPlan extends TreeNode {
         if(getRangeCols(table).contains(column)) {
             RangeOperations<?> rangeOperations =  getRangeOperations(table, column);
             return rangeOperations.processFilterItem(filterItem, table, column);
-        } else if(getQueryCols(table).contains(column)) {
+        } else if(getQueryCols(table).contains(column) && filterItem.getChildType(Comparator.class, 0).isEQ()) {
             String value = filterItem.getChildType(IdentifierNode.class, 0).getValue();
             return new DirectAPINode(table, column, value);
         } else {
