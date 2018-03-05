@@ -44,6 +44,9 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
     }
 
     private boolean checkDiscrete(Range<T> r1, Range<T> r2) {
+        if(r1 == null || r2 == null) {
+            return true;
+        }
         if (r1.getMax().compareTo(r2.getMin()) < 0 || r2.getMax().compareTo(r1.getMin()) < 0) {
             return true;
         }

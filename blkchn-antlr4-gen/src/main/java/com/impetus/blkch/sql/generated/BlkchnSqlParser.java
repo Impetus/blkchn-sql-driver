@@ -3826,7 +3826,6 @@ public class BlkchnSqlParser extends Parser {
 		public ValueExpressionContext valueExpression() {
 			return getRuleContext(ValueExpressionContext.class,0);
 		}
-		public TerminalNode MINUS() { return getToken(BlkchnSqlParser.MINUS, 0); }
 		public TerminalNode PLUS() { return getToken(BlkchnSqlParser.PLUS, 0); }
 		public TerminalNode TILDE() { return getToken(BlkchnSqlParser.TILDE, 0); }
 		public ArithmeticUnaryContext(ValueExpressionContext ctx) { copyFrom(ctx); }
@@ -3862,8 +3861,9 @@ public class BlkchnSqlParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(512);
-			switch ( getInterpreter().adaptivePredict(_input,60,_ctx) ) {
-			case 1:
+			switch (_input.LA(1)) {
+			case PLUS:
+			case TILDE:
 				{
 				_localctx = new ArithmeticUnaryContext(_localctx);
 				_ctx = _localctx;
@@ -3872,7 +3872,7 @@ public class BlkchnSqlParser extends Parser {
 				setState(509);
 				((ArithmeticUnaryContext)_localctx).operator = _input.LT(1);
 				_la = _input.LA(1);
-				if ( !(((((_la - 109)) & ~0x3f) == 0 && ((1L << (_la - 109)) & ((1L << (PLUS - 109)) | (1L << (MINUS - 109)) | (1L << (TILDE - 109)))) != 0)) ) {
+				if ( !(_la==PLUS || _la==TILDE) ) {
 					((ArithmeticUnaryContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
 				} else {
 					consume();
@@ -3881,7 +3881,129 @@ public class BlkchnSqlParser extends Parser {
 				valueExpression(7);
 				}
 				break;
-			case 2:
+			case T__0:
+			case SELECT:
+			case FROM:
+			case ADD:
+			case AS:
+			case ALL:
+			case DISTINCT:
+			case WHERE:
+			case GROUP:
+			case BY:
+			case GROUPING:
+			case SETS:
+			case CUBE:
+			case ROLLUP:
+			case ORDER:
+			case HAVING:
+			case LIMIT:
+			case AT:
+			case OR:
+			case AND:
+			case IN:
+			case NOT:
+			case NO:
+			case EXISTS:
+			case BETWEEN:
+			case LIKE:
+			case RLIKE:
+			case IS:
+			case NULL:
+			case TRUE:
+			case FALSE:
+			case NULLS:
+			case ASC:
+			case DESC:
+			case FOR:
+			case INTERVAL:
+			case CASE:
+			case WHEN:
+			case THEN:
+			case ELSE:
+			case END:
+			case JOIN:
+			case CROSS:
+			case OUTER:
+			case INNER:
+			case LEFT:
+			case SEMI:
+			case RIGHT:
+			case FULL:
+			case NATURAL:
+			case ON:
+			case FIRST:
+			case AFTER:
+			case LAST:
+			case VALUES:
+			case CREATE:
+			case TABLE:
+			case VIEW:
+			case REPLACE:
+			case INSERT:
+			case DELETE:
+			case INTO:
+			case DESCRIBE:
+			case EXPLAIN:
+			case CAST:
+			case SHOW:
+			case TABLES:
+			case COLUMNS:
+			case COLUMN:
+			case USE:
+			case FUNCTIONS:
+			case DROP:
+			case UNION:
+			case EXCEPT:
+			case SETMINUS:
+			case INTERSECT:
+			case TO:
+			case ALTER:
+			case RENAME:
+			case ARRAY:
+			case MAP:
+			case STRUCT:
+			case COMMENT:
+			case SET:
+			case RESET:
+			case COMMIT:
+			case ROLLBACK:
+			case IGNORE:
+			case IF:
+			case MINUS:
+			case ASTERISK:
+			case DIV:
+			case PERCENTLIT:
+			case OUT:
+			case OF:
+			case FUNCTION:
+			case DATABASE:
+			case DATABASES:
+			case TRUNCATE:
+			case ANALYZE:
+			case COMPUTE:
+			case LIST:
+			case REVOKE:
+			case GRANT:
+			case EXPORT:
+			case IMPORT:
+			case LOAD:
+			case ROLE:
+			case ROLES:
+			case INDEX:
+			case INDEXES:
+			case CURRENT_DATE:
+			case CURRENT_TIMESTAMP:
+			case STRING:
+			case BIGINT_LITERAL:
+			case SMALLINT_LITERAL:
+			case TINYINT_LITERAL:
+			case INTEGER_VALUE:
+			case DECIMAL_VALUE:
+			case DOUBLE_LITERAL:
+			case BIGDECIMAL_LITERAL:
+			case IDENTIFIER:
+			case BACKQUOTED_IDENTIFIER:
 				{
 				_localctx = new ValueExpressionDefaultContext(_localctx);
 				_ctx = _localctx;
@@ -3890,6 +4012,8 @@ public class BlkchnSqlParser extends Parser {
 				primaryExpression(0);
 				}
 				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.LT(-1);
 			setState(535);
@@ -6862,7 +6986,7 @@ public class BlkchnSqlParser extends Parser {
 		"\nA\3A\3A\5A\u0324\nA\3A\5A\u0327\nA\3B\3B\3B\2\6*V\\^C\2\4\6\b\n\f\16"+
 		"\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bd"+
 		"fhjlnprtvxz|~\u0080\u0082\2\22\3\2\33\34\3\2QT\3\2)*\4\2<<>>\3\2\16\17"+
-		"\3\2\"#\4\2opuu\3\2qt\3\2op\3\2\u008c\u008d\3\2gn\3\2ox\3\2\33\36\3\2"+
+		"\3\2\"#\4\2oouu\3\2qt\3\2op\3\2\u008c\u008d\3\2gn\3\2ox\3\2\33\36\3\2"+
 		"&\'\3\2\u0093\u0094\t\2\n\61\64\64<PU`fftty\u008d\u037f\2\u0084\3\2\2"+
 		"\2\4\u008b\3\2\2\2\6\u008d\3\2\2\2\b\u009b\3\2\2\2\n\u009d\3\2\2\2\f\u009f"+
 		"\3\2\2\2\16\u00a7\3\2\2\2\20\u00b5\3\2\2\2\22\u00b7\3\2\2\2\24\u00bb\3"+
