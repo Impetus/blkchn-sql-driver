@@ -78,7 +78,7 @@ public class PhysicalPlanTest extends TestCase
         physicalPlan.getWhereClause().traverse();
 
 
-        String sql2 = "SELECT column1 as rcol1, column2 as rcol2, qcolumn3, qcol2 as xyz FROM myTable tbl where column1 < 10 and column1 > 2  or (qcolumn3 > 25 and xyz < 30)";
+        String sql2 = "SELECT column1 as rcol1, column2 as rcol2, qcolumn3, qcol2 as xyz FROM myTable tbl where column1 < 10 and column1 > 2  or (qcolumn3 > 25 and xyz = 30)";
         LogicalPlan plan2 = getLogicalPlan(sql2);
         plan2.getQuery().traverse();
         System.out.println("\n\n\n");
