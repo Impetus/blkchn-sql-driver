@@ -1,15 +1,15 @@
 package com.impetus.blkch.sql.parser;
+import junit.framework.TestCase;
+
 import org.junit.Test;
 
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.Comparator;
-import com.impetus.blkch.sql.query.GroupByClause;
-import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
 import com.impetus.blkch.sql.query.FilterItem;
+import com.impetus.blkch.sql.query.GroupByClause;
 import com.impetus.blkch.sql.query.HavingClause;
-
-import junit.framework.TestCase;
+import com.impetus.blkch.sql.query.IdentifierNode;
 
 public class TestTreeNodeEquals extends TestCase {
 

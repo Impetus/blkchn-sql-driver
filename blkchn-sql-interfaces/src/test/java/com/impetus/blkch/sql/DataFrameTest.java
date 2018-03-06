@@ -1,5 +1,11 @@
 package com.impetus.blkch.sql;
 
+import static com.impetus.blkch.sql.UtilityClass.createAggregateFunction;
+import static com.impetus.blkch.sql.UtilityClass.createColSelectItem;
+import static com.impetus.blkch.sql.UtilityClass.createLimitClause;
+import static com.impetus.blkch.sql.UtilityClass.createOrderItem;
+import static com.impetus.blkch.sql.UtilityClass.createStarSelectItem;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,8 +23,6 @@ import com.impetus.blkch.sql.query.LimitClause;
 import com.impetus.blkch.sql.query.OrderItem;
 import com.impetus.blkch.sql.query.OrderingDirection.Direction;
 import com.impetus.blkch.sql.query.SelectItem;
-
-import static com.impetus.blkch.sql.UtilityClass.*;
 
 public class DataFrameTest extends TestCase {
     

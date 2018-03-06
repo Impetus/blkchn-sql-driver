@@ -1,8 +1,8 @@
 package com.impetus.blkch.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ArrayList;
 
 public final class RangeList<T extends Number & Comparable<T>> {
 
