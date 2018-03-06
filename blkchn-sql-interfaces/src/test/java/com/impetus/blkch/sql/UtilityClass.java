@@ -2,6 +2,7 @@ package com.impetus.blkch.sql;
 
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.Comparator;
+import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
 import com.impetus.blkch.sql.query.FilterItem;
 import com.impetus.blkch.sql.query.FunctionNode;
 import com.impetus.blkch.sql.query.IdentifierNode;
@@ -10,10 +11,9 @@ import com.impetus.blkch.sql.query.LogicalOperation;
 import com.impetus.blkch.sql.query.LogicalOperation.Operator;
 import com.impetus.blkch.sql.query.OrderItem;
 import com.impetus.blkch.sql.query.OrderingDirection;
+import com.impetus.blkch.sql.query.OrderingDirection.Direction;
 import com.impetus.blkch.sql.query.SelectItem;
 import com.impetus.blkch.sql.query.StarNode;
-import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
-import com.impetus.blkch.sql.query.OrderingDirection.Direction;
 
 public class UtilityClass {
 

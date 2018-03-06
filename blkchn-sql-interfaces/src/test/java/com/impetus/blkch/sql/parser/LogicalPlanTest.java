@@ -324,6 +324,33 @@ public class LogicalPlanTest extends TestCase {
         LogicalPlan plan = getLogicalPlan(sql);
         plan.getQuery().traverse();
     }
+    
+    @Test
+    public void testCreateAsset() {
+        String sql = "CREATE ASSET user_asset FOR chaincode assetchain and FUNCTION qGetUsers ("
+                + "ID int,"
+                + "AssetType string,"
+                + "Email string)"
+                + " WITH STORAGE TYPE CSV "
+                + "FIELDS DELIMITED BY ',' "
+                + "RECORDS DELIMITED BY \"\\n\"";
+        LogicalPlan plan = getLogicalPlan(sql);
+        plan.getCreateAsset().traverse();
+    }
+    
+    @Test
+    public void testDeleteFunction() {
+        String sql = "DELETE chaincod(deleteFunc, USER, 1001)";
+        LogicalPlan plan = getLogicalPlan(sql);
+        plan.getDeleteFunction().traverse();
+    }
+    
+    @Test
+    public void testDropAsset() {
+        String sql = "DROP ASSET assetchain";
+        LogicalPlan plan = getLogicalPlan(sql);
+        plan.getDropAsset().traverse();
+    }
 
     private LogicalPlan buildOrderByClause() {
         LogicalPlan logicalPlan = buildHaving();

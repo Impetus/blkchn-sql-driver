@@ -6,12 +6,12 @@ import org.junit.Test;
 
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.Comparator;
-import com.impetus.blkch.sql.query.LogicalOperation;
-import com.impetus.blkch.sql.query.RangeNode;
 import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
-import com.impetus.blkch.sql.query.LogicalOperation.Operator;
 import com.impetus.blkch.sql.query.FilterItem;
 import com.impetus.blkch.sql.query.IdentifierNode;
+import com.impetus.blkch.sql.query.LogicalOperation;
+import com.impetus.blkch.sql.query.LogicalOperation.Operator;
+import com.impetus.blkch.sql.query.RangeNode;
 
 public class TestRangeOperations extends TestCase {
 

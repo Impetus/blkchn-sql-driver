@@ -1,5 +1,11 @@
 package com.impetus.blkch.sql;
 
+import static com.impetus.blkch.sql.UtilityClass.createAggregateFunction;
+import static com.impetus.blkch.sql.UtilityClass.createColSelectItem;
+import static com.impetus.blkch.sql.UtilityClass.createFilterItem;
+import static com.impetus.blkch.sql.UtilityClass.createLogicalOperation;
+import static com.impetus.blkch.sql.UtilityClass.createOrderItem;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,8 +24,6 @@ import com.impetus.blkch.sql.query.LogicalOperation;
 import com.impetus.blkch.sql.query.LogicalOperation.Operator;
 import com.impetus.blkch.sql.query.OrderingDirection.Direction;
 import com.impetus.blkch.sql.query.SelectItem;
-
-import static com.impetus.blkch.sql.UtilityClass.*;
 
 public class GroupedDataFrameTest extends TestCase {
 

@@ -37,6 +37,9 @@ statement
     | insertInto                                                   #singleInsert
     | createFunction										   	   #createFunctionRule
     | callFunction											   	   #callFunctionRule
+    | createAsset                                                  #createAssetRule
+    | deleteFunction                                               #deleteFunctionRule
+    | dropAsset                                                    #dropAssetRule
     ;
     
 insertInto
@@ -57,8 +60,38 @@ constantSeq
 
     
 createFunction
-	: CREATE FUNCTION qualifiedName AS className version? endorsers? args?
+	: CREATE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? endorsers? args?
 	;
+	
+createAsset
+    : CREATE (ASSET | TABLE) asset ('(' colTypeList ')')? WITH STORAGE TYPE storageType
+      fieldDelimiter? recordDelimiter?
+    ;
+    
+asset
+    : identifier
+    ;
+    
+storageType
+    : JSON
+    | CSV
+    ;
+    
+fieldDelimiter
+    : FIELDS DELIMITED BY STRING
+    ;
+    
+recordDelimiter
+    : RECORDS DELIMITED BY STRING
+    ;
+    
+deleteFunction
+    : DELETE qualifiedName '(' parameterValues? ')'
+    ;
+    
+dropAsset
+    : DROP (ASSET | TABLE) asset
+    ;
 
 className
     : STRING
@@ -91,7 +124,7 @@ argParam
     ;
 	
 callFunction
-	: CALL qualifiedName '(' parameterValues? ')'
+	: CALL qualifiedName '(' parameterValues? ')' (AS (ASSET | TABLE) asset)?
 	;
 
 parameterValues
@@ -308,6 +341,14 @@ dataType
     | identifier ('(' INTEGER_VALUE (',' INTEGER_VALUE)* ')')?  #primitiveDataType
     ;
     
+colTypeList
+    : colType (',' colType)*
+    ;
+
+colType
+    : identifier dataType (COMMENT STRING)?
+    ;
+    
 complexColTypeList
     : complexColType (',' complexColType)*
     ;
@@ -456,6 +497,16 @@ WITH: 'WITH';
 VERSION: 'VERSION';
 ENDORSERS: 'ENDORSERS';
 ARGS: 'ARGS';
+ASSET: 'ASSET';
+CHAINCODE: 'CHAINCODE';
+SMARTCONTRACT: 'SMARTCONTRACT';
+STORAGE: 'STORAGE';
+TYPE: 'TYPE';
+JSON: 'JSON';
+CSV: 'CSV';
+FIELDS: 'FIELDS';
+RECORDS: 'RECORDS';
+DELIMITED: 'DELIMITED';
 
 IF: 'IF';
 

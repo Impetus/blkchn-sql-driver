@@ -2,9 +2,9 @@ package com.impetus.blkch.util;
 
 import java.math.BigInteger;
 
-import org.junit.Test;
-
 import junit.framework.TestCase;
+
+import org.junit.Test;
 
 public class TestBigIntegerRangeOperations extends TestCase {
 

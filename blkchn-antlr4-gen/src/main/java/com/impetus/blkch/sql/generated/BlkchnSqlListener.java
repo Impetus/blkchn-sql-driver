@@ -67,6 +67,42 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitCallFunctionRule(BlkchnSqlParser.CallFunctionRuleContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code createAssetRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCreateAssetRule(BlkchnSqlParser.CreateAssetRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code createAssetRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCreateAssetRule(BlkchnSqlParser.CreateAssetRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code deleteFunctionRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeleteFunctionRule(BlkchnSqlParser.DeleteFunctionRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code deleteFunctionRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeleteFunctionRule(BlkchnSqlParser.DeleteFunctionRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code dropAssetRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterDropAssetRule(BlkchnSqlParser.DropAssetRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code dropAssetRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitDropAssetRule(BlkchnSqlParser.DropAssetRuleContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#insertInto}.
 	 * @param ctx the parse tree
 	 */
@@ -116,6 +152,76 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCreateFunction(BlkchnSqlParser.CreateFunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#createAsset}.
+	 * @param ctx the parse tree
+	 */
+	void enterCreateAsset(BlkchnSqlParser.CreateAssetContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#createAsset}.
+	 * @param ctx the parse tree
+	 */
+	void exitCreateAsset(BlkchnSqlParser.CreateAssetContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#asset}.
+	 * @param ctx the parse tree
+	 */
+	void enterAsset(BlkchnSqlParser.AssetContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#asset}.
+	 * @param ctx the parse tree
+	 */
+	void exitAsset(BlkchnSqlParser.AssetContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#storageType}.
+	 * @param ctx the parse tree
+	 */
+	void enterStorageType(BlkchnSqlParser.StorageTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#storageType}.
+	 * @param ctx the parse tree
+	 */
+	void exitStorageType(BlkchnSqlParser.StorageTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#fieldDelimiter}.
+	 * @param ctx the parse tree
+	 */
+	void enterFieldDelimiter(BlkchnSqlParser.FieldDelimiterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#fieldDelimiter}.
+	 * @param ctx the parse tree
+	 */
+	void exitFieldDelimiter(BlkchnSqlParser.FieldDelimiterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#recordDelimiter}.
+	 * @param ctx the parse tree
+	 */
+	void enterRecordDelimiter(BlkchnSqlParser.RecordDelimiterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#recordDelimiter}.
+	 * @param ctx the parse tree
+	 */
+	void exitRecordDelimiter(BlkchnSqlParser.RecordDelimiterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#deleteFunction}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeleteFunction(BlkchnSqlParser.DeleteFunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#deleteFunction}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeleteFunction(BlkchnSqlParser.DeleteFunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#dropAsset}.
+	 * @param ctx the parse tree
+	 */
+	void enterDropAsset(BlkchnSqlParser.DropAssetContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#dropAsset}.
+	 * @param ctx the parse tree
+	 */
+	void exitDropAsset(BlkchnSqlParser.DropAssetContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#className}.
 	 * @param ctx the parse tree
@@ -984,6 +1090,26 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPrimitiveDataType(BlkchnSqlParser.PrimitiveDataTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#colTypeList}.
+	 * @param ctx the parse tree
+	 */
+	void enterColTypeList(BlkchnSqlParser.ColTypeListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#colTypeList}.
+	 * @param ctx the parse tree
+	 */
+	void exitColTypeList(BlkchnSqlParser.ColTypeListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#colType}.
+	 * @param ctx the parse tree
+	 */
+	void enterColType(BlkchnSqlParser.ColTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#colType}.
+	 * @param ctx the parse tree
+	 */
+	void exitColType(BlkchnSqlParser.ColTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#complexColTypeList}.
 	 * @param ctx the parse tree
