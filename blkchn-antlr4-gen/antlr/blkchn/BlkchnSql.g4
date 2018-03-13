@@ -57,7 +57,6 @@ columnValues
 constantSeq
 	: constant (',' constant)*
 	;
-
     
 createFunction
 	: CREATE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? endorsers? args?
@@ -119,8 +118,7 @@ argParamSeq
     ;
     
 argParam
-    : strictIdentifier
-    | constant
+    : constant
     ;
 	
 callFunction
