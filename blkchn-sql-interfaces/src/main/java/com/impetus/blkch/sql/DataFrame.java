@@ -15,6 +15,7 @@
 ******************************************************************************/
 package com.impetus.blkch.sql;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -193,6 +194,8 @@ public class DataFrame {
                         diff = (((Double) firstObject) - ((Double) secondObject)) < 0.0 ? -1 : +1;
                     } else if (firstObject instanceof Date) {
                         diff = (((Date) firstObject).getTime() - ((Date) secondObject).getTime()) < 0.0 ? -1 : +1;
+                    } else if (firstObject instanceof BigInteger) {
+                        diff = (((BigInteger) firstObject).compareTo((BigInteger) secondObject)) < 0 ? -1 : +1;
                     } else {
                         diff = firstObject.toString().compareTo(secondObject.toString());
                     }
