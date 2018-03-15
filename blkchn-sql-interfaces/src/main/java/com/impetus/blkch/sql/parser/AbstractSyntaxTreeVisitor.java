@@ -132,6 +132,8 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.TimeFunctionCallContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.TinyIntLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.TypeConstructorContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.UnquotedIdentifierContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.UpgradeFunctionContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.UpgradeFunctionRuleContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ValueExpressionDefaultContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.VersionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.WhenClauseContext;
@@ -928,6 +930,18 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     @Override
     public LogicalPlan visitDropAsset(DropAssetContext ctx) {
         logger.trace("In visitDropAsset " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitUpgradeFunctionRule(UpgradeFunctionRuleContext ctx) {
+        logger.trace("In visitUpgradeFunctionRule " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitUpgradeFunction(UpgradeFunctionContext ctx) {
+        logger.trace("In visitUpgradeFunction " + ctx.getText());
         return visitChildren(ctx);
     }
 

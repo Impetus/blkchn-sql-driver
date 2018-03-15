@@ -113,6 +113,18 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterUpgradeFunctionRule(BlkchnSqlParser.UpgradeFunctionRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUpgradeFunctionRule(BlkchnSqlParser.UpgradeFunctionRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterInsertInto(BlkchnSqlParser.InsertIntoContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -168,6 +180,18 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCreateFunction(BlkchnSqlParser.CreateFunctionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUpgradeFunction(BlkchnSqlParser.UpgradeFunctionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUpgradeFunction(BlkchnSqlParser.UpgradeFunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -67,6 +67,13 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDropAssetRule(BlkchnSqlParser.DropAssetRuleContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code upgradeFunctionRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUpgradeFunctionRule(BlkchnSqlParser.UpgradeFunctionRuleContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#insertInto}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -96,6 +103,12 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCreateFunction(BlkchnSqlParser.CreateFunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#upgradeFunction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUpgradeFunction(BlkchnSqlParser.UpgradeFunctionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#createAsset}.
 	 * @param ctx the parse tree

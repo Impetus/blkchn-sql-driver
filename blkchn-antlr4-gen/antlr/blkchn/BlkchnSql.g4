@@ -40,6 +40,7 @@ statement
     | createAsset                                                  #createAssetRule
     | deleteFunction                                               #deleteFunctionRule
     | dropAsset                                                    #dropAssetRule
+    | upgradeFunction                                              #upgradeFunctionRule
     ;
     
 insertInto
@@ -61,6 +62,10 @@ constantSeq
 createFunction
 	: CREATE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? endorsers? args?
 	;
+	
+upgradeFunction
+    : UPGRADE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? args?
+    ;
 	
 createAsset
     : CREATE (ASSET | TABLE) asset ('(' colTypeList ')')? WITH STORAGE TYPE storageType
@@ -505,6 +510,7 @@ CSV: 'CSV';
 FIELDS: 'FIELDS';
 RECORDS: 'RECORDS';
 DELIMITED: 'DELIMITED';
+UPGRADE: 'UPGRADE';
 
 IF: 'IF';
 
