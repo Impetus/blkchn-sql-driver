@@ -259,7 +259,7 @@ public class LogicalPlanTest extends TestCase {
     
     @Test
     public void testInsert() {
-       String sql = "INSERT INTO someTable VALUES(first, second, third, 4)";
+       String sql = "INSERT INTO someTable VALUES('first', 'second', 'third', 4)";
        LogicalPlan plan = getLogicalPlan(sql);
        plan.getInsert().traverse();
     }
