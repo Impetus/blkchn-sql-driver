@@ -37,13 +37,13 @@ import com.impetus.blkch.sql.query.SelectItem;
 import com.impetus.blkch.sql.query.StarNode;
 
 public class DataFrame {
-    
+
     private Map<String, Integer> columnNamesMap;
 
     private Map<String, String> aliasMapping;
 
     private List<List<Object>> data;
-    
+
     private List<Object> rawData = new ArrayList<>();
 
     public DataFrame(List<List<Object>> data, String[] columns, Map<String, String> aliasMapping) {
@@ -55,12 +55,11 @@ public class DataFrame {
         this.aliasMapping = aliasMapping;
         this.data = data;
     }
-    
-    private Map<String, Integer> buildColumnNamesMap(List<String> columns)
-    {
+
+    private Map<String, Integer> buildColumnNamesMap(List<String> columns) {
         Map<String, Integer> columnsMap = new LinkedHashMap<>();
         int index = 0;
-        for(String col : columns){
+        for (String col : columns) {
             columnsMap.put(col, index++);
         }
         return columnsMap;
@@ -71,7 +70,7 @@ public class DataFrame {
         this.aliasMapping = aliasMapping;
         this.data = data;
     }
-    
+
     public Map<String, Integer> getColumnNamesMap() {
         return columnNamesMap;
     }
@@ -87,19 +86,19 @@ public class DataFrame {
     public List<List<Object>> getData() {
         return data;
     }
-    
+
     public List<String> getColumns() {
         return new ArrayList<>(getColumnNamesMap().keySet());
     }
-    
+
     public void setRawData(Collection<Object> rawData) {
         this.rawData.addAll(rawData);
     }
-    
+
     public void addRawData(Object data) {
         this.rawData.add(data);
     }
-    
+
     public List<Object> getRawData() {
         return rawData;
     }
@@ -237,7 +236,7 @@ public class DataFrame {
         }
         return new GroupedDataFrame(groupIndices, data, columnNamesMap, aliasMapping);
     }
-    
+
     public boolean isEmpty() {
         return this.data.isEmpty();
     }
@@ -258,17 +257,26 @@ public class DataFrame {
             columnData.add(computeFunction(function.getChildType(FunctionNode.class, 0)));
         } else {
             int colIndex;
-            String colName = function.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
-            if (columnNamesMap.get(colName) != null) {
-                colIndex = columnNamesMap.get(colName);
-            } else if (aliasMapping.containsKey(colName)) {
-                String actualCol = aliasMapping.get(colName);
-                colIndex = columnNamesMap.get(actualCol);
+            if (function.hasChildType(StarNode.class)) {
+                for (int i = 0; i < data.size(); i++) {
+                    columnData.add(i + 1);
+                }
             } else {
-                throw new RuntimeException("Column " + colName + " doesn't exist in table");
-            }
-            for (List<Object> record : data) {
-                columnData.add(record.get(colIndex));
+
+                String colName = function.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0)
+                        .getValue();
+                if (columnNamesMap.get(colName) != null) {
+                    colIndex = columnNamesMap.get(colName);
+                } else if (aliasMapping.containsKey(colName)) {
+                    String actualCol = aliasMapping.get(colName);
+                    colIndex = columnNamesMap.get(actualCol);
+                } else {
+                    throw new RuntimeException("Column " + colName + " doesn't exist in table");
+                }
+                for (List<Object> record : data) {
+                    columnData.add(record.get(colIndex));
+                }
+
             }
         }
         switch (func) {
@@ -286,8 +294,13 @@ public class DataFrame {
         if (function.hasChildType(FunctionNode.class)) {
             return func + "(" + createFunctionColName(function.getChildType(FunctionNode.class, 0)) + ")";
         } else {
-            String colName = function.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
-            return func + "(" + colName + ")";
+            if (function.hasChildType(StarNode.class))
+                return func + "(*)";
+            else {
+                String colName = function.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0)
+                        .getValue();
+                return func + "(" + colName + ")";
+            }
         }
     }
 

@@ -29,11 +29,12 @@ import com.impetus.blkch.sql.query.HavingClause;
 import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.LogicalOperation;
 import com.impetus.blkch.sql.query.SelectItem;
+import com.impetus.blkch.sql.query.StarNode;
 
 public class GroupedDataFrame {
 
     private List<Integer> groupIndices;
-    
+
     private Map<String, Integer> columnNamesMap;
 
     private Map<String, String> aliasMapping;
@@ -45,41 +46,40 @@ public class GroupedDataFrame {
         this.groupIndices = groupIndices;
         this.columnNamesMap = columnNamesMap;
         this.aliasMapping = aliasMapping;
-        this.groupData = data.stream().collect(
-                Collectors.groupingBy(
+        this.groupData = data.stream()
+                .collect(Collectors.groupingBy(
                         list -> groupIndices.stream().map(index -> list.get(index)).collect(Collectors.toList()),
                         Collectors.toList()));
     }
-    
+
     public GroupedDataFrame(List<Integer> groupIndices, List<List<Object>> data, List<String> columns,
             Map<String, String> aliasMapping) {
         this.groupIndices = groupIndices;
         this.columnNamesMap = buildColumnNamesMap(columns);
         this.aliasMapping = aliasMapping;
-        this.groupData = data.stream().collect(
-                Collectors.groupingBy(
+        this.groupData = data.stream()
+                .collect(Collectors.groupingBy(
                         list -> groupIndices.stream().map(index -> list.get(index)).collect(Collectors.toList()),
                         Collectors.toList()));
     }
-    
-    private Map<String, Integer> buildColumnNamesMap(List<String> columns)
-    {
+
+    private Map<String, Integer> buildColumnNamesMap(List<String> columns) {
         Map<String, Integer> columnsMap = new HashMap<>();
         int index = 0;
-        for(String col : columns){
+        for (String col : columns) {
             columnsMap.put(col, index++);
         }
         return columnsMap;
     }
-    
-    private GroupedDataFrame(List<Integer> groupIndices, Map<List<Object>, List<List<Object>>> groupData, Map<String, Integer> columnNamesMap,
-            Map<String, String> aliasMapping) {
+
+    private GroupedDataFrame(List<Integer> groupIndices, Map<List<Object>, List<List<Object>>> groupData,
+            Map<String, Integer> columnNamesMap, Map<String, String> aliasMapping) {
         this.groupIndices = groupIndices;
         this.columnNamesMap = columnNamesMap;
         this.aliasMapping = aliasMapping;
         this.groupData = groupData;
     }
-    
+
     // Exposed this getter for test cases. Should be package private.
     Map<List<Object>, List<List<Object>>> getGroupData() {
         return groupData;
@@ -136,31 +136,31 @@ public class GroupedDataFrame {
         }
         return new DataFrame(returnData, returnCols, aliasMapping);
     }
-    
+
     public GroupedDataFrame having(HavingClause havingClause) {
         Map<List<Object>, List<List<Object>>> groupData;
-        if(havingClause.hasChildType(FilterItem.class)) {
+        if (havingClause.hasChildType(FilterItem.class)) {
             groupData = executeSingleHavingClause(havingClause.getChildType(FilterItem.class, 0));
         } else {
             groupData = executeMultipleHavingClause(havingClause.getChildType(LogicalOperation.class, 0));
         }
         return new GroupedDataFrame(groupIndices, groupData, columnNamesMap, aliasMapping);
     }
-    
+
     private Map<List<Object>, List<List<Object>>> executeSingleHavingClause(FilterItem filterItem) {
         String column = filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
         Comparator comparator = filterItem.getChildType(Comparator.class, 0);
         String value = filterItem.getChildType(IdentifierNode.class, 0).getValue().replace("'", "");
         int groupIdx = -1;
         boolean invalidFilterCol = false;
-        if(columnNamesMap.get(column) != null) {
-            if(groupIndices.contains(columnNamesMap.get(column))) {
+        if (columnNamesMap.get(column) != null) {
+            if (groupIndices.contains(columnNamesMap.get(column))) {
                 groupIdx = groupIndices.indexOf(columnNamesMap.get(column));
             } else {
                 invalidFilterCol = true;
             }
-        } else if(aliasMapping.containsKey(column)) {
-            if(groupIndices.contains(columnNamesMap.get(aliasMapping.get(column)))) {
+        } else if (aliasMapping.containsKey(column)) {
+            if (groupIndices.contains(columnNamesMap.get(aliasMapping.get(column)))) {
                 groupIdx = groupIndices.indexOf(columnNamesMap.get(aliasMapping.get(column)));
             } else {
                 invalidFilterCol = true;
@@ -168,43 +168,43 @@ public class GroupedDataFrame {
         } else {
             invalidFilterCol = true;
         }
-        if(invalidFilterCol || (groupIdx == -1)) {
+        if (invalidFilterCol || (groupIdx == -1)) {
             throw new RuntimeException("Column " + column + " must appear in GROUP BY clause");
         }
         final int groupIndex = groupIdx;
         Map<List<Object>, List<List<Object>>> filterData = groupData.entrySet().stream().filter(entry -> {
             List<Object> keys = entry.getKey();
             Object cellValue = keys.get(groupIndex);
-            if(cellValue == null) {
+            if (cellValue == null) {
                 return false;
             }
-            if(cellValue instanceof Number) {
+            if (cellValue instanceof Number) {
                 Double cell = Double.parseDouble(cellValue.toString());
                 Double doubleValue = Double.parseDouble(value);
-                if(comparator.isEQ()) {
+                if (comparator.isEQ()) {
                     return cell.equals(doubleValue);
-                } else if(comparator.isGT()) {
+                } else if (comparator.isGT()) {
                     return cell > doubleValue;
-                } else if(comparator.isGTE()) {
+                } else if (comparator.isGTE()) {
                     return cell >= doubleValue;
-                } else if(comparator.isLT()) {
+                } else if (comparator.isLT()) {
                     return cell < doubleValue;
-                } else if(comparator.isLTE()) {
+                } else if (comparator.isLTE()) {
                     return cell <= doubleValue;
                 } else {
                     return !cell.equals(doubleValue);
                 }
             } else {
                 int comparisionValue = cellValue.toString().compareTo(value);
-                if(comparator.isEQ()) {
+                if (comparator.isEQ()) {
                     return comparisionValue == 0;
-                } else if(comparator.isGT()) {
+                } else if (comparator.isGT()) {
                     return comparisionValue > 0;
-                } else if(comparator.isGTE()) {
+                } else if (comparator.isGTE()) {
                     return comparisionValue >= 0;
-                } else if(comparator.isLT()) {
+                } else if (comparator.isLT()) {
                     return comparisionValue < 0;
-                } else if(comparator.isLTE()) {
+                } else if (comparator.isLTE()) {
                     return comparisionValue <= 0;
                 } else {
                     return comparisionValue != 0;
@@ -213,7 +213,7 @@ public class GroupedDataFrame {
         }).collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
         return filterData;
     }
-    
+
     private Map<List<Object>, List<List<Object>>> executeMultipleHavingClause(LogicalOperation operation) {
         if (operation.getChildNodes().size() != 2) {
             throw new RuntimeException("Logical operation should have two boolean expressions");
@@ -231,15 +231,15 @@ public class GroupedDataFrame {
             FilterItem filterItem = (FilterItem) operation.getChildNode(1);
             secondOut = executeSingleHavingClause(filterItem);
         }
-        if(operation.isAnd()) {
-            for(List<Object> key : firstOut.keySet()) {
-                if(secondOut.containsKey(key)) {
+        if (operation.isAnd()) {
+            for (List<Object> key : firstOut.keySet()) {
+                if (secondOut.containsKey(key)) {
                     returnMap.put(key, secondOut.get(key));
                 }
             }
         } else {
             returnMap.putAll(firstOut);
-            for(Map.Entry<List<Object>, List<List<Object>>> entry : secondOut.entrySet()) {
+            for (Map.Entry<List<Object>, List<List<Object>>> entry : secondOut.entrySet()) {
                 returnMap.putIfAbsent(entry.getKey(), entry.getValue());
             }
         }
@@ -252,18 +252,25 @@ public class GroupedDataFrame {
         if (function.hasChildType(FunctionNode.class)) {
             columnData.add(computeFunction(function.getChildType(FunctionNode.class, 0), data));
         } else {
-            int colIndex;
-            String colName = function.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
-            if (columnNamesMap.get(colName) != null) {
-                colIndex = columnNamesMap.get(colName);
-            } else if (aliasMapping.containsKey(colName)) {
-                String actualCol = aliasMapping.get(colName);
-                colIndex = columnNamesMap.get(actualCol);
+            if (function.hasChildType(StarNode.class)) {
+                for (int i = 0; i < data.size(); i++) {
+                    columnData.add(i + 1);
+                }
             } else {
-                throw new RuntimeException("Column " + colName + " doesn't exist in table");
-            }
-            for (List<Object> record : data) {
-                columnData.add(record.get(colIndex));
+                int colIndex;
+                String colName = function.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0)
+                        .getValue();
+                if (columnNamesMap.get(colName) != null) {
+                    colIndex = columnNamesMap.get(colName);
+                } else if (aliasMapping.containsKey(colName)) {
+                    String actualCol = aliasMapping.get(colName);
+                    colIndex = columnNamesMap.get(actualCol);
+                } else {
+                    throw new RuntimeException("Column " + colName + " doesn't exist in table");
+                }
+                for (List<Object> record : data) {
+                    columnData.add(record.get(colIndex));
+                }
             }
         }
         switch (func) {
@@ -281,8 +288,13 @@ public class GroupedDataFrame {
         if (function.hasChildType(FunctionNode.class)) {
             return func + "(" + createFunctionColName(function.getChildType(FunctionNode.class, 0)) + ")";
         } else {
-            String colName = function.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
-            return func + "(" + colName + ")";
+            if (function.hasChildType(StarNode.class))
+                return func + "(*)";
+            else {
+                String colName = function.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0)
+                        .getValue();
+                return func + "(" + colName + ")";
+            }
         }
     }
 }
