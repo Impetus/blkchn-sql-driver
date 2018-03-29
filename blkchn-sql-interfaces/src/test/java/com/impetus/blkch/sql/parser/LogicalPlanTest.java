@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.impetus.blkch.sql.parser;
 
+import com.impetus.blkch.BlkchnErrorListener;
+import com.impetus.blkch.BlkchnException;
 import junit.framework.TestCase;
 
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -41,7 +43,10 @@ import com.impetus.blkch.sql.query.SelectClause;
 import com.impetus.blkch.sql.query.SelectItem;
 import com.impetus.blkch.sql.query.Table;
 import com.impetus.blkch.sql.query.WhereClause;
+import org.junit.runner.RunWith;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+@RunWith(PowerMockRunner.class)
 public class LogicalPlanTest extends TestCase {
 
     @Test
@@ -254,7 +259,7 @@ public class LogicalPlanTest extends TestCase {
     
     @Test
     public void testInsert() {
-       String sql = "INSERT INTO someTable VALUES(first, second, third, 4)";
+       String sql = "INSERT INTO someTable VALUES('first', 'second', 'third', 4)";
        LogicalPlan plan = getLogicalPlan(sql);
        plan.getInsert().traverse();
     }
@@ -359,6 +364,16 @@ public class LogicalPlanTest extends TestCase {
         plan.getDropAsset().traverse();
     }
 
+
+    @Test(expected =  BlkchnException.class)
+    public void testWrongQuery() {
+        String sql = "select * from block blk where blockNo = 2 And blockNo>=2 blockNo <=300";
+        LogicalPlan plan = getLogicalPlan(sql);
+        plan.getQuery().traverse();
+    }
+
+
+
     private LogicalPlan buildOrderByClause() {
         LogicalPlan logicalPlan = buildHaving();
         TreeNode orderByClause = new OrderByClause();
@@ -460,6 +475,10 @@ public class LogicalPlanTest extends TestCase {
     public LogicalPlan getLogicalPlan(String sqlText) {
         LogicalPlan logicalPlan = null;
         BlkchnSqlParser parser = getParser(sqlText);
+
+        parser.removeErrorListeners();
+        parser.addErrorListener(BlkchnErrorListener.INSTANCE);
+
         AbstractSyntaxTreeVisitor astBuilder = new BlockchainVisitor();
         logicalPlan = (LogicalPlan) astBuilder.visitSingleStatement(parser.singleStatement());
         return logicalPlan;
@@ -467,6 +486,10 @@ public class LogicalPlanTest extends TestCase {
 
     public BlkchnSqlParser getParser(String sqlText) {
         BlkchnSqlLexer lexer = new BlkchnSqlLexer(new CaseInsensitiveCharStream(sqlText));
+
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(BlkchnErrorListener.INSTANCE);
+
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         BlkchnSqlParser parser = new BlkchnSqlParser(tokens);
         return parser;
