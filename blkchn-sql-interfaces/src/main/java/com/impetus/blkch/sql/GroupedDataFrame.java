@@ -140,6 +140,7 @@ public class GroupedDataFrame {
     public GroupedDataFrame having(HavingClause havingClause) {
         Map<List<Object>, List<List<Object>>> groupData;
         if (havingClause.hasChildType(FilterItem.class)) {
+            havingClause.traverse();
             groupData = executeSingleHavingClause(havingClause.getChildType(FilterItem.class, 0));
         } else {
             groupData = executeMultipleHavingClause(havingClause.getChildType(LogicalOperation.class, 0));
@@ -148,69 +149,49 @@ public class GroupedDataFrame {
     }
 
     private Map<List<Object>, List<List<Object>>> executeSingleHavingClause(FilterItem filterItem) {
-        String column = filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
         Comparator comparator = filterItem.getChildType(Comparator.class, 0);
         String value = filterItem.getChildType(IdentifierNode.class, 0).getValue().replace("'", "");
-        int groupIdx = -1;
-        boolean invalidFilterCol = false;
-        if (columnNamesMap.get(column) != null) {
-            if (groupIndices.contains(columnNamesMap.get(column))) {
-                groupIdx = groupIndices.indexOf(columnNamesMap.get(column));
-            } else {
-                invalidFilterCol = true;
-            }
-        } else if (aliasMapping.containsKey(column)) {
-            if (groupIndices.contains(columnNamesMap.get(aliasMapping.get(column)))) {
-                groupIdx = groupIndices.indexOf(columnNamesMap.get(aliasMapping.get(column)));
-            } else {
-                invalidFilterCol = true;
-            }
+        Map<List<Object>, List<List<Object>>> filterData = new HashMap<>();
+        if (filterItem.hasChildType(FunctionNode.class)) {
+            filterData = groupData.entrySet().stream().filter(entry -> {
+                Object cellValue = computeFunction(filterItem.getChildType(FunctionNode.class, 0), entry.getValue());
+                if (cellValue == null) {
+                    return false;
+                }
+                return compareHavingValue(comparator, cellValue, value);
+            }).collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
         } else {
-            invalidFilterCol = true;
-        }
-        if (invalidFilterCol || (groupIdx == -1)) {
-            throw new RuntimeException("Column " + column + " must appear in GROUP BY clause");
-        }
-        final int groupIndex = groupIdx;
-        Map<List<Object>, List<List<Object>>> filterData = groupData.entrySet().stream().filter(entry -> {
-            List<Object> keys = entry.getKey();
-            Object cellValue = keys.get(groupIndex);
-            if (cellValue == null) {
-                return false;
-            }
-            if (cellValue instanceof Number) {
-                Double cell = Double.parseDouble(cellValue.toString());
-                Double doubleValue = Double.parseDouble(value);
-                if (comparator.isEQ()) {
-                    return cell.equals(doubleValue);
-                } else if (comparator.isGT()) {
-                    return cell > doubleValue;
-                } else if (comparator.isGTE()) {
-                    return cell >= doubleValue;
-                } else if (comparator.isLT()) {
-                    return cell < doubleValue;
-                } else if (comparator.isLTE()) {
-                    return cell <= doubleValue;
+            String column = filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
+            int groupIdx = -1;
+            boolean invalidFilterCol = false;
+            if (columnNamesMap.get(column) != null) {
+                if (groupIndices.contains(columnNamesMap.get(column))) {
+                    groupIdx = groupIndices.indexOf(columnNamesMap.get(column));
                 } else {
-                    return !cell.equals(doubleValue);
+                    invalidFilterCol = true;
+                }
+            } else if (aliasMapping.containsKey(column)) {
+                if (groupIndices.contains(columnNamesMap.get(aliasMapping.get(column)))) {
+                    groupIdx = groupIndices.indexOf(columnNamesMap.get(aliasMapping.get(column)));
+                } else {
+                    invalidFilterCol = true;
                 }
             } else {
-                int comparisionValue = cellValue.toString().compareTo(value);
-                if (comparator.isEQ()) {
-                    return comparisionValue == 0;
-                } else if (comparator.isGT()) {
-                    return comparisionValue > 0;
-                } else if (comparator.isGTE()) {
-                    return comparisionValue >= 0;
-                } else if (comparator.isLT()) {
-                    return comparisionValue < 0;
-                } else if (comparator.isLTE()) {
-                    return comparisionValue <= 0;
-                } else {
-                    return comparisionValue != 0;
-                }
+                invalidFilterCol = true;
             }
-        }).collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
+            if (invalidFilterCol || (groupIdx == -1)) {
+                throw new RuntimeException("Column " + column + " must appear in GROUP BY clause");
+            }
+            final int groupIndex = groupIdx;
+            filterData = groupData.entrySet().stream().filter(entry -> {
+                List<Object> keys = entry.getKey();
+                Object cellValue = keys.get(groupIndex);
+                if (cellValue == null) {
+                    return false;
+                }
+                return compareHavingValue(comparator, cellValue, value);
+            }).collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
+        }
         return filterData;
     }
 
@@ -297,4 +278,40 @@ public class GroupedDataFrame {
             }
         }
     }
+
+    private boolean compareHavingValue(Comparator comparator, Object cellValue, String value) {
+        if (cellValue instanceof Number) {
+            Double cell = Double.parseDouble(cellValue.toString());
+            Double doubleValue = Double.parseDouble(value);
+            if (comparator.isEQ()) {
+                return cell.equals(doubleValue);
+            } else if (comparator.isGT()) {
+                return cell > doubleValue;
+            } else if (comparator.isGTE()) {
+                return cell >= doubleValue;
+            } else if (comparator.isLT()) {
+                return cell < doubleValue;
+            } else if (comparator.isLTE()) {
+                return cell <= doubleValue;
+            } else {
+                return !cell.equals(doubleValue);
+            }
+        } else {
+            int comparisionValue = cellValue.toString().compareTo(value);
+            if (comparator.isEQ()) {
+                return comparisionValue == 0;
+            } else if (comparator.isGT()) {
+                return comparisionValue > 0;
+            } else if (comparator.isGTE()) {
+                return comparisionValue >= 0;
+            } else if (comparator.isLT()) {
+                return comparisionValue < 0;
+            } else if (comparator.isLTE()) {
+                return comparisionValue <= 0;
+            } else {
+                return comparisionValue != 0;
+            }
+        }
+    }
+
 }
