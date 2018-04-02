@@ -21,6 +21,7 @@ import com.impetus.blkch.sql.function.CallFunction;
 import com.impetus.blkch.sql.function.ClassName;
 import com.impetus.blkch.sql.function.CreateFunction;
 import com.impetus.blkch.sql.function.DeleteFunction;
+import com.impetus.blkch.sql.function.UpgradeFunction;
 import com.impetus.blkch.sql.insert.Insert;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.QueryItemInterface;
@@ -44,6 +45,8 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
     private DeleteFunction deleteFunction;
     
     private DropAsset dropAsset;
+    
+    private UpgradeFunction upgradeFunction;
     
     private SQLType type;
 
@@ -121,6 +124,14 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
         this.dropAsset = dropAsset;
     }
     
+    public UpgradeFunction getUpgradeFunction() {
+        return upgradeFunction;
+    }
+    
+    public void setUpgradeFunction(UpgradeFunction upgradeFunction) {
+        this.upgradeFunction = upgradeFunction;
+    }
+    
     public SQLType getType() {
         return type;
     }
@@ -143,7 +154,9 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
         
         DELETE_FUNCTION,
         
-        DROP_ASSET
+        DROP_ASSET,
+        
+        UPGRADE_FUNCTION
     }
 
 }

@@ -34,10 +34,12 @@ import com.impetus.blkch.sql.function.CreateFunction;
 import com.impetus.blkch.sql.function.DeleteFunction;
 import com.impetus.blkch.sql.function.Endorsers;
 import com.impetus.blkch.sql.function.Parameters;
+import com.impetus.blkch.sql.function.UpgradeFunction;
 import com.impetus.blkch.sql.function.Version;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArgsContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.AssetContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.BooleanLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CallFunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColTypeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColTypeListContext;
@@ -74,6 +76,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.StorageTypeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.StringLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.TableIdentifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.UnquotedIdentifierContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.UpgradeFunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.VersionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.WhereClauseContext;
 import com.impetus.blkch.sql.insert.ColumnName;
@@ -120,6 +123,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     CreateAsset createAsset;
     DeleteFunction deleteFunction;
     DropAsset dropAsset;
+    UpgradeFunction upgradeFunction;
 
     @Override
     public LogicalPlan visitSimpleQuery(SimpleQueryContext ctx) {
@@ -359,6 +363,13 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText()));
         return visitChildren(ctx);
     }
+    
+    @Override
+    public LogicalPlan visitBooleanLiteral(BooleanLiteralContext ctx) {
+        logger.trace("In visitBooleanLiteral " + ctx.getText());
+        logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText()));
+        return visitChildren(ctx);
+    }
 
     @Override
     public LogicalPlan visitSortItem(SortItemContext ctx) {
@@ -536,6 +547,16 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setDropAsset(dropAsset);
         logicalPlan.setCurrentNode(dropAsset);
         logicalPlan.setType(SQLType.DROP_ASSET);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitUpgradeFunction(UpgradeFunctionContext ctx) {
+        logger.trace("In visitUpgradeFunction " + ctx.getText());
+        upgradeFunction = new UpgradeFunction();
+        logicalPlan.setUpgradeFunction(upgradeFunction);
+        logicalPlan.setCurrentNode(upgradeFunction);
+        logicalPlan.setType(SQLType.UPGRADE_FUNCTION);
         return visitChildrenAndResetNode(ctx);
     }
 

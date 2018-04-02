@@ -103,6 +103,18 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitDropAssetRule(BlkchnSqlParser.DropAssetRuleContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code upgradeFunctionRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterUpgradeFunctionRule(BlkchnSqlParser.UpgradeFunctionRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code upgradeFunctionRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitUpgradeFunctionRule(BlkchnSqlParser.UpgradeFunctionRuleContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#insertInto}.
 	 * @param ctx the parse tree
 	 */
@@ -152,6 +164,16 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCreateFunction(BlkchnSqlParser.CreateFunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#upgradeFunction}.
+	 * @param ctx the parse tree
+	 */
+	void enterUpgradeFunction(BlkchnSqlParser.UpgradeFunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#upgradeFunction}.
+	 * @param ctx the parse tree
+	 */
+	void exitUpgradeFunction(BlkchnSqlParser.UpgradeFunctionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#createAsset}.
 	 * @param ctx the parse tree
