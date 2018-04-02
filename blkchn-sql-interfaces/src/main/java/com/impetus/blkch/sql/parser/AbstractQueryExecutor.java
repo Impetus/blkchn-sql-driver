@@ -275,9 +275,9 @@ public abstract class AbstractQueryExecutor {
     
     protected abstract DataNode<?> getDataNode(String table, String column, String value);
     
-    protected abstract <T extends Number & Comparable<T>> DataNode<T> executeRangeNode(RangeNode<T> rangeNode);
+    protected abstract <T extends Number & Comparable<T>> DataNode<?> executeRangeNode(RangeNode<T> rangeNode);
     
-    protected abstract <T extends Number & Comparable<T>> RangeNode<T> combineRangeAndDataNodes(RangeNode<T> rangeNode,
+    protected abstract <T extends Number & Comparable<T>> TreeNode combineRangeAndDataNodes(RangeNode<T> rangeNode,
             DataNode<?> dataNode, LogicalOperation oper);
     
     protected abstract boolean filterField(String fieldName, Object obj, String value, Comparator comparator);
