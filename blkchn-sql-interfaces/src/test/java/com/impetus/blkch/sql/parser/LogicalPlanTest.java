@@ -244,7 +244,7 @@ public class LogicalPlanTest extends TestCase {
     @Test
     public void testCreateFunction() {
         String sql = "Create Function someFunction AS '/home/xyz' WITH VERSION '1.0' WITH ENDORSERS AND(Org1.member, OR(Org2.member, Org3.member)) "
-                + "WITH ARGS init, 500, 230";
+                + "WITH ARGS 'init', 500, 230";
         LogicalPlan plan = getLogicalPlan(sql);
         //plan.traverse();
         plan.getCreateFunction().traverse();
@@ -252,7 +252,7 @@ public class LogicalPlanTest extends TestCase {
     
     @Test
     public void testCallFunction() {
-        String sql = "CALL someFunc(xyz, abc, 300)";
+        String sql = "CALL someFunc('xyz', 'abc', 300)";
         LogicalPlan plan = getLogicalPlan(sql);
         plan.getCallFunction().traverse();
     }
@@ -352,7 +352,7 @@ public class LogicalPlanTest extends TestCase {
     
     @Test
     public void testDeleteFunction() {
-        String sql = "DELETE chaincod(deleteFunc, USER, 1001)";
+        String sql = "DELETE chaincod('deleteFunc', 'USER', 1001)";
         LogicalPlan plan = getLogicalPlan(sql);
         plan.getDeleteFunction().traverse();
     }
