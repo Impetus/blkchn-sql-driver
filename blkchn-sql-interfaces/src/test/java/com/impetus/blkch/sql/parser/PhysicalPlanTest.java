@@ -87,7 +87,7 @@ public class PhysicalPlanTest extends TestCase
         or.addChildNode(and1);
         LogicalOperation and2 = new LogicalOperation(Operator.AND);
         and2.addChildNode(createFilterItem("column3", "!=", "25"));
-        and2.addChildNode(createFilterItem("direct1", "<", "30"));
+        and2.addChildNode(createFilterItem("qcol1", "<", "30"));
         or.addChildNode(and2);
         whereClause.addChildNode(or);
         return whereClause;

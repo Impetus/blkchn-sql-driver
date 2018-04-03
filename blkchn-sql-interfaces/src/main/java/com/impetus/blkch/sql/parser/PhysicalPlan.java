@@ -129,7 +129,7 @@ public abstract class PhysicalPlan extends TreeNode {
             String value = filterItem.getChildType(IdentifierNode.class, 0).getValue();
             return new DirectAPINode(table, column, value);
         } else {
-            return filterItem;
+            return createFilterItem(column, filterItem.getChildType(Comparator.class, 0), filterItem.getChildType(IdentifierNode.class, 0).getValue());
         }
     }
     
@@ -159,6 +159,21 @@ public abstract class PhysicalPlan extends TreeNode {
                 return Color.GREEN;
             }
         }
+    }
+    
+    private Column createColumn(String colName) {
+        Column column = new Column();
+        IdentifierNode identifierNode = new IdentifierNode(colName);
+        column.addChildNode(identifierNode);
+        return column;
+    }
+    
+    private FilterItem createFilterItem(String colName, Comparator cmp, String value) {
+        FilterItem filterItem = new FilterItem();
+        filterItem.addChildNode(createColumn(colName));
+        filterItem.addChildNode(cmp);
+        filterItem.addChildNode(new IdentifierNode(value));
+        return filterItem;
     }
 
     public abstract List<String> getRangeCols(String table);
