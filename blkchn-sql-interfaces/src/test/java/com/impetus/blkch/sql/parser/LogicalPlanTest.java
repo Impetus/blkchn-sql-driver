@@ -17,13 +17,32 @@ package com.impetus.blkch.sql.parser;
 
 import com.impetus.blkch.BlkchnErrorListener;
 import com.impetus.blkch.BlkchnException;
+
 import junit.framework.TestCase;
 
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
 
+import com.impetus.blkch.sql.asset.Asset;
+import com.impetus.blkch.sql.asset.ColumnType;
+import com.impetus.blkch.sql.asset.ColumnTypeList;
+import com.impetus.blkch.sql.asset.CreateAsset;
+import com.impetus.blkch.sql.asset.DropAsset;
+import com.impetus.blkch.sql.asset.FieldDelimiter;
+import com.impetus.blkch.sql.asset.RecordDelimiter;
+import com.impetus.blkch.sql.asset.StorageType;
+import com.impetus.blkch.sql.function.Args;
+import com.impetus.blkch.sql.function.CallFunction;
+import com.impetus.blkch.sql.function.ClassName;
+import com.impetus.blkch.sql.function.CreateFunction;
+import com.impetus.blkch.sql.function.DeleteFunction;
+import com.impetus.blkch.sql.function.Endorsers;
+import com.impetus.blkch.sql.function.Parameters;
+import com.impetus.blkch.sql.function.Version;
 import com.impetus.blkch.sql.generated.BlkchnSqlLexer;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser;
+import com.impetus.blkch.sql.insert.ColumnValue;
+import com.impetus.blkch.sql.insert.Insert;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.Comparator;
 import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
@@ -34,6 +53,7 @@ import com.impetus.blkch.sql.query.HavingClause;
 import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.LimitClause;
 import com.impetus.blkch.sql.query.LogicalOperation;
+import com.impetus.blkch.sql.query.LogicalOperation.Operator;
 import com.impetus.blkch.sql.query.OrderByClause;
 import com.impetus.blkch.sql.query.OrderItem;
 import com.impetus.blkch.sql.query.OrderingDirection;
@@ -41,8 +61,10 @@ import com.impetus.blkch.sql.query.OrderingDirection.Direction;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.SelectClause;
 import com.impetus.blkch.sql.query.SelectItem;
+import com.impetus.blkch.sql.query.StarNode;
 import com.impetus.blkch.sql.query.Table;
 import com.impetus.blkch.sql.query.WhereClause;
+
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -246,22 +268,27 @@ public class LogicalPlanTest extends TestCase {
         String sql = "Create Function someFunction AS '/home/xyz' WITH VERSION '1.0' WITH ENDORSERS AND(Org1.member, OR(Org2.member, Org3.member)) "
                 + "WITH ARGS 'init', 500, 230";
         LogicalPlan plan = getLogicalPlan(sql);
-        //plan.traverse();
-        plan.getCreateFunction().traverse();
+        CreateFunction actual = plan.getCreateFunction();
+        CreateFunction expected = buildCreateFunction();
+        assertEquals(expected, actual);
     }
     
     @Test
     public void testCallFunction() {
         String sql = "CALL someFunc('xyz', 'abc', 300)";
         LogicalPlan plan = getLogicalPlan(sql);
-        plan.getCallFunction().traverse();
+        CallFunction actual = plan.getCallFunction();
+        CallFunction expected = buildCallFunction();
+        assertEquals(expected, actual);
     }
     
     @Test
     public void testInsert() {
-       String sql = "INSERT INTO someTable VALUES('first', 'second', 'third', 4)";
+       String sql = "INSERT INTO someTable VALUES('first', 'second', 'third', 4, false)";
        LogicalPlan plan = getLogicalPlan(sql);
-       plan.getInsert().traverse();
+       Insert actual = plan.getInsert();
+       Insert expected = buildInsert();
+       assertEquals(expected, actual);
     }
 
     @Test
@@ -321,47 +348,49 @@ public class LogicalPlanTest extends TestCase {
 
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
-    
-    @Test
-    public void testForRange() {
-        String sql = "SELECT * FROM block where blockno > 10 and blockno<30 or (blockno > 50 and tid='0xabcdf233') or (blockno=55 and from='hari')";
-//        String sql = "SELECT * FROM block where blockno > 10 and blockno<30 and blockno != 20";
-        LogicalPlan plan = getLogicalPlan(sql);
-        plan.getQuery().traverse();
-    }
 
     @Test
     public void testCreateAssetWithJSONStorage() {
         String sql = "CREATE ASSET user_asset"
-                + " WITH STORAGE TYPE JSON "
-                + "FIELDS DELIMITED BY ',' "
-                + "RECORDS DELIMITED BY \"\\n\"";
+                + " WITH STORAGE TYPE JSON";
         LogicalPlan plan = getLogicalPlan(sql);
-        plan.getCreateAsset().traverse();
+        CreateAsset actual = plan.getCreateAsset();
+        CreateAsset expected = buildCreateAssetJSON();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void testCreateAssetWithCSVStorage() {
-        String sql = "CREATE ASSET user_asset"
+        String sql = "CREATE ASSET user_asset ("
+                + "id int,"
+                + "name string,"
+                + "designation string"
+                + ")"
                 + " WITH STORAGE TYPE CSV "
                 + "FIELDS DELIMITED BY ',' "
                 + "RECORDS DELIMITED BY \"\\n\"";
         LogicalPlan plan = getLogicalPlan(sql);
-        plan.getCreateAsset().traverse();
+        CreateAsset actual = plan.getCreateAsset();
+        CreateAsset expected = buildCreateAssetCSV();
+        assertEquals(expected, actual);
     }
     
     @Test
     public void testDeleteFunction() {
         String sql = "DELETE chaincod('deleteFunc', 'USER', 1001)";
         LogicalPlan plan = getLogicalPlan(sql);
-        plan.getDeleteFunction().traverse();
+        DeleteFunction actual = plan.getDeleteFunction();
+        DeleteFunction expected = buildDeleteFunction();
+        assertEquals(expected, actual);
     }
     
     @Test
     public void testDropAsset() {
         String sql = "DROP ASSET assetchain";
         LogicalPlan plan = getLogicalPlan(sql);
-        plan.getDropAsset().traverse();
+        DropAsset actual = plan.getDropAsset();
+        DropAsset expected = buildDropAsset();
+        assertEquals(expected, actual);
     }
 
 
@@ -369,7 +398,6 @@ public class LogicalPlanTest extends TestCase {
     public void testWrongQuery() {
         String sql = "select * from block blk where blockNo = 2 And blockNo>=2 blockNo <=300";
         LogicalPlan plan = getLogicalPlan(sql);
-        plan.getQuery().traverse();
     }
 
 
@@ -470,6 +498,115 @@ public class LogicalPlanTest extends TestCase {
         TreeNode ident7 = new IdentifierNode("'hello world'");
         filterItem.addChildNode(ident7);
         return logicalPlan;
+    }
+    
+    private CreateFunction buildCreateFunction() {
+        CreateFunction createFunction = new CreateFunction();
+        createFunction.addChildNode(new IdentifierNode("someFunction"));
+        createFunction.addChildNode(new ClassName("'/home/xyz'"));
+        createFunction.addChildNode(new Version("'1.0'"));
+        Endorsers endorsers = new Endorsers();
+        LogicalOperation and = new LogicalOperation(Operator.AND);
+        and.addChildNode(new IdentifierNode("Org1.member"));
+        LogicalOperation or = new LogicalOperation(Operator.OR);
+        or.addChildNode(new IdentifierNode("Org2.member"));
+        or.addChildNode(new IdentifierNode("Org3.member"));
+        and.addChildNode(or);
+        endorsers.addChildNode(and);
+        createFunction.addChildNode(endorsers);
+        Args args = new Args();
+        args.addChildNode(new IdentifierNode("'init'"));
+        args.addChildNode(new IdentifierNode("500"));
+        args.addChildNode(new IdentifierNode("230"));
+        createFunction.addChildNode(args);
+        return createFunction;
+    }
+    
+    private CallFunction buildCallFunction() {
+        CallFunction callFunction = new CallFunction();
+        callFunction.addChildNode(new IdentifierNode("someFunc"));
+        Parameters parameters = new Parameters();
+        parameters.addChildNode(new IdentifierNode("'xyz'"));
+        parameters.addChildNode(new IdentifierNode("'abc'"));
+        parameters.addChildNode(new IdentifierNode("300"));
+        callFunction.addChildNode(parameters);
+        return callFunction;
+    }
+    
+    private Insert buildInsert() {
+        Insert insert = new Insert();
+        Table table = new Table();
+        table.addChildNode(new IdentifierNode("someTable"));
+        insert.addChildNode(table);
+        ColumnValue columnValue = new ColumnValue();
+        columnValue.addChildNode(new IdentifierNode("'first'"));
+        columnValue.addChildNode(new IdentifierNode("'second'"));
+        columnValue.addChildNode(new IdentifierNode("'third'"));
+        columnValue.addChildNode(new IdentifierNode("4"));
+        columnValue.addChildNode(new IdentifierNode("false"));
+        insert.addChildNode(columnValue);
+        return insert;
+    }
+    
+    private CreateAsset buildCreateAssetJSON() {
+        CreateAsset createAsset = new CreateAsset();
+        Asset asset = new Asset();
+        asset.addChildNode(new IdentifierNode("user_asset"));
+        createAsset.addChildNode(asset);
+        StorageType storageType = new StorageType();
+        storageType.addChildNode(new IdentifierNode("JSON"));
+        createAsset.addChildNode(storageType);
+        return createAsset;
+    }
+    
+    private CreateAsset buildCreateAssetCSV() {
+        CreateAsset createAsset = new CreateAsset();
+        Asset asset = new Asset();
+        asset.addChildNode(new IdentifierNode("user_asset"));
+        createAsset.addChildNode(asset);
+        ColumnTypeList columnTypeList = new ColumnTypeList();
+        ColumnType columnType1 = new ColumnType();
+        columnType1.addChildNode(new IdentifierNode("id"));
+        columnType1.addChildNode(new IdentifierNode("int"));
+        columnTypeList.addChildNode(columnType1);
+        ColumnType columnType2 = new ColumnType();
+        columnType2.addChildNode(new IdentifierNode("name"));
+        columnType2.addChildNode(new IdentifierNode("string"));
+        columnTypeList.addChildNode(columnType2);
+        ColumnType columnType3 = new ColumnType();
+        columnType3.addChildNode(new IdentifierNode("designation"));
+        columnType3.addChildNode(new IdentifierNode("string"));
+        columnTypeList.addChildNode(columnType3);
+        createAsset.addChildNode(columnTypeList);
+        StorageType storageType = new StorageType();
+        storageType.addChildNode(new IdentifierNode("CSV"));
+        createAsset.addChildNode(storageType);
+        FieldDelimiter fieldDelimiter = new FieldDelimiter();
+        fieldDelimiter.addChildNode(new IdentifierNode(","));
+        createAsset.addChildNode(fieldDelimiter);
+        RecordDelimiter recordDelimiter = new RecordDelimiter();
+        recordDelimiter.addChildNode(new IdentifierNode("\\n"));
+        createAsset.addChildNode(recordDelimiter);
+        return createAsset;
+    }
+    
+    private DeleteFunction buildDeleteFunction() {
+        DeleteFunction deleteFunction = new DeleteFunction();
+        deleteFunction.addChildNode(new IdentifierNode("chaincod"));
+        Parameters parameters = new Parameters();
+        parameters.addChildNode(new IdentifierNode("'deleteFunc'"));
+        parameters.addChildNode(new IdentifierNode("'USER'"));
+        parameters.addChildNode(new IdentifierNode("1001"));
+        deleteFunction.addChildNode(parameters);
+        return deleteFunction;
+    }
+    
+    private DropAsset buildDropAsset() {
+        DropAsset dropAsset = new DropAsset();
+        Asset asset = new Asset();
+        asset.addChildNode(new IdentifierNode("assetchain"));
+        dropAsset.addChildNode(asset);
+        return dropAsset;
     }
 
     public LogicalPlan getLogicalPlan(String sqlText) {

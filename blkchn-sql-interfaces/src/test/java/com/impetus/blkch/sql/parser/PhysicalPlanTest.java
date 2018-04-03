@@ -1,30 +1,115 @@
 package com.impetus.blkch.sql.parser;
 
-import com.impetus.blkch.sql.query.LogicalOperation;
+import java.math.BigInteger;
+
 import junit.framework.TestCase;
 
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
 
+import com.impetus.blkch.BlkchnErrorListener;
 import com.impetus.blkch.sql.generated.BlkchnSqlLexer;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser;
+import com.impetus.blkch.sql.query.Column;
+import com.impetus.blkch.sql.query.Comparator;
+import com.impetus.blkch.sql.query.DirectAPINode;
+import com.impetus.blkch.sql.query.FilterItem;
+import com.impetus.blkch.sql.query.IdentifierNode;
+import com.impetus.blkch.sql.query.LogicalOperation;
+import com.impetus.blkch.sql.query.LogicalOperation.Operator;
+import com.impetus.blkch.sql.query.RangeNode;
+import com.impetus.blkch.sql.query.WhereClause;
+import com.impetus.blkch.util.Range;
 
 public class PhysicalPlanTest extends TestCase
 {
     @Test
     public void testForRange() {
-        String sql = "SELECT column1 as rcol1, column2 as rcol2, column3, qcol1 as direct1 FROM myTable tbl where rcol1 > 10 and column2 < 30 or (column3 != 25 and direct1 < 30)";
+        String sql = "SELECT column1 as rcol1, column2 as rcol2, column3, qcol1 as direct1 FROM myTable tbl where rcol1 > 10 and column2 < 30 or (column3 != 25 and direct1 = 30)";
         LogicalPlan plan = getLogicalPlan(sql);
-        plan.getQuery().traverse();
-        
         DummyPhysicalPlan physicalPlan = new DummyPhysicalPlan("dummyPlan", plan);
-        physicalPlan.getWhereClause().traverse();
-        
+        WhereClause actual = physicalPlan.getWhereClause();
+        WhereClause expected = buildRangeAndDirectWhereClause();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testValidateLogicalPlan(){
+
+        String sql = "Select * from myTable tbl where column1 = 100 and rcol1 > 5";
+        LogicalPlan plan = getLogicalPlan(sql);
+        DummyPhysicalPlan physicalPlan = new DummyPhysicalPlan("dummyPlan", plan);
+        boolean actual = physicalPlan.validateLogicalPlan();
+        boolean expected = true;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testComplexRangeQuery(){
+        String sql = "SELECT column1 as rcol1, column2 as rcol2, column3, qcol1 as direct1 FROM myTable tbl where rcol1 > 10 and rcol1 < 25 and (column2 <= 30 and "
+                + "column2 >= 20 and rcol2 != 25) or (column3 != 25 and direct1 < 30)";
+        LogicalPlan plan = getLogicalPlan(sql);
+        DummyPhysicalPlan physicalPlan = new DummyPhysicalPlan("dummyPlan", plan);
+        WhereClause actual = physicalPlan.getWhereClause();
+        WhereClause expected = buildComplexRangeQueryWhereClause();
+        assertEquals(expected, actual);
+    }
+    
+    private WhereClause buildRangeAndDirectWhereClause() {
+        WhereClause whereClause = new WhereClause();
+        LogicalOperation or = new LogicalOperation(Operator.OR);
+        LogicalOperation and1 = new LogicalOperation(Operator.AND);
+        RangeNode<Long> rangeNode1 = new RangeNode<>("myTable", "column1");
+        rangeNode1.getRangeList().addRange(new Range<Long>(11l, Long.MAX_VALUE));
+        and1.addChildNode(rangeNode1);
+        RangeNode<BigInteger> rangeNode2 = new RangeNode<>("myTable", "column2");
+        rangeNode2.getRangeList().addRange(new Range<>(new BigInteger("0"), new BigInteger("29")));
+        and1.addChildNode(rangeNode2);
+        or.addChildNode(and1);
+        LogicalOperation and2 = new LogicalOperation(Operator.AND);
+        and2.addChildNode(createFilterItem("column3", "!=", "25"));
+        and2.addChildNode(new DirectAPINode("myTable", "qcol1", "30"));
+        or.addChildNode(and2);
+        whereClause.addChildNode(or);
+        return whereClause;
+    }
+    
+    private WhereClause buildComplexRangeQueryWhereClause() {
+        WhereClause whereClause = new WhereClause();
+        LogicalOperation or = new LogicalOperation(Operator.OR);
+        LogicalOperation and1 = new LogicalOperation(Operator.AND);
+        RangeNode<Long> rangeNode1 = new RangeNode<>("myTable", "column1");
+        rangeNode1.getRangeList().addRange(new Range<>(11l, 24l));
+        and1.addChildNode(rangeNode1);
+        RangeNode<BigInteger> rangeNode2 = new RangeNode<>("myTable", "column2");
+        rangeNode2.getRangeList().addAllRanges(new Range<>(new BigInteger("20"), new BigInteger("24")), new Range<>(new BigInteger("26"), new BigInteger("30")));
+        and1.addChildNode(rangeNode2);
+        or.addChildNode(and1);
+        LogicalOperation and2 = new LogicalOperation(Operator.AND);
+        and2.addChildNode(createFilterItem("column3", "!=", "25"));
+        and2.addChildNode(createFilterItem("direct1", "<", "30"));
+        or.addChildNode(and2);
+        whereClause.addChildNode(or);
+        return whereClause;
+    }
+    
+    private FilterItem createFilterItem(String columnName, String comparator, String value) {
+        FilterItem filterItem = new FilterItem();
+        Column column = new Column();
+        column.addChildNode(new IdentifierNode(columnName));
+        filterItem.addChildNode(column);
+        Comparator comp = new Comparator(Comparator.ComparisionOperator.getOp(comparator));
+        comp.addChildNode(new IdentifierNode(comparator));
+        filterItem.addChildNode(comp);
+        filterItem.addChildNode(new IdentifierNode(value));
+        return filterItem;
     }
     
     public LogicalPlan getLogicalPlan(String sqlText) {
         LogicalPlan logicalPlan = null;
         BlkchnSqlParser parser = getParser(sqlText);
+        parser.removeErrorListeners();
+        parser.addErrorListener(BlkchnErrorListener.INSTANCE);
         AbstractSyntaxTreeVisitor astBuilder = new BlockchainVisitor();
         logicalPlan = (LogicalPlan) astBuilder.visitSingleStatement(parser.singleStatement());
         return logicalPlan;
@@ -32,59 +117,11 @@ public class PhysicalPlanTest extends TestCase
     
     public BlkchnSqlParser getParser(String sqlText) {
         BlkchnSqlLexer lexer = new BlkchnSqlLexer(new CaseInsensitiveCharStream(sqlText));
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(BlkchnErrorListener.INSTANCE);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         BlkchnSqlParser parser = new BlkchnSqlParser(tokens);
         return parser;
-    }
-
-    //TODO Add assert
-    @Test
-    public void testRandomTestCase1(){
-        String sql = "Select * from myTable tbl where rcol1 = 100 and rcol1 > 5";
-        LogicalPlan plan = getLogicalPlan(sql);
-        plan.getQuery().traverse();
-        System.out.println("\n\n\n\n");
-        DummyPhysicalPlan physicalPlan = new DummyPhysicalPlan("dummyPlan", plan);
-        physicalPlan.getWhereClause().traverse();
-
-    }
-
-    @Test
-    public void testValidateNode(){
-
-        String sql = "Select * from myTable tbl where rcol1 = 100 and rcol1 > 5";
-        LogicalPlan plan = getLogicalPlan(sql);
-        plan.getQuery().traverse();
-        System.out.println("\n\n\n\n");
-        DummyPhysicalPlan physicalPlan = new DummyPhysicalPlan("dummyPlan", plan);
-        physicalPlan.getWhereClause().traverse();
-        TreeNode node = new TreeNode("abcd");
-
-        LogicalOperation opr1 = new LogicalOperation(LogicalOperation.Operator.AND);
-        opr1.addChildNode(new TreeNode("blockNum = 2"));
-        opr1.addChildNode(new TreeNode("blockTrxId = 'dummyTrxId'"));
-        //opr1.addChildNode(new FilterItem());//"thirdChild = 'dummyChild'"));
-
-        PhysicalPlan.Color c = physicalPlan.validateNode(opr1);
-    }
-
-    @Test
-    public void testProcessLogicalOperation(){
-
-        String sql = "SELECT column1 as rcol1, column2 as rcol2, column3, qcol1 as direct1 FROM myTable tbl where rcol1 > 10 and rcol1 < 25 and column2 < 30 and column2 > 20 or (column3 != 25 and direct1 < 30)";
-        LogicalPlan plan = getLogicalPlan(sql);
-        //plan.getQuery().traverse();
-        DummyPhysicalPlan physicalPlan = new DummyPhysicalPlan("dummyPlan", plan);
-        physicalPlan.getWhereClause().traverse();
-
-
-        String sql2 = "SELECT column1 as rcol1, column2 as rcol2, qcolumn3, qcol2 as xyz FROM myTable tbl where column1 < 10 and column1 > 2  or (qcolumn3 > 25 and xyz = 30)";
-        LogicalPlan plan2 = getLogicalPlan(sql2);
-        plan2.getQuery().traverse();
-        System.out.println("\n\n\n");
-        DummyPhysicalPlan physicalPlan2 = new DummyPhysicalPlan("dummyPlan", plan2);
-        physicalPlan2.getWhereClause().traverse();
-
     }
 
 
