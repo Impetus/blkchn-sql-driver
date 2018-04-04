@@ -38,6 +38,16 @@ public class DummyPhysicalPlan extends PhysicalPlan
             return new BigIntegerRangeOperations();
         }
     }
+
+    @Override
+    public boolean tableExists(String table) {
+        return true;
+    }
+
+    @Override
+    public boolean columnExists(String table, String column) {
+        return true;
+    }
     
 
 }

@@ -36,6 +36,10 @@ public abstract class PhysicalPlan extends TreeNode {
         super(description);
         this.logicalPlan = logicalPlan;
         if(logicalPlan.getType() == SQLType.QUERY) {
+            String table = logicalPlan.getQuery().getChildType(FromItem.class, 0).getChildType(Table.class, 0).getChildType(IdentifierNode.class, 0).getValue();
+            if(!tableExists(table)) {
+                throw new BlkchnException(String.format("Table %s doesn't exist", table));
+            }
             //process aliases and add to map
             processAliasMapping(logicalPlan.getQuery().getChildType(SelectClause.class, 0));
             if(logicalPlan.getQuery().hasChildType(WhereClause.class)) {
@@ -122,6 +126,9 @@ public abstract class PhysicalPlan extends TreeNode {
         if(columnAliasMapping.get(column) != null){
             column = columnAliasMapping.get(column);
         }
+        if(!columnExists(table, column)) {
+            throw new BlkchnException(String.format("Column %s doesn't exist in table %s", column, table));
+        }
         if(getRangeCols(table).contains(column)) {
             RangeOperations<?> rangeOperations =  getRangeOperations(table, column);
             return rangeOperations.processFilterItem(filterItem, table, column);
@@ -181,6 +188,10 @@ public abstract class PhysicalPlan extends TreeNode {
     public abstract List<String> getQueryCols(String table);
     
     public abstract RangeOperations<?> getRangeOperations(String table, String column);
+    
+    public abstract boolean tableExists(String table);
+    
+    public abstract boolean columnExists(String table, String column);
     
     public static enum Color {
         RED,
