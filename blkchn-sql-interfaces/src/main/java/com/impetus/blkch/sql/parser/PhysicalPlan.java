@@ -12,6 +12,7 @@ import com.impetus.blkch.sql.query.Comparator;
 import com.impetus.blkch.sql.query.DirectAPINode;
 import com.impetus.blkch.sql.query.FilterItem;
 import com.impetus.blkch.sql.query.FromItem;
+import com.impetus.blkch.sql.query.FunctionNode;
 import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.LogicalOperation;
 import com.impetus.blkch.sql.query.LogicalOperation.Operator;
@@ -21,6 +22,7 @@ import com.impetus.blkch.sql.query.SelectItem;
 import com.impetus.blkch.sql.query.Table;
 import com.impetus.blkch.sql.query.WhereClause;
 import com.impetus.blkch.util.RangeOperations;
+import com.impetus.blkch.util.Utilities;
 
 public abstract class PhysicalPlan extends TreeNode {
 
@@ -51,7 +53,6 @@ public abstract class PhysicalPlan extends TreeNode {
 
     private void processAliasMapping(SelectClause selectClause)
     {
-        //TODO: handle functions with alias
         for (SelectItem item : selectClause.getChildType(SelectItem.class))
         {
             selectItems.add(item);
@@ -59,6 +60,11 @@ public abstract class PhysicalPlan extends TreeNode {
             {
                 columnAliasMapping.put(item.getChildType(IdentifierNode.class, 0).getValue(),
                         item.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue());
+            }
+            else if (item.getChildType(IdentifierNode.class, 0) != null && item.hasChildType(FunctionNode.class))
+            {
+                columnAliasMapping.put(item.getChildType(IdentifierNode.class, 0).getValue(), 
+                        Utilities.createFunctionColName(item.getChildType(FunctionNode.class, 0)));
             }
         }
     }

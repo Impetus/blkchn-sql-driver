@@ -30,6 +30,7 @@ import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.LogicalOperation;
 import com.impetus.blkch.sql.query.SelectItem;
 import com.impetus.blkch.sql.query.StarNode;
+import com.impetus.blkch.util.Utilities;
 
 public class GroupedDataFrame {
 
@@ -127,7 +128,7 @@ public class GroupedDataFrame {
                             returnCols.add(col.getChildType(IdentifierNode.class, 0).getValue());
                         }
                     } else if (!columnsInitialized) {
-                        returnCols.add(createFunctionColName(col.getChildType(FunctionNode.class, 0)));
+                        returnCols.add(Utilities.createFunctionColName(col.getChildType(FunctionNode.class, 0)));
                     }
                 }
             }
@@ -261,21 +262,6 @@ public class GroupedDataFrame {
                 return AggregationFunctions.sum(columnData);
             default:
                 throw new RuntimeException("Unidentified function: " + func);
-        }
-    }
-
-    private String createFunctionColName(FunctionNode function) {
-        String func = function.getChildType(IdentifierNode.class, 0).getValue();
-        if (function.hasChildType(FunctionNode.class)) {
-            return func + "(" + createFunctionColName(function.getChildType(FunctionNode.class, 0)) + ")";
-        } else {
-            if (function.hasChildType(StarNode.class))
-                return func + "(*)";
-            else {
-                String colName = function.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0)
-                        .getValue();
-                return func + "(" + colName + ")";
-            }
         }
     }
 

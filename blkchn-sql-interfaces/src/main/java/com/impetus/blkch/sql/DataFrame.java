@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.impetus.blkch.BlkchnException;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.FunctionNode;
 import com.impetus.blkch.sql.query.IdentifierNode;
@@ -35,6 +36,7 @@ import com.impetus.blkch.sql.query.OrderItem;
 import com.impetus.blkch.sql.query.OrderingDirection;
 import com.impetus.blkch.sql.query.SelectItem;
 import com.impetus.blkch.sql.query.StarNode;
+import com.impetus.blkch.util.Utilities;
 
 public class DataFrame {
 
@@ -107,6 +109,9 @@ public class DataFrame {
         List<List<Object>> returnData = new ArrayList<>();
         List<String> returnCols = new ArrayList<>();
         boolean columnsInitialized = false;
+        if(isValidAggregation(cols)){
+            return processAggregation(cols, returnData, returnCols);
+        }
         for (List<Object> record : data) {
             List<Object> returnRec = new ArrayList<>();
             for (SelectItem col : cols) {
@@ -138,22 +143,46 @@ public class DataFrame {
                         throw new RuntimeException("Column " + colName + " doesn't exist in table");
                     }
                     returnRec.add(record.get(colIndex));
-                } else if (col.hasChildType(FunctionNode.class)) {
-                    Object computeResult = computeFunction(col.getChildType(FunctionNode.class, 0));
-                    returnRec.add(computeResult);
-                    if (col.hasChildType(IdentifierNode.class)) {
-                        if (!columnsInitialized) {
-                            returnCols.add(col.getChildType(IdentifierNode.class, 0).getValue());
-                        }
-                    } else if (!columnsInitialized) {
-                        returnCols.add(createFunctionColName(col.getChildType(FunctionNode.class, 0)));
-                    }
                 }
             }
             returnData.add(returnRec);
             columnsInitialized = true;
         }
         return new DataFrame(returnData, returnCols, aliasMapping);
+    }
+
+    private boolean isValidAggregation(List<SelectItem> cols)
+    {
+        boolean isFunc =false;
+        boolean isCol = false;
+        String colname = null;
+        for(SelectItem col : cols){
+            if(col.hasChildType(FunctionNode.class)){
+                isFunc = true;
+            }
+            else{
+                colname = col.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
+                isCol = true;
+            }
+        }
+        if(isCol && isFunc){
+            throw new BlkchnException("Column " + colname + " must appear in GROUP BY clause");
+        }
+        return isFunc;
+    }
+
+    private DataFrame processAggregation(List<SelectItem> cols, List<List<Object>> returnData, List<String> returnCols)
+    {
+        List<Object> returnRec = new ArrayList<>();
+        for(SelectItem col : cols){
+            Object computeResult = computeFunction(col.getChildType(FunctionNode.class, 0));
+            returnRec.add(computeResult);
+            returnCols.add(Utilities.createFunctionColName(col.getChildType(FunctionNode.class, 0)));
+        }
+        returnData.add(returnRec);
+        return new DataFrame(returnData, returnCols, aliasMapping);
+        
+        
     }
 
     public DataFrame order(List<OrderItem> orderItems) {
@@ -286,21 +315,6 @@ public class DataFrame {
                 return AggregationFunctions.sum(columnData);
             default:
                 throw new RuntimeException("Unidentified function: " + func);
-        }
-    }
-
-    private String createFunctionColName(FunctionNode function) {
-        String func = function.getChildType(IdentifierNode.class, 0).getValue();
-        if (function.hasChildType(FunctionNode.class)) {
-            return func + "(" + createFunctionColName(function.getChildType(FunctionNode.class, 0)) + ")";
-        } else {
-            if (function.hasChildType(StarNode.class))
-                return func + "(*)";
-            else {
-                String colName = function.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0)
-                        .getValue();
-                return func + "(" + colName + ")";
-            }
         }
     }
 
