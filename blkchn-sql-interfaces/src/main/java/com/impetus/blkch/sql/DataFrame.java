@@ -160,7 +160,7 @@ public class DataFrame {
             if(col.hasChildType(FunctionNode.class)){
                 isFunc = true;
             }
-            else{
+            else if (col.hasChildType(Column.class)){
                 colname = col.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
                 isCol = true;
             }
