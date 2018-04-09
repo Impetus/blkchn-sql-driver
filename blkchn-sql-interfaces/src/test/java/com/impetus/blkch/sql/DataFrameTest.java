@@ -83,15 +83,10 @@ public class DataFrameTest extends TestCase {
         topFunc.addChildNode(new IdentifierNode("count"));
         topFunc.addChildNode(createAggregateFunction("sum", "age"));
         multiFunc.addChildNode(topFunc);
-        List<SelectItem> selectItems = Arrays.asList(createColSelectItem("jersey_name"), simpleFunc, multiFunc);
+        List<SelectItem> selectItems = Arrays.asList(simpleFunc, multiFunc);
         DataFrame afterSelect = dataframe.select(selectItems);
-        List<List<Object>> expectedData = Arrays.asList(
-                    Arrays.asList("CR7", 10, 1), Arrays.asList("Messi", 10, 1), Arrays.asList("Benzema", 10, 1),
-                    Arrays.asList("Iker", 10, 1), Arrays.asList("Ramos", 10, 1), Arrays.asList("Varane", 10, 1),
-                    Arrays.asList("Rooney", 10, 1), Arrays.asList("Neymar", 10, 1), Arrays.asList("Casemiro", 10, 1),
-                    Arrays.asList("Iniesta", 10, 1)
-                );
-        assertEquals(Arrays.asList("jersey_name", "cnt", "count(sum(age))"), afterSelect.getColumns());
+        List<List<Object>> expectedData = Arrays.asList(Arrays.asList(10, 1));
+        assertEquals(Arrays.asList("count(jersey_no)", "count(sum(age))"), afterSelect.getColumns());
         assertEquals(dataframe.getAliasMapping(), afterSelect.getAliasMapping());
         assertEquals(expectedData, afterSelect.getData());
     }
