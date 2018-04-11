@@ -209,10 +209,19 @@ public class DataFrame {
                     int colIndex = entry.getKey();
                     Object firstObject = first.get(colIndex);
                     Object secondObject = second.get(colIndex);
+                    OrderingDirection direction = entry.getValue();
+                    if((firstObject == null) || (secondObject == null)) {
+                        if((firstObject == null) && (secondObject == null)) {
+                            continue;
+                        } else if(firstObject == null) {
+                            return direction.isAsc() ? 1 : -1;
+                        } else {
+                            return direction.isAsc() ? -1 : 1;
+                        }
+                    }
                     if (firstObject.equals(secondObject)) {
                         continue;
                     }
-                    OrderingDirection direction = entry.getValue();
                     int diff;
                     if (firstObject instanceof Integer) {
                         diff = (((Integer) firstObject) - ((Integer) secondObject)) < 0 ? -1 : +1;

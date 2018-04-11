@@ -144,11 +144,11 @@ public class DataFrameTest extends TestCase {
     public void testOrderByOnBigInteger(){
 
         List<List<Object>> data = new ArrayList<>();
-        data.add(Arrays.asList(new BigInteger("1"), "CR7", "Real Madrid", "26", "Winger"));
-        data.add(Arrays.asList(new BigInteger("3"), "Ramos", "Real Madrid", "27", "Defender"));
-        data.add(Arrays.asList(new BigInteger("2"), "Benzema", "Real Madrid", "31", "Striker"));
-        data.add(Arrays.asList(new BigInteger("22"), "Casemiro", "Real Madrid", "25", "Mid Fielder"));
-        data.add(Arrays.asList(new BigInteger("4"), "Varane", "Real Madrid", "24", "Defender"));
+        data.add(Arrays.asList(new BigInteger("7"), "CR7", "Real Madrid", "26", "Winger"));
+        data.add(Arrays.asList(new BigInteger("4"), "Ramos", "Real Madrid", "27", "Defender"));
+        data.add(Arrays.asList(new BigInteger("9"), "Benzema", "Real Madrid", "31", "Striker"));
+        data.add(Arrays.asList(new BigInteger("14"), "Casemiro", "Real Madrid", "25", "Mid Fielder"));
+        data.add(Arrays.asList(new BigInteger("5"), "Varane", "Real Madrid", "24", "Defender"));
        
         List<String> columns = Arrays.asList("jersey_no", "name", "club", "age", "position");
         Map<String, String> aliasMapping = new HashMap<>();
@@ -159,12 +159,44 @@ public class DataFrameTest extends TestCase {
         List<SelectItem> selectItems = Arrays.asList(createColSelectItem("jersey_no"),createColSelectItem("club"), createColSelectItem("age"), createColSelectItem("name"));
         DataFrame afterOrder = dataframeIntegerAsString.order(orderItems).select(selectItems);
         List<List<Object>> expectedData = Arrays.asList(
-                Arrays.asList(new BigInteger("1"),"Real Madrid", "26", "CR7"),
-                Arrays.asList(new BigInteger("2"),"Real Madrid", "31", "Benzema"),
-                Arrays.asList(new BigInteger("3"),"Real Madrid", "27", "Ramos"),
-                Arrays.asList(new BigInteger("4"),"Real Madrid", "24", "Varane"),
-                Arrays.asList(new BigInteger("22"),"Real Madrid", "25", "Casemiro")
+                Arrays.asList(new BigInteger("4"),"Real Madrid", "27", "Ramos"),
+                Arrays.asList(new BigInteger("5"),"Real Madrid", "24", "Varane"),
+                Arrays.asList(new BigInteger("7"),"Real Madrid", "26", "CR7"),
+                Arrays.asList(new BigInteger("9"),"Real Madrid", "31", "Benzema"),
+                Arrays.asList(new BigInteger("14"),"Real Madrid", "25", "Casemiro")
         );
+        assertEquals(expectedData, afterOrder.getData());
+    }
+    
+    @Test
+    public void testOrderByWithNulls() {
+        List<List<Object>> data = new ArrayList<>();
+        data.add(Arrays.asList(7, "CR7", "Real Madrid", 26, "Winger"));
+        data.add(Arrays.asList(4, "Ramos", "Real Madrid", 27, "Defender"));
+        data.add(Arrays.asList(9, "Benzema", "Real Madrid", 31, "Striker"));
+        data.add(Arrays.asList(14, "Casemiro", "Real Madrid", 25, "Mid Fielder"));
+        data.add(Arrays.asList(5, "Varane", "Real Madrid", 24, "Defender"));
+        data.add(Arrays.asList(52, null, "Real Madrid", 16, "Mid Fielder"));
+        data.add(Arrays.asList(0, null, "Real Madrid", 14, null));
+        data.add(Arrays.asList(16, null, "Real Madrid", 15, "Striker"));
+        List<String> columns = Arrays.asList("jersey_no", "name", "club", "age", "position");
+        Map<String, String> aliasMapping = new HashMap<>();
+        aliasMapping.put("pos", "position");
+        DataFrame df = new DataFrame(data, columns, aliasMapping);
+        List<OrderItem> orderItems = Arrays.asList(createOrderItem("name", Direction.ASC), createOrderItem("pos", Direction.DESC));
+        List<SelectItem> selectItems = Arrays.asList(createColSelectItem("jersey_no"), createColSelectItem("name"), createColSelectItem("club"), 
+                createColSelectItem("age"), createColSelectItem("pos"));
+        DataFrame afterOrder = df.order(orderItems).select(selectItems);
+        List<List<Object>> expectedData = Arrays.asList(
+                Arrays.asList(9, "Benzema", "Real Madrid", 31, "Striker"),
+                Arrays.asList(7, "CR7", "Real Madrid", 26, "Winger"),
+                Arrays.asList(14, "Casemiro", "Real Madrid", 25, "Mid Fielder"),
+                Arrays.asList(4, "Ramos", "Real Madrid", 27, "Defender"),
+                Arrays.asList(5, "Varane", "Real Madrid", 24, "Defender"),
+                Arrays.asList(0, null, "Real Madrid", 14, null),
+                Arrays.asList(16, null, "Real Madrid", 15, "Striker"),
+                Arrays.asList(52, null, "Real Madrid", 16, "Mid Fielder")
+                );
         assertEquals(expectedData, afterOrder.getData());
     }
 }
