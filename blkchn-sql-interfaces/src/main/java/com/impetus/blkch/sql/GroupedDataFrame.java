@@ -123,11 +123,7 @@ public class GroupedDataFrame {
                 } else if (col.hasChildType(FunctionNode.class)) {
                     Object computeResult = computeFunction(col.getChildType(FunctionNode.class, 0), entry.getValue());
                     returnRec.add(computeResult);
-                    if (col.hasChildType(IdentifierNode.class)) {
-                        if (!columnsInitialized) {
-                            returnCols.add(col.getChildType(IdentifierNode.class, 0).getValue());
-                        }
-                    } else if (!columnsInitialized) {
+                    if (!columnsInitialized) {
                         returnCols.add(Utilities.createFunctionColName(col.getChildType(FunctionNode.class, 0)));
                     }
                 }

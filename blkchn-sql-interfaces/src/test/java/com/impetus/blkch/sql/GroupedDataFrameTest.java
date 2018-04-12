@@ -99,4 +99,14 @@ public class GroupedDataFrameTest extends TestCase {
                 Arrays.asList("PSG", "Striker", 2));
         assertEquals(expectedData, afterHaving.getData());
     }
+    
+    public void testCountWithAlias() {
+        SelectItem simpleFunc = new SelectItem();
+        simpleFunc.addChildNode(createAggregateFunction("count", "jersey_no"));
+        simpleFunc.addChildNode(new IdentifierNode("cnt"));
+        List<SelectItem> selectItems = Arrays.asList(createColSelectItem("club"), createColSelectItem("position"), simpleFunc);
+        DataFrame afterSelect = groupedDataFrame.select(selectItems);
+        List<String> expectedCols = Arrays.asList("club", "position", "count(jersey_no)");
+        assertEquals(expectedCols, afterSelect.getColumns());
+    }
 }
