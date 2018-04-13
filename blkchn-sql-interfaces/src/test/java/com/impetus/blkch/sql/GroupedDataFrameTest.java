@@ -63,7 +63,7 @@ public class GroupedDataFrameTest extends TestCase {
                 Arrays.asList("Real Madrid", "Defender", 2), Arrays.asList("Real Madrid", "Mid Fielder", 2),
                 Arrays.asList("Real Madrid", "Striker", 1), Arrays.asList("Real Madrid", "Winger", 1));
         assertEquals(expectedData, afterSelect.getData());
-        assertEquals(Arrays.asList("club", "position", "cnt"), afterSelect.getColumns());
+        assertEquals(Arrays.asList("club", "position", "count(jersey_no)"), afterSelect.getColumns());
     }
 
     public void testSingleHaving() {
