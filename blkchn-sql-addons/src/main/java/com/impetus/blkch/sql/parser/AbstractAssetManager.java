@@ -2,8 +2,10 @@ package com.impetus.blkch.sql.parser;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -68,6 +70,20 @@ public abstract class AbstractAssetManager {
         TreeNode dropAsset = logicalPlan.getDropAsset();
         String asset = dropAsset.getChildType(Asset.class, 0).getChildType(IdentifierNode.class, 0).getValue().trim();
         removeSchemaInDB(asset);
+    }
+    
+    public String getSchemaJSON(String asset) throws SQLException {
+        String schemaJSON;
+        String query = "SELECT schema_json FROM asset_schema WHERE asset_name='%s'";
+        Connection conn = getConnection();
+        Statement stat = conn.createStatement();
+        ResultSet rs = stat.executeQuery(String.format(query, asset));
+        if(rs.next()) {
+            schemaJSON = rs.getString("schema_json");
+        } else {
+            throw new BlkchnException(String.format("Schema for Asset %s doesn't exist", asset));
+        }
+        return schemaJSON;
     }
     
     private void saveSchemaInDB(String asset, JSONObject json) {
