@@ -4,7 +4,7 @@
 
 	<groupId>com.impetus</groupId>
 	<artifactId>blkchn-sql-driver</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 	<name>Blockchain SQL Driver</name>
 	<description>Project containing modules for Antlr based parsing of SQL Query 
@@ -147,5 +147,12 @@
 		</plugins>
 
 	</build>
+		<distributionManagement>
+		<repository>
+			<id>deployment</id>
+			<name>Blockchain JDBC nexus</name>
+			<url>http://172.25.32.44:8081/content/repositories/releases/</url>
+		</repository>
+	</distributionManagement>
 
 </project>
