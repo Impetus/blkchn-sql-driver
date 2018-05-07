@@ -15,7 +15,7 @@
 
 
 	<properties>
-		<blkchn-antlr4-gen.version>0.0.1-SNAPSHOT</blkchn-antlr4-gen.version>
+		<blkchn-antlr4-gen.version>1.0.0</blkchn-antlr4-gen.version>
 	</properties>
 
 	<dependencies>
