@@ -14,15 +14,11 @@
 	This will be implemented by concrete implementations of Hyperledger and Ethereum</description>
 
 
-	<properties>
-		<blkchn-antlr4-gen.version>1.0.0</blkchn-antlr4-gen.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.impetus</groupId>
 			<artifactId>blkchn-antlr4-gen</artifactId>
-			<version>${blkchn-antlr4-gen.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 
