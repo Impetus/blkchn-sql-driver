@@ -1,26 +1,22 @@
 package com.impetus.blkch.sql.parser;
 
-import com.impetus.blkch.BlkchnException;
-import com.impetus.blkch.sql.generated.BlkchnSqlLexer;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser;
-import junit.framework.TestCase;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.junit.Test;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 
 import java.util.Properties;
 
-import org.junit.rules.ExpectedException;
+import junit.framework.TestCase;
+
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatcher;
-import org.mockito.Mock;
-import org.mockito.internal.progress.ArgumentMatcherStorage;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.powermock.api.mockito.PowerMockito.when;
+import com.impetus.blkch.BlkchnException;
+import com.impetus.blkch.sql.generated.BlkchnSqlLexer;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({AbstractAssetManager.class})
