@@ -38,6 +38,7 @@ import com.impetus.blkch.sql.function.CreateFunction;
 import com.impetus.blkch.sql.function.DeleteFunction;
 import com.impetus.blkch.sql.function.Endorsers;
 import com.impetus.blkch.sql.function.Parameters;
+import com.impetus.blkch.sql.function.PolicyFile;
 import com.impetus.blkch.sql.function.Version;
 import com.impetus.blkch.sql.generated.BlkchnSqlLexer;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser;
@@ -265,7 +266,7 @@ public class LogicalPlanTest extends TestCase {
 
     @Test
     public void testCreateFunction() {
-        String sql = "Create Function someFunction AS '/home/xyz' WITH VERSION '1.0' WITH ENDORSERS AND(Org1.member, OR(Org2.member, Org3.member)) "
+        String sql = "Create Function someFunction AS '/home/xyz' WITH VERSION '1.0' WITH ENDORSEMENT POLICY FILE '/home/username/fileloc' "
                 + "WITH ARGS 'init', 500, 230";
         LogicalPlan plan = getLogicalPlan(sql);
         CreateFunction actual = plan.getCreateFunction();
@@ -506,13 +507,8 @@ public class LogicalPlanTest extends TestCase {
         createFunction.addChildNode(new ClassName("'/home/xyz'"));
         createFunction.addChildNode(new Version("'1.0'"));
         Endorsers endorsers = new Endorsers();
-        LogicalOperation and = new LogicalOperation(Operator.AND);
-        and.addChildNode(new IdentifierNode("Org1.member"));
-        LogicalOperation or = new LogicalOperation(Operator.OR);
-        or.addChildNode(new IdentifierNode("Org2.member"));
-        or.addChildNode(new IdentifierNode("Org3.member"));
-        and.addChildNode(or);
-        endorsers.addChildNode(and);
+        PolicyFile policy = new PolicyFile("'/home/username/fileloc'");
+        endorsers.addChildNode(policy);
         createFunction.addChildNode(endorsers);
         Args args = new Args();
         args.addChildNode(new IdentifierNode("'init'"));

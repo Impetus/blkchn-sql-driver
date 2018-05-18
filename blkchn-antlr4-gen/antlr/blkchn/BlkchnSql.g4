@@ -60,11 +60,11 @@ constantSeq
 	;
     
 createFunction
-	: CREATE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? endorsers? args?
+	: CREATE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? endorsersFile? args?
 	;
 	
 upgradeFunction
-    : UPGRADE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? args?
+    : UPGRADE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? endorsersFile? args?
     ;
 	
 createAsset
@@ -105,13 +105,12 @@ version
     : WITH VERSION STRING
     ;
     
-endorsers
-    : WITH ENDORSERS endorserDetails
+endorsersFile
+    : WITH ENDORSEMENT POLICY FILE policyFile
     ;
     
-endorserDetails
-    : ENDORSER
-    | (AND | OR) '(' endorserDetails (',' endorserDetails)* ')'
+policyFile
+    : STRING
     ;
     
 args
@@ -498,7 +497,9 @@ IGNORE: 'IGNORE';
 CALL: 'CALL';
 WITH: 'WITH';
 VERSION: 'VERSION';
-ENDORSERS: 'ENDORSERS';
+ENDORSEMENT: 'ENDORSEMENT';
+POLICY: 'POLICY';
+FILE: 'FILE';
 ARGS: 'ARGS';
 ASSET: 'ASSET';
 CHAINCODE: 'CHAINCODE';
@@ -599,10 +600,6 @@ BIGDECIMAL_LITERAL
 
 IDENTIFIER
     : (LETTER | DIGIT | '_')+
-    ;
-    
-ENDORSER
-    : (LETTER | DIGIT | '.')+
     ;
 
 BACKQUOTED_IDENTIFIER

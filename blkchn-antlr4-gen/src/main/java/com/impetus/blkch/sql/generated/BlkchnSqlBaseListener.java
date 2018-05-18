@@ -305,25 +305,25 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEndorsers(BlkchnSqlParser.EndorsersContext ctx) { }
+	@Override public void enterEndorsersFile(BlkchnSqlParser.EndorsersFileContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEndorsers(BlkchnSqlParser.EndorsersContext ctx) { }
+	@Override public void exitEndorsersFile(BlkchnSqlParser.EndorsersFileContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEndorserDetails(BlkchnSqlParser.EndorserDetailsContext ctx) { }
+	@Override public void enterPolicyFile(BlkchnSqlParser.PolicyFileContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEndorserDetails(BlkchnSqlParser.EndorserDetailsContext ctx) { }
+	@Override public void exitPolicyFile(BlkchnSqlParser.PolicyFileContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -8,11 +8,11 @@
     </encoder>
   </appender>
 
-  <logger name="com.lordofthejars.foo" level="INFO" additivity="false">
+  <logger name="com.lordofthejars.foo" level="DEBUG" additivity="false">
    <appender-ref ref="STDOUT" />
   </logger>
 
-  <root level="INFO">          
+  <root level="DEBUG">          
     <appender-ref ref="STDOUT" />
   </root>  
   

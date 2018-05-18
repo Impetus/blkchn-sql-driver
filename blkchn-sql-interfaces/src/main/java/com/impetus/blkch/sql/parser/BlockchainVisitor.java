@@ -34,6 +34,7 @@ import com.impetus.blkch.sql.function.CreateFunction;
 import com.impetus.blkch.sql.function.DeleteFunction;
 import com.impetus.blkch.sql.function.Endorsers;
 import com.impetus.blkch.sql.function.Parameters;
+import com.impetus.blkch.sql.function.PolicyFile;
 import com.impetus.blkch.sql.function.UpgradeFunction;
 import com.impetus.blkch.sql.function.Version;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser;
@@ -52,8 +53,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateAssetContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DeleteFunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DereferenceContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DropAssetContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorserDetailsContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorsersContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorsersFileContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FieldDelimiterContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FromClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionCallContext;
@@ -65,6 +65,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.NamedExpressionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.NumericLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.OrderByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ParameterValuesContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.PolicyFileContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.RecordDelimiterContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SelectClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SetQuantifierContext;
@@ -395,8 +396,8 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     }
     
     @Override
-    public LogicalPlan visitEndorsers(EndorsersContext ctx) {
-        logger.trace("In visitEndorsers " + ctx.getText());
+    public LogicalPlan visitEndorsersFile(EndorsersFileContext ctx) {
+        logger.trace("In visitEndorsersFile " + ctx.getText());
         Endorsers endorsers = new Endorsers();
         logicalPlan.getCurrentNode().addChildNode(endorsers);
         logicalPlan.setCurrentNode(endorsers);
@@ -404,23 +405,11 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     }
     
     @Override
-    public LogicalPlan visitEndorserDetails(EndorserDetailsContext ctx) {
-        logger.trace("In visitEndorserDetails " + ctx.getText());
-        if(ctx.ENDORSER() != null) {
-            IdentifierNode node = new IdentifierNode(ctx.ENDORSER().getText());
-            logicalPlan.getCurrentNode().addChildNode(node);
-            logicalPlan.setCurrentNode(node);
-        } else {
-            if(ctx.AND() != null) {
-                LogicalOperation oper = new LogicalOperation(Operator.AND);
-                logicalPlan.getCurrentNode().addChildNode(oper);
-                logicalPlan.setCurrentNode(oper);
-            } else {
-                LogicalOperation oper = new LogicalOperation(Operator.OR);
-                logicalPlan.getCurrentNode().addChildNode(oper);
-                logicalPlan.setCurrentNode(oper);
-            }
-        }
+    public LogicalPlan visitPolicyFile(PolicyFileContext ctx) {
+        logger.trace("In visitPolicyFile " + ctx.getText());
+        PolicyFile policyFile = new PolicyFile(ctx.getText());
+        logicalPlan.getCurrentNode().addChildNode(policyFile);
+        logicalPlan.setCurrentNode(policyFile);
         return visitChildrenAndResetNode(ctx);
     }
     

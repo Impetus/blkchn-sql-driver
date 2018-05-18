@@ -186,14 +186,14 @@ public class BlkchnSqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitEndorsers(BlkchnSqlParser.EndorsersContext ctx) { return visitChildren(ctx); }
+	@Override public T visitEndorsersFile(BlkchnSqlParser.EndorsersFileContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitEndorserDetails(BlkchnSqlParser.EndorserDetailsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPolicyFile(BlkchnSqlParser.PolicyFileContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

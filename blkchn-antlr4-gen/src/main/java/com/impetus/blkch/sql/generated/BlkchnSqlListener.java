@@ -265,25 +265,25 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitVersion(BlkchnSqlParser.VersionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link BlkchnSqlParser#endorsers}.
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#endorsersFile}.
 	 * @param ctx the parse tree
 	 */
-	void enterEndorsers(BlkchnSqlParser.EndorsersContext ctx);
+	void enterEndorsersFile(BlkchnSqlParser.EndorsersFileContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link BlkchnSqlParser#endorsers}.
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#endorsersFile}.
 	 * @param ctx the parse tree
 	 */
-	void exitEndorsers(BlkchnSqlParser.EndorsersContext ctx);
+	void exitEndorsersFile(BlkchnSqlParser.EndorsersFileContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link BlkchnSqlParser#endorserDetails}.
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#policyFile}.
 	 * @param ctx the parse tree
 	 */
-	void enterEndorserDetails(BlkchnSqlParser.EndorserDetailsContext ctx);
+	void enterPolicyFile(BlkchnSqlParser.PolicyFileContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link BlkchnSqlParser#endorserDetails}.
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#policyFile}.
 	 * @param ctx the parse tree
 	 */
-	void exitEndorserDetails(BlkchnSqlParser.EndorserDetailsContext ctx);
+	void exitPolicyFile(BlkchnSqlParser.PolicyFileContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#args}.
 	 * @param ctx the parse tree

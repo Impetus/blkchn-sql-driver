@@ -164,17 +164,17 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVersion(BlkchnSqlParser.VersionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link BlkchnSqlParser#endorsers}.
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#endorsersFile}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitEndorsers(BlkchnSqlParser.EndorsersContext ctx);
+	T visitEndorsersFile(BlkchnSqlParser.EndorsersFileContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link BlkchnSqlParser#endorserDetails}.
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#policyFile}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitEndorserDetails(BlkchnSqlParser.EndorserDetailsContext ctx);
+	T visitPolicyFile(BlkchnSqlParser.PolicyFileContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#args}.
 	 * @param ctx the parse tree

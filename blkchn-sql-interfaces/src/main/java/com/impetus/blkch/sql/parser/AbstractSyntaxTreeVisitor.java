@@ -60,8 +60,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.DereferenceContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DoubleLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DropAssetContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DropAssetRuleContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorserDetailsContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorsersContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorsersFileContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ExpressionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FieldDelimiterContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FirstContext;
@@ -95,6 +94,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.NumericLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.OrderByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ParameterValuesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ParenthesizedExpressionContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.PolicyFileContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.PredicateContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.PredicateOperatorContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.PredicatedContext;
@@ -825,18 +825,6 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     }
 
     @Override
-    public LogicalPlan visitEndorsers(EndorsersContext ctx) {
-        logger.trace("In visitEndorsers " + ctx.getText());
-        return visitChildren(ctx);
-    }
-
-    @Override
-    public LogicalPlan visitEndorserDetails(EndorserDetailsContext ctx) {
-        logger.trace("In visitEndorserDetails " + ctx.getText());
-        return visitChildren(ctx);
-    }
-
-    @Override
     public LogicalPlan visitArgs(ArgsContext ctx) {
         logger.trace("In visitArgs " + ctx.getText());
         return visitChildren(ctx);
@@ -942,6 +930,18 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     @Override
     public LogicalPlan visitUpgradeFunction(UpgradeFunctionContext ctx) {
         logger.trace("In visitUpgradeFunction " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitEndorsersFile(EndorsersFileContext ctx) {
+        logger.trace("In visitEndorsersFile " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitPolicyFile(PolicyFileContext ctx) {
+        logger.trace("In visitPolicyFile " + ctx.getText());
         return visitChildren(ctx);
     }
 
