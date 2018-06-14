@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.impetus</groupId>
 		<artifactId>blkchn-sql-driver</artifactId>
-		<version>${project.release.version}</version>
+		<version>1.0.0</version>
 	</parent>
 	<artifactId>blkchn-antlr4-gen</artifactId>
 	<packaging>jar</packaging>

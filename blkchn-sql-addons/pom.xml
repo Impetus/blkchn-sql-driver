@@ -7,11 +7,11 @@
         <parent>
                 <groupId>com.impetus</groupId>
                 <artifactId>blkchn-sql-driver</artifactId>
-                <version>${project.release.version}</version>
+                <version>1.0.0</version>
         </parent>
 	<artifactId>blkchn-sql-addons</artifactId>
-
-	<name>blkchn-sql-addons</name>
+	<name>BlockChain-SQL-ADDONS</name>
+	<description>Project containing business support functionalities over and above a pure JDBC driver</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
