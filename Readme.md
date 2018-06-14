@@ -1,7 +1,9 @@
 Overview
 =========
 
-blkchn-sql-driver project parses the sql query using [Antlr4](http://www.antlr.org/) and converts it into Logical plan and/or physical plan, which can be used by different blockchain driver implementations.
+blkchn-sql-driver project parses the SQL query using [Antlr4](http://www.antlr.org/) and converts it into Logical Plan and/or optimized Physical Plan, which can be used by different blockchain driver implementations.
+
+It uses Antlr4's visitor pattern to create a Logical Plan and optionally an optimized Physical Plan. Blockchain drivers uses these Logical Plan and Physical Plan along with corresponding blockchain clients to get the data in and out of the network.
 
 Currently following Blockchain drivers are implemented.
 
@@ -19,11 +21,15 @@ blkchn-sql-driver is built using [Apache Maven](http://maven.apache.org/). To bu
 To rebuild antlr generated java source files:
 
     mvn clean install -Pgen-sources
+    
+Important Links
+===============
+
+* [Blkchn SQL Driver wikis](http://git-impetus/RND-LABS/blkchn-sql-driver/wikis/home)
 
 Contribution
 ============
-* [Contribution Ideas]()
-* [Contribution Guidelines]()
+* [Contribution Guidelines](http://git-impetus/RND-LABS/blkchn-sql-driver/blob/master/CONTRIBUTING.md)
 
 About Us
 ========
