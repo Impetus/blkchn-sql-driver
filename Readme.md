@@ -21,18 +21,18 @@ To rebuild antlr generated java source files:
 Available Drivers
 =================
 
-* [Hyperledger Fabric JDBC Driver](http://git-impetus/RND-LABS/fabric-jdbc-connector)
+* [Hyperledger Fabric JDBC Driver](https://github.com/Impetus/fabric-jdbc-connector)
 
-* [Ethereum JDBC Driver](http://git-impetus/RND-LABS/eth-jdbc-connector)
+* [Ethereum JDBC Driver](https://github.com/Impetus/eth-jdbc-connector)
     
 Important Links
 ===============
 
-* [Blkchn SQL Driver wikis](http://git-impetus/RND-LABS/blkchn-sql-driver/wikis/home)
+* [Blkchn SQL Driver wikis](https://github.com/Impetus/blkchn-sql-driver/wiki)
 
 Contribution
 ============
-* [Contribution Guidelines](http://git-impetus/RND-LABS/blkchn-sql-driver/blob/master/CONTRIBUTING.md)
+* [Contribution Guidelines](https://github.com/Impetus/blkchn-sql-driver/blob/master/CONTRIBUTING.md)
 
 About Us
 ========
