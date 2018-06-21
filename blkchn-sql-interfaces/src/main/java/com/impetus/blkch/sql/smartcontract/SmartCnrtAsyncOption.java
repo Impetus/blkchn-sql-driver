@@ -13,41 +13,21 @@
 * * See the License for the specific language governing permissions and
 * * limitations under the License.
 ******************************************************************************/
-package com.impetus.blkch.sql.query;
+package com.impetus.blkch.sql.smartcontract;
 
-import com.impetus.blkch.sql.parser.TreeNode;
+import com.impetus.blkch.sql.parser.LogicalPlan;
 
-public class IdentifierNode extends TreeNode {
-
-    public static final String DESCRIPTION = "IDENT";
-
-    private String value;
-    private IdentType type;
-
-    public IdentifierNode(String value) {
-        super(DESCRIPTION + ":" + value);
-        this.value = value;
-    }
-
-    public IdentifierNode(String value,IdentType type) {
-        super(DESCRIPTION + ":" + value);
-        this.value = value;
-        this.type = type;
-    }
-
-    public String getValue() {
-        return value;
-    }
-    public IdentType getType() {
-        return type;
-    }
-    
-    public static enum IdentType {
-        NUMBER,
-        BOOLEAN,
-        STRING,
-        BYTES;
-    }
-    
+public class SmartCnrtAsyncOption extends LogicalPlan {
+	public static final String DESCRIPTION = "AsyncOption";
+	private String asyncOption;
+	
+	public SmartCnrtAsyncOption(String asyncOption) {
+		super(DESCRIPTION);
+		this.asyncOption = asyncOption;
+	}
+	
+	public String getAsyncOption() {
+		return asyncOption;
+	}
 
 }

@@ -15,39 +15,21 @@
 ******************************************************************************/
 package com.impetus.blkch.sql.query;
 
-import com.impetus.blkch.sql.parser.TreeNode;
+import com.impetus.blkch.sql.parser.LogicalPlan;
+import com.impetus.blkch.util.Utilities;
 
-public class IdentifierNode extends TreeNode {
+public class BytesArgs extends LogicalPlan {
 
-    public static final String DESCRIPTION = "IDENT";
-
-    private String value;
-    private IdentType type;
-
-    public IdentifierNode(String value) {
-        super(DESCRIPTION + ":" + value);
-        this.value = value;
-    }
-
-    public IdentifierNode(String value,IdentType type) {
-        super(DESCRIPTION + ":" + value);
-        this.value = value;
-        this.type = type;
-    }
-
-    public String getValue() {
-        return value;
-    }
-    public IdentType getType() {
-        return type;
-    }
-    
-    public static enum IdentType {
-        NUMBER,
-        BOOLEAN,
-        STRING,
-        BYTES;
-    }
-    
+	public static final String DESCRIPTION = "BytesArgs";
+	private String value;
+	
+	public BytesArgs(String value) {
+		super(DESCRIPTION);
+		this.value = value;
+	}
+	
+	public String getValue() {
+		return value.replace("HEX('", "").replace("')", "");
+	}
 
 }

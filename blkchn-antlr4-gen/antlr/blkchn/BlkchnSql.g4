@@ -35,8 +35,8 @@ singleStatement
 statement
     : query                                                        #statementDefault
     | insertInto                                                   #singleInsert
-    | createFunction										   	   #createFunctionRule
-    | callFunction											   	   #callFunctionRule
+    | createFunction                                               #createFunctionRule
+    | callFunction                                                 #callFunctionRule
     | createAsset                                                  #createAssetRule
     | deleteFunction                                               #deleteFunctionRule
     | dropAsset                                                    #dropAssetRule
@@ -46,27 +46,27 @@ statement
 insertInto
     : INSERT INTO tableIdentifier ('(' columnNames ')')? VALUES '(' columnValues ')'
     ;
-	
+    
 columnNames
-	: identifierSeq
-	;
-	
+    : identifierSeq
+    ;
+    
 columnValues
-	: constantSeq
-	;
-	
+    : constantSeq
+    ;
+    
 constantSeq
-	: constant (',' constant)*
-	;
+    : constant (',' constant)*
+    ;
     
 createFunction
-	: CREATE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? endorsersFile? args?
-	;
-	
+    : CREATE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? endorsersFile? args?
+    ;
+    
 upgradeFunction
     : UPGRADE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? endorsersFile? args?
     ;
-	
+    
 createAsset
     : CREATE (ASSET | TABLE) asset ('(' colTypeList ')')? WITH STORAGE TYPE storageType
       fieldDelimiter? recordDelimiter?
@@ -123,16 +123,62 @@ argParamSeq
     
 argParam
     : constant
+    | collection     
     ;
-	
+
+collection
+    : list
+    | bytes
+    ;
+
+bytes
+    : 'HEX('STRING')'
+    ;
+
+list
+    :  listTypeDec? '[' parameterValues? ']'
+    ;
+
+listTypeDec
+    :  '<'listType'>' 
+    ;
+
+listType
+    : STRING
+    ;
+
 callFunction
-	: CALL qualifiedName '(' parameterValues? ')' (AS (ASSET | TABLE) asset)?
-	;
+    : CALL qualifiedName '(' parameterValues? ')' (smartFunction | assetFunction)
+    ;
+
+smartFunction
+    : USE classOption WITH addressOption (asyncOption)?
+    ;
+
+assetFunction
+    : (AS (ASSET | TABLE) asset)?
+    ;
+
+classOption
+    : SMARTCONTRACT className
+    ;
+
+addressOption
+    : ADDRESS addressVlaue
+    ;
+
+addressVlaue
+    : STRING
+    ;
+
+asyncOption
+    : AND WITHASYNC booleanValue
+    ;
 
 parameterValues
-	: argParamSeq
-	;
-	
+    : argParamSeq
+    ;
+    
 query
     : queryTerm queryOrganization                                   #simpleQuery
     ;
@@ -393,6 +439,7 @@ number
     | MINUS? BIGDECIMAL_LITERAL       #bigDecimalLiteral
     ;
     
+    
 nonReserved
     : SHOW | TABLES | COLUMNS | COLUMN | FUNCTIONS | DATABASES | ADD | LAST | FIRST | AFTER | MAP 
     | ARRAY | STRUCT | GROUPING | CUBE | ROLLUP | EXPLAIN | USE | TO | PERCENTLIT | OUT | OF
@@ -440,6 +487,7 @@ FALSE: 'FALSE';
 NULLS: 'NULLS';
 ASC: 'ASC';
 DESC: 'DESC';
+HEX: 'HEX';
 FOR: 'FOR';
 INTERVAL: 'INTERVAL';
 CASE: 'CASE';
@@ -512,6 +560,8 @@ FIELDS: 'FIELDS';
 RECORDS: 'RECORDS';
 DELIMITED: 'DELIMITED';
 UPGRADE: 'UPGRADE';
+ADDRESS : 'ADDRESS';
+WITHASYNC:'WITHASYNC';
 
 IF: 'IF';
 
@@ -560,7 +610,7 @@ CURRENT_TIMESTAMP: 'CURRENT_TIMESTAMP';
 
 STRING
     : '\'' ( ~('\''|'\\') | ('\\' .) )* '\''
-    | '\"' ( ~('\"'|'\\') | ('\\' .) )* '\"'
+    | '"' ( ~('"'|'\\') | ('\\' .) )* '"'
     ;
 
 BIGINT_LITERAL
@@ -601,6 +651,7 @@ BIGDECIMAL_LITERAL
 IDENTIFIER
     : (LETTER | DIGIT | '_')+
     ;
+
 
 BACKQUOTED_IDENTIFIER
     : '`' ( ~'`' | '``' )* '`'

@@ -38,10 +38,16 @@ import com.impetus.blkch.sql.function.PolicyFile;
 import com.impetus.blkch.sql.function.UpgradeFunction;
 import com.impetus.blkch.sql.function.Version;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.AddressOptionContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.AddressVlaueContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ArgsContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.AssetContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.AssetFunctionContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.AsyncOptionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.BooleanLiteralContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.BytesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CallFunctionContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ClassOptionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColTypeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColTypeListContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnNamesContext;
@@ -60,6 +66,8 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionCallContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.GroupByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.HavingClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.LimitClauseContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ListContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.ListTypeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.LogicalBinaryContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.NamedExpressionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.NumericLiteralContext;
@@ -71,6 +79,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.SelectClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SetQuantifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SimpleQueryContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SingleInsertContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.SmartFunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SortItemContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.StarContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.StorageTypeContext;
@@ -80,35 +89,17 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.UnquotedIdentifierContext
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.UpgradeFunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.VersionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.WhereClauseContext;
-import com.impetus.blkch.sql.insert.ColumnName;
-import com.impetus.blkch.sql.insert.ColumnValue;
-import com.impetus.blkch.sql.insert.Insert;
+import com.impetus.blkch.sql.insert.*;
 import com.impetus.blkch.sql.parser.LogicalPlan.SQLType;
-import com.impetus.blkch.sql.query.Column;
-import com.impetus.blkch.sql.query.Comparator;
+import com.impetus.blkch.sql.query.*;
 import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
-import com.impetus.blkch.sql.query.DereferenceNode;
-import com.impetus.blkch.sql.query.FilterItem;
-import com.impetus.blkch.sql.query.FromItem;
-import com.impetus.blkch.sql.query.FunctionNode;
-import com.impetus.blkch.sql.query.GroupByClause;
-import com.impetus.blkch.sql.query.HavingClause;
-import com.impetus.blkch.sql.query.IdentifierNode;
-import com.impetus.blkch.sql.query.LimitClause;
-import com.impetus.blkch.sql.query.LogicalOperation;
+import com.impetus.blkch.sql.query.IdentifierNode.IdentType;
 import com.impetus.blkch.sql.query.LogicalOperation.Operator;
-import com.impetus.blkch.sql.query.OrderByClause;
-import com.impetus.blkch.sql.query.OrderItem;
-import com.impetus.blkch.sql.query.OrderingDirection;
 import com.impetus.blkch.sql.query.OrderingDirection.Direction;
-import com.impetus.blkch.sql.query.QuantifierNode;
 import com.impetus.blkch.sql.query.QuantifierNode.Quantifier;
-import com.impetus.blkch.sql.query.Query;
-import com.impetus.blkch.sql.query.SelectClause;
-import com.impetus.blkch.sql.query.SelectItem;
-import com.impetus.blkch.sql.query.StarNode;
 import com.impetus.blkch.sql.query.Table;
-import com.impetus.blkch.sql.query.WhereClause;
+import com.impetus.blkch.sql.smartcontract.*;
+
 
 public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
 
@@ -125,6 +116,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     DeleteFunction deleteFunction;
     DropAsset dropAsset;
     UpgradeFunction upgradeFunction;
+    SmartContractFunction smartContractFunction;
 
     @Override
     public LogicalPlan visitSimpleQuery(SimpleQueryContext ctx) {
@@ -354,21 +346,21 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitNumericLiteral(NumericLiteralContext ctx) {
         logger.trace("In visitNumericLiteral " + ctx.getText());
-        logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText()));
+        logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText(),IdentType.NUMBER));
         return visitChildren(ctx);
     }
 
     @Override
     public LogicalPlan visitStringLiteral(StringLiteralContext ctx) {
         logger.trace("In visitStringLiteral " + ctx.getText());
-        logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText()));
+        logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText(),IdentType.STRING));
         return visitChildren(ctx);
     }
     
     @Override
     public LogicalPlan visitBooleanLiteral(BooleanLiteralContext ctx) {
         logger.trace("In visitBooleanLiteral " + ctx.getText());
-        logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText()));
+        logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText(),IdentType.BOOLEAN));
         return visitChildren(ctx);
     }
 
@@ -568,5 +560,72 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
             logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent());
         }
     }
+
+	@Override
+	public LogicalPlan visitList(ListContext ctx) {
+		logger.trace("In visitList " + ctx.getText());
+		ListAgrs args = new ListAgrs();
+		logicalPlan.getCurrentNode().addChildNode(args);
+        logicalPlan.setCurrentNode(args);
+        return visitChildrenAndResetNode(ctx);
+	}
+	
+	@Override
+	public LogicalPlan visitSmartFunction(SmartFunctionContext ctx) {
+		logger.trace("In visitSmartFunction " + ctx.getText());
+		smartContractFunction = new SmartContractFunction();
+		logicalPlan.getCurrentNode().addChildNode(smartContractFunction);
+        logicalPlan.setCurrentNode(smartContractFunction);
+        return visitChildrenAndResetNode(ctx);
+	}
+
+	@Override
+	public LogicalPlan visitBytes(BytesContext ctx) {
+		logger.trace("In visitBytes " + ctx.getText());
+		BytesArgs args = new BytesArgs(ctx.getText());
+		logicalPlan.getCurrentNode().addChildNode(args);
+        logicalPlan.setCurrentNode(args);
+        return visitChildrenAndResetNode(ctx);
+	}
+
+
+
+	@Override
+	public LogicalPlan visitClassOption(ClassOptionContext ctx) {
+		logger.trace("In visitClassOption " + ctx.getText());
+		SmartCnrtClassOption args = new SmartCnrtClassOption(ctx.getText());
+		logicalPlan.getCurrentNode().addChildNode(args);
+        logicalPlan.setCurrentNode(args);
+        return visitChildrenAndResetNode(ctx);
+	}
+
+	@Override
+	public LogicalPlan visitAsyncOption(AsyncOptionContext ctx) {
+		logger.trace("In visitAsyncOption " + ctx.getText());
+		SmartCnrtAsyncOption args = new SmartCnrtAsyncOption(ctx.getText());
+		logicalPlan.getCurrentNode().addChildNode(args);
+        logicalPlan.setCurrentNode(args);
+        return visitChildrenAndResetNode(ctx);
+	}
+	
+	@Override
+	public LogicalPlan visitListType(ListTypeContext ctx) {		
+		logger.trace("In visitListType " + ctx.getText());
+		SmartCnrtListType args = new SmartCnrtListType(ctx.getText());
+		logicalPlan.getCurrentNode().addChildNode(args);
+        logicalPlan.setCurrentNode(args);
+        return visitChildrenAndResetNode(ctx);
+	}
+
+	@Override
+	public LogicalPlan visitAddressVlaue(AddressVlaueContext ctx) {
+		logger.trace("In visitAddressVlaue " + ctx.getText());
+		SmartCnrtAddressOption args = new SmartCnrtAddressOption(ctx.getText());
+		logicalPlan.getCurrentNode().addChildNode(args);
+        logicalPlan.setCurrentNode(args);
+        return visitChildrenAndResetNode(ctx);
+	}
+
+
 
 }

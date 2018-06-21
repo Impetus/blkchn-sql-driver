@@ -194,11 +194,77 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArgParam(BlkchnSqlParser.ArgParamContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#collection}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCollection(BlkchnSqlParser.CollectionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#bytes}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBytes(BlkchnSqlParser.BytesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitList(BlkchnSqlParser.ListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#listTypeDec}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitListTypeDec(BlkchnSqlParser.ListTypeDecContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#listType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitListType(BlkchnSqlParser.ListTypeContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#callFunction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitCallFunction(BlkchnSqlParser.CallFunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#smartFunction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSmartFunction(BlkchnSqlParser.SmartFunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#assetFunction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssetFunction(BlkchnSqlParser.AssetFunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#classOption}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitClassOption(BlkchnSqlParser.ClassOptionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#addressOption}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAddressOption(BlkchnSqlParser.AddressOptionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#addressVlaue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAddressVlaue(BlkchnSqlParser.AddressVlaueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#asyncOption}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAsyncOption(BlkchnSqlParser.AsyncOptionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#parameterValues}.
 	 * @param ctx the parse tree
