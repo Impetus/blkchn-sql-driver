@@ -1,9 +1,9 @@
-##Generate source code from grammer file   
+# Generate source code from grammer file   
 
-# Grammer file.   
+Grammer file.   
 The grammar file for this project is [BlkchnSql.g4](https://github.com/Impetus/blkchn-sql-driver/blob/master/blkchn-antlr4-gen/antlr/blkchn/BlkchnSql.g4). It has features for basic sql syntax and some constructs applicable only to blockchain. Antlr4 is used to generate the lexer and parser based on this grammer file.    
 
-#POM File Configurations to generate the code.   
+POM File Configurations to generate the code.   
 1. A maven profile gen-sources is defined to generate the code.   
    
 2. To clean the generated code for that grammer in pom.xml configure maven-clean plugin.    
