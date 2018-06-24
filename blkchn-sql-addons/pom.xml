@@ -4,11 +4,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-        <parent>
-                <groupId>com.impetus</groupId>
-                <artifactId>blkchn-sql-driver</artifactId>
-                <version>1.0.0</version>
-        </parent>
+	<parent>
+		<groupId>com.impetus</groupId>
+		<artifactId>blkchn-sql-driver</artifactId>
+		<version>1.0.0</version>
+	</parent>
 	<artifactId>blkchn-sql-addons</artifactId>
 	<name>BlockChain-SQL-ADDONS</name>
 	<description>Project containing business support functionalities over and above a pure JDBC driver</description>
@@ -25,22 +25,22 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.38</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.impetus</groupId>
-            <artifactId>blkchn-sql-interfaces</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.38</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.impetus</groupId>
+			<artifactId>blkchn-sql-interfaces</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 </project>
