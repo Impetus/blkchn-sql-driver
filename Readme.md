@@ -7,6 +7,14 @@ It uses Antlr4's visitor pattern to create a logical plan and optionally an opti
 Blockchain drivers use these logical plan and physical plan along with corresponding blockchain clients 
 to get the data in and out of the network.
 
+# Tested with
+| Dependency | Version |
+|---|---|
+| maven | 3.3.3 |
+|java | 1.8 |
+
+
+
 Building blkchn-sql-driver
 ==========================
 
