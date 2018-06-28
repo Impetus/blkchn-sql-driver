@@ -152,7 +152,7 @@ callFunction
     ;
 
 smartFunction
-    : USE classOption WITH addressOption (asyncOption)?
+    : USE classOption WITH addressOption (AND WITHASYNC asyncOption)?
     ;
 
 assetFunction
@@ -172,7 +172,7 @@ addressVlaue
     ;
 
 asyncOption
-    : AND WITHASYNC booleanValue
+    :  booleanValue
     ;
 
 parameterValues
