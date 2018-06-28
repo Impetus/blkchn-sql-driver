@@ -1,5 +1,6 @@
 Overview
 =========
+[![Join the chat at https://gitter.im/Impetus/blkchn-sql-driver](https://badges.gitter.im/Impetus/blkchn-sql-driver.svg)](https://gitter.im/Impetus/blkchn-sql-driver?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 blkchn-sql-driver project parses the SQL query using [Antlr4](http://www.antlr.org/) and converts it into logical plan 
 and/or optimized physical plan, which can be used by different blockchain driver implementations.
