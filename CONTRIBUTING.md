@@ -6,7 +6,7 @@ Use `git clone https://github.com/Impetus/blkchn-sql-driver.git`
 
 ### 2. Discuss with blkchn-sql-driver Team:
 
-Share your thoughts with us at Gitter [chat](<add gitter link>) or mail us at ILABS-BLR-RD@impetus.co.in
+Share your thoughts with us at Gitter [chat](https://gitter.im/Impetus/blkchn-sql-driver?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) or mail us at dev-sql-blkchn@impetus.co.in
 
 After discussion, Raise a new issue on [github](https://github.com/Impetus/blkchn-sql-driver/issues)
 
