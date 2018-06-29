@@ -115,6 +115,18 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitUpgradeFunctionRule(BlkchnSqlParser.UpgradeFunctionRuleContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code deploySmartContractRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeploySmartContractRule(BlkchnSqlParser.DeploySmartContractRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code deploySmartContractRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeploySmartContractRule(BlkchnSqlParser.DeploySmartContractRuleContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#insertInto}.
 	 * @param ctx the parse tree
 	 */
@@ -184,6 +196,16 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCreateAsset(BlkchnSqlParser.CreateAssetContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#deploySmartContract}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeploySmartContract(BlkchnSqlParser.DeploySmartContractContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#deploySmartContract}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeploySmartContract(BlkchnSqlParser.DeploySmartContractContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#asset}.
 	 * @param ctx the parse tree

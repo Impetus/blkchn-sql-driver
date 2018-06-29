@@ -25,6 +25,7 @@ import com.impetus.blkch.sql.function.UpgradeFunction;
 import com.impetus.blkch.sql.insert.Insert;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.QueryItemInterface;
+import com.impetus.blkch.sql.smartcontract.SmartCnrtDeploy;
 
 public class LogicalPlan extends TreeNode implements QueryItemInterface {
 
@@ -49,6 +50,8 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
     private UpgradeFunction upgradeFunction;
     
     private SQLType type;
+
+	private SmartCnrtDeploy smartCnrtDeploy;
 
     public LogicalPlan(String description) {
         super(description);
@@ -128,6 +131,15 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
         return upgradeFunction;
     }
     
+    public void setSmartCnrtDeploy(SmartCnrtDeploy smartCnrtDeploy) {
+		this.smartCnrtDeploy = smartCnrtDeploy;
+		
+	}
+    
+    public SmartCnrtDeploy getSmartCnrtDeploy() {
+    	return smartCnrtDeploy;
+    }
+    
     public void setUpgradeFunction(UpgradeFunction upgradeFunction) {
         this.upgradeFunction = upgradeFunction;
     }
@@ -156,7 +168,9 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
         
         DROP_ASSET,
         
-        UPGRADE_FUNCTION
+        UPGRADE_FUNCTION, 
+        
+        DEPLOY_SMARTCONTRACT
     }
 
 }

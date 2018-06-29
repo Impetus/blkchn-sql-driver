@@ -853,4 +853,11 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
 		logger.trace("In visitAssetFunction " + ctx.getText());
 		return visitChildren(ctx);
 	}
+
+	@Override
+	public LogicalPlan visitDeploySmartContract(DeploySmartContractContext ctx) {
+		logger.trace("In visitDeploySmartContract " + ctx.getText());
+		return visitChildren(ctx);
+	}
+
 }

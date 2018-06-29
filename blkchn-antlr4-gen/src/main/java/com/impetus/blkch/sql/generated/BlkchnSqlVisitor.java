@@ -74,6 +74,13 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUpgradeFunctionRule(BlkchnSqlParser.UpgradeFunctionRuleContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code deploySmartContractRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeploySmartContractRule(BlkchnSqlParser.DeploySmartContractRuleContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#insertInto}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -115,6 +122,12 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCreateAsset(BlkchnSqlParser.CreateAssetContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#deploySmartContract}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeploySmartContract(BlkchnSqlParser.DeploySmartContractContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#asset}.
 	 * @param ctx the parse tree

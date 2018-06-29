@@ -57,6 +57,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonOperatorContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateAssetContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DeleteFunctionContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.DeploySmartContractRuleContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DereferenceContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DropAssetContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.EndorsersFileContext;
@@ -117,6 +118,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     DropAsset dropAsset;
     UpgradeFunction upgradeFunction;
     SmartContractFunction smartContractFunction;
+    SmartCnrtDeploy smartCnrtDeploy;
 
     @Override
     public LogicalPlan visitSimpleQuery(SimpleQueryContext ctx) {
@@ -520,6 +522,16 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setType(SQLType.DELETE_FUNCTION);
         return visitChildrenAndResetNode(ctx);
     }
+    
+    @Override
+	public LogicalPlan visitDeploySmartContractRule(DeploySmartContractRuleContext ctx) {
+		logger.trace("In visitDeploySmartContractRule " + ctx.getText());
+		smartCnrtDeploy = new SmartCnrtDeploy();
+        logicalPlan.setSmartCnrtDeploy(smartCnrtDeploy);
+        logicalPlan.setCurrentNode(smartCnrtDeploy);
+        logicalPlan.setType(SQLType.DEPLOY_SMARTCONTRACT);
+		return visitChildrenAndResetNode(ctx);
+	}
     
     @Override
     public LogicalPlan visitDropAsset(DropAssetContext ctx) {

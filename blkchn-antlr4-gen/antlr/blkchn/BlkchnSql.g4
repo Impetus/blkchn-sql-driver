@@ -41,8 +41,9 @@ statement
     | deleteFunction                                               #deleteFunctionRule
     | dropAsset                                                    #dropAssetRule
     | upgradeFunction                                              #upgradeFunctionRule
+    | deploySmartContract 										   #deploySmartContractRule
     ;
-    
+       
 insertInto
     : INSERT INTO tableIdentifier ('(' columnNames ')')? VALUES '(' columnValues ')'
     ;
@@ -71,7 +72,12 @@ createAsset
     : CREATE (ASSET | TABLE) asset ('(' colTypeList ')')? WITH STORAGE TYPE storageType
       fieldDelimiter? recordDelimiter?
     ;
-    
+
+   
+deploySmartContract
+	: DEPLOY SMARTCONTRACT qualifiedName '(' parameterValues? ')'
+	;
+	
 asset
     : identifier
     ;
@@ -562,7 +568,7 @@ DELIMITED: 'DELIMITED';
 UPGRADE: 'UPGRADE';
 ADDRESS : 'ADDRESS';
 WITHASYNC:'WITHASYNC';
-
+DEPLOY:'DEPLOY';
 IF: 'IF';
 
 EQ  : '=' | '==';

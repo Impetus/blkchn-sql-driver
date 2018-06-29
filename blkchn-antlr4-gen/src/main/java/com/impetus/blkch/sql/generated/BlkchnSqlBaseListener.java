@@ -125,6 +125,18 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDeploySmartContractRule(BlkchnSqlParser.DeploySmartContractRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeploySmartContractRule(BlkchnSqlParser.DeploySmartContractRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterInsertInto(BlkchnSqlParser.InsertIntoContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -204,6 +216,18 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCreateAsset(BlkchnSqlParser.CreateAssetContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDeploySmartContract(BlkchnSqlParser.DeploySmartContractContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeploySmartContract(BlkchnSqlParser.DeploySmartContractContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
