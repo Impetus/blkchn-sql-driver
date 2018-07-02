@@ -503,7 +503,7 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
 	public LogicalPlan visitQualifiedName(QualifiedNameContext ctx) {
 		logger.trace("In visitQualifiedName " + ctx.getText());
 		return visitChildren(ctx);
-
+	
 	}
 
 	@Override

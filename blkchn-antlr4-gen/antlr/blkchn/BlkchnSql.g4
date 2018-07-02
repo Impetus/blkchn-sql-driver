@@ -75,7 +75,7 @@ createAsset
 
    
 deploySmartContract
-	: DEPLOY SMARTCONTRACT qualifiedName '(' parameterValues? ')'
+	: DEPLOY SMARTCONTRACT className '(' parameterValues? ')'
 	;
 	
 asset

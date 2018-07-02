@@ -1086,8 +1086,8 @@ public class BlkchnSqlParser extends Parser {
 	public static class DeploySmartContractContext extends ParserRuleContext {
 		public TerminalNode DEPLOY() { return getToken(BlkchnSqlParser.DEPLOY, 0); }
 		public TerminalNode SMARTCONTRACT() { return getToken(BlkchnSqlParser.SMARTCONTRACT, 0); }
-		public QualifiedNameContext qualifiedName() {
-			return getRuleContext(QualifiedNameContext.class,0);
+		public ClassNameContext className() {
+			return getRuleContext(ClassNameContext.class,0);
 		}
 		public ParameterValuesContext parameterValues() {
 			return getRuleContext(ParameterValuesContext.class,0);
@@ -1123,7 +1123,7 @@ public class BlkchnSqlParser extends Parser {
 			setState(262);
 			match(SMARTCONTRACT);
 			setState(263);
-			qualifiedName();
+			className();
 			setState(264);
 			match(T__0);
 			setState(266);
@@ -8616,10 +8616,10 @@ public class BlkchnSqlParser extends Parser {
 		"\2\u00ff\u0100\7n\2\2\u0100\u0102\5\30\r\2\u0101\u0103\5\32\16\2\u0102"+
 		"\u0101\3\2\2\2\u0102\u0103\3\2\2\2\u0103\u0105\3\2\2\2\u0104\u0106\5\34"+
 		"\17\2\u0105\u0104\3\2\2\2\u0105\u0106\3\2\2\2\u0106\23\3\2\2\2\u0107\u0108"+
-		"\7w\2\2\u0108\u0109\7l\2\2\u0109\u010a\5\u00a4S\2\u010a\u010c\7\3\2\2"+
-		"\u010b\u010d\5H%\2\u010c\u010b\3\2\2\2\u010c\u010d\3\2\2\2\u010d\u010e"+
-		"\3\2\2\2\u010e\u010f\7\4\2\2\u010f\25\3\2\2\2\u0110\u0111\5\u00a6T\2\u0111"+
-		"\27\3\2\2\2\u0112\u0113\t\4\2\2\u0113\31\3\2\2\2\u0114\u0115\7q\2\2\u0115"+
+		"\7w\2\2\u0108\u0109\7l\2\2\u0109\u010a\5\"\22\2\u010a\u010c\7\3\2\2\u010b"+
+		"\u010d\5H%\2\u010c\u010b\3\2\2\2\u010c\u010d\3\2\2\2\u010d\u010e\3\2\2"+
+		"\2\u010e\u010f\7\4\2\2\u010f\25\3\2\2\2\u0110\u0111\5\u00a6T\2\u0111\27"+
+		"\3\2\2\2\u0112\u0113\t\4\2\2\u0113\31\3\2\2\2\u0114\u0115\7q\2\2\u0115"+
 		"\u0116\7s\2\2\u0116\u0117\7\23\2\2\u0117\u0118\7\u00a0\2\2\u0118\33\3"+
 		"\2\2\2\u0119\u011a\7r\2\2\u011a\u011b\7s\2\2\u011b\u011c\7\23\2\2\u011c"+
 		"\u011d\7\u00a0\2\2\u011d\35\3\2\2\2\u011e\u011f\7G\2\2\u011f\u0120\5\u00a4"+
