@@ -75,7 +75,7 @@ createAsset
 
    
 deploySmartContract
-	: DEPLOY SMARTCONTRACT className '(' parameterValues? ')'
+	: DEPLOY SMARTCONTRACT className '(' parameterValues? ')' (AND WITHASYNC asyncOption)?
 	;
 	
 asset
