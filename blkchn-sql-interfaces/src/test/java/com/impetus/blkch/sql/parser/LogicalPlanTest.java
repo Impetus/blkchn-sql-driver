@@ -44,6 +44,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlLexer;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 import com.impetus.blkch.sql.insert.ColumnValue;
 import com.impetus.blkch.sql.insert.Insert;
+import com.impetus.blkch.sql.query.BytesArgs;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.Comparator;
 import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
@@ -53,12 +54,14 @@ import com.impetus.blkch.sql.query.GroupByClause;
 import com.impetus.blkch.sql.query.HavingClause;
 import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.LimitClause;
+import com.impetus.blkch.sql.query.ListAgrs;
 import com.impetus.blkch.sql.query.LogicalOperation;
 import com.impetus.blkch.sql.query.LogicalOperation.Operator;
 import com.impetus.blkch.sql.query.OrderByClause;
 import com.impetus.blkch.sql.query.OrderItem;
 import com.impetus.blkch.sql.query.OrderingDirection;
 import com.impetus.blkch.sql.query.OrderingDirection.Direction;
+import com.impetus.blkch.sql.smartcontract.SmartCnrtDeploy;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.SelectClause;
 import com.impetus.blkch.sql.query.SelectItem;
@@ -187,6 +190,40 @@ public class LogicalPlanTest extends TestCase {
         filterItem.addChildNode(ident7);
 
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
+    }
+    
+    @Test
+    public void testDeploySmartContract() {
+    	String sql = "DEPLOY smartcontract 'com.impetus.blkchn.eth.FirstSmartContract'()";
+    	LogicalPlan plan = getLogicalPlan(sql);
+    	SmartCnrtDeploy actual = plan.getSmartCnrtDeploy();
+    	SmartCnrtDeploy expected = new SmartCnrtDeploy();
+    	expected.addChildNode(new ClassName("'com.impetus.blkchn.eth.FirstSmartContract'"));
+    	assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void testDeploySmartContractParameters() {
+    	String sql = "DEPLOY smartcontract 'com.impetus.blkchn.eth.FirstSmartContract'('xyz','qwerty',500,[1,2,3],HEX('0x123'))";
+    	LogicalPlan plan = getLogicalPlan(sql);
+    	SmartCnrtDeploy actual = plan.getSmartCnrtDeploy();
+    	SmartCnrtDeploy expected = new SmartCnrtDeploy();
+    	expected.addChildNode(new ClassName("'com.impetus.blkchn.eth.FirstSmartContract'"));
+    	Parameters parameters = new Parameters();
+        parameters.addChildNode(new IdentifierNode("'xyz'"));
+        parameters.addChildNode(new IdentifierNode("'qwerty'"));
+        parameters.addChildNode(new IdentifierNode("500"));
+        ListAgrs lstArgs = new ListAgrs();
+        Parameters lstParameters = new Parameters();
+        lstParameters.addChildNode(new IdentifierNode("1"));
+        lstParameters.addChildNode(new IdentifierNode("2"));
+        lstParameters.addChildNode(new IdentifierNode("3"));
+        lstArgs.addChildNode(lstParameters);
+        BytesArgs byt = new BytesArgs("HEX('0x123')");
+        parameters.addChildNode(lstArgs);
+        parameters.addChildNode(byt);
+        expected.addChildNode(parameters);
+    	assertEquals(expected, actual);
     }
 
     @Test
