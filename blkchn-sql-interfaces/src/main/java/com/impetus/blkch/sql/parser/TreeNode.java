@@ -28,9 +28,6 @@ import com.impetus.blkch.sql.query.Placeholder;
 
 public class TreeNode implements Cloneable, Serializable {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -5244526440190973169L;
 
     private static final Logger logger = LoggerFactory.getLogger(TreeNode.class);
