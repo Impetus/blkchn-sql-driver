@@ -27,7 +27,7 @@ import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.Placeholder;
 
 public class TreeNode implements Cloneable, Serializable {
-    
+
     /**
      * 
      */
@@ -200,9 +200,9 @@ public class TreeNode implements Cloneable, Serializable {
         }
         throw new BlkchnException("Index out of Bounds " + i);
     }
-    
+
     @Override
-    public Object clone()  {
+    public Object clone() {
         TreeNode root;
         try {
             root = (TreeNode) super.clone();
@@ -211,7 +211,7 @@ public class TreeNode implements Cloneable, Serializable {
         }
         root.parent = null;
         root.childNodes = new ArrayList<>();
-        for(TreeNode child : childNodes) {
+        for (TreeNode child : childNodes) {
             TreeNode newChild = (TreeNode) child.clone();
             root.addChildNode(newChild);
             newChild.setParent(root);

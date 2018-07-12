@@ -555,6 +555,7 @@ public abstract class AbstractPreparedStatement implements PreparedStatement {
 
     protected LogicalPlan getLogicalPlan(String sqlText) {
         LogicalPlan logicalPlan = null;
+
         BlkchnSqlParser parser = getParser(sqlText);
 
         parser.removeErrorListeners();
