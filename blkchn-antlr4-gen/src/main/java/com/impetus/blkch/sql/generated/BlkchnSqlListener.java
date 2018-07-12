@@ -743,6 +743,18 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitComparison(BlkchnSqlParser.ComparisonContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code placeholder}
+	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterPlaceholder(BlkchnSqlParser.PlaceholderContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code placeholder}
+	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitPlaceholder(BlkchnSqlParser.PlaceholderContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code arithmeticBinary}
 	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
 	 * @param ctx the parse tree

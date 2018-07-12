@@ -845,6 +845,18 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterPlaceholder(BlkchnSqlParser.PlaceholderContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPlaceholder(BlkchnSqlParser.PlaceholderContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterArithmeticBinary(BlkchnSqlParser.ArithmeticBinaryContext ctx) { }
 	/**
 	 * {@inheritDoc}

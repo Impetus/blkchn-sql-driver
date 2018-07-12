@@ -448,6 +448,13 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitComparison(BlkchnSqlParser.ComparisonContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code placeholder}
+	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPlaceholder(BlkchnSqlParser.PlaceholderContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code arithmeticBinary}
 	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
 	 * @param ctx the parse tree
