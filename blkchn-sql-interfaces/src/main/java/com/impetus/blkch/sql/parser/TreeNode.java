@@ -21,6 +21,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.impetus.blkch.BlkchnException;
+
 public class TreeNode {
 
     private static final Logger logger = LoggerFactory.getLogger(TreeNode.class);
@@ -53,15 +55,16 @@ public class TreeNode {
     public TreeNode setChildNode(TreeNode child, int i) {
         if (i < childNodes.size()) {
             this.childNodes.set(i, child);
+            return child;
         }
-        return child;
+        throw new BlkchnException("Index out of Bounds " + i);
     }
 
     public TreeNode getChildNode(int i) {
         if (i < childNodes.size()) {
             return childNodes.get(i);
         }
-        return null;
+        throw new BlkchnException("Index out of Bounds " + i);
     }
 
     public List<TreeNode> getChildNodes() {

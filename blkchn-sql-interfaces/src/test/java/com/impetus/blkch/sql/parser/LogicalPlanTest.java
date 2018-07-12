@@ -59,6 +59,7 @@ import com.impetus.blkch.sql.query.OrderByClause;
 import com.impetus.blkch.sql.query.OrderItem;
 import com.impetus.blkch.sql.query.OrderingDirection;
 import com.impetus.blkch.sql.query.OrderingDirection.Direction;
+import com.impetus.blkch.sql.query.Placeholder;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.SelectClause;
 import com.impetus.blkch.sql.query.SelectItem;
@@ -82,43 +83,15 @@ public class LogicalPlanTest extends TestCase {
     }
     
     @Test
-    public void testPlaceHolder1() {
-        String sql = "select count(*) as cnt, blocknumber from transaction where blocknumber = ? and name='ashish' and address=? and phone=13244 group by blocknumber";
-        LogicalPlan plan = getLogicalPlan(sql);
-        //System.out.println("traverse plan");
-        plan.getQuery().traverse();
-      //  plan.getQuery().getChildNode(2).getChildNode(0).removeChildNode(2);
-       WhereClause whereclause= plan.getQuery().getChildType(WhereClause.class,0);
-       System.out.println(whereclause.getChildNodes());
-       System.out.println(plan.getQuery().hasChildType(WhereClause.class));
-       System.out.println(plan.getQuery().getChildType(WhereClause.class,0));
-       // System.out.println("traverse query");
-       // plan.getQuery().traverse();
-        //System.out.println("its normal");
-        //IdentifierNode identNode= new IdentifierNode("1234");
-        //TreeNode node=plan.getQuery().getChildNode(2).getChildNode(0).setChildNode(2, identNode);
-       // plan.getQuery().getChildNode(2).getChildNode(0).se;
-       // plan.getQuery().traverse();;
-        //TODO-ADD PROPER TEST CASE
-    }
-
-    @Test
     public void testPlaceHolder() {
         String sql = "select count(*) as cnt, blocknumber from transaction where blocknumber = ? group by blocknumber";
         LogicalPlan plan = getLogicalPlan(sql);
-        System.out.println("traverse plan");
         plan.getQuery().traverse();
-      //  plan.getQuery().getChildNode(2).getChildNode(0).removeChildNode(2);
-        System.out.println("traverse query");
-        plan.getQuery().traverse();
-        System.out.println("its normal");
-        IdentifierNode identNode= new IdentifierNode("1234");
-        TreeNode node=plan.getQuery().getChildNode(2).getChildNode(0).setChildNode(identNode,2);
-       // plan.getQuery().getChildNode(2).getChildNode(0).se;
-        plan.getQuery().traverse();;
-        //TODO-ADD PROPER TEST CASE
+       TreeNode node= plan.getQuery().getChildType(WhereClause.class,0).getChildType(FilterItem.class,0);
+       
+       assertTrue(node.hasChildType(Placeholder.class));
     }
-    
+
     @Test
     public void testSimpleSelectWithWhereClause() {
         String sql = "select a, b from TRANSACTION t where a = 'hello world'";
