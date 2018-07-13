@@ -85,7 +85,6 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.NotLikeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.NumericLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.OrderByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ParameterValuesContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.PlaceholderContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.PolicyFileContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.PredicateExpressionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.QuestionMarkContext;
@@ -699,7 +698,6 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
             logicalPlan.setCurrentNode(logicalPlan.getCurrentNode().getParent());
         }
     }
-
     @Override
     public LogicalPlan visitList(ListContext ctx) {
         logger.trace("In visitList " + ctx.getText());
