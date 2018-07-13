@@ -846,8 +846,7 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     public LogicalPlan visitQuestionMark(QuestionMarkContext ctx) {
         logger.trace("In visitQuestionMark " + ctx.getText());
         return visitChildren(ctx);
-    }
-    
+    }    
     @Override
     public LogicalPlan visitCreateUser(CreateUserContext ctx) {
         logger.trace("In visitCreateUser " + ctx.getText());
