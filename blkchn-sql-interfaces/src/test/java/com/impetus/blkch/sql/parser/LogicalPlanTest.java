@@ -65,10 +65,7 @@ import com.impetus.blkch.sql.query.OrderByClause;
 import com.impetus.blkch.sql.query.OrderItem;
 import com.impetus.blkch.sql.query.OrderingDirection;
 import com.impetus.blkch.sql.query.OrderingDirection.Direction;
-<<<<<<< HEAD
 import com.impetus.blkch.sql.smartcontract.SmartCnrtDeploy;
-=======
->>>>>>> 1.added proper exception for unimplemented methods
 import com.impetus.blkch.sql.query.Placeholder;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.SelectClause;
@@ -95,15 +92,9 @@ public class LogicalPlanTest extends TestCase {
         String sql = "select count(*) as cnt, blocknumber from transaction where blocknumber = ? group by blocknumber";
         LogicalPlan plan = getLogicalPlan(sql);
         plan.getQuery().traverse();
-<<<<<<< HEAD
         TreeNode node = plan.getQuery().getChildType(WhereClause.class, 0).getChildType(FilterItem.class, 0);
 
         assertTrue(node.hasChildType(Placeholder.class));
-=======
-       TreeNode node= plan.getQuery().getChildType(WhereClause.class,0).getChildType(FilterItem.class,0);
-       
-       assertTrue(node.hasChildType(Placeholder.class));
->>>>>>> 1.added proper exception for unimplemented methods
     }
 
     @Test

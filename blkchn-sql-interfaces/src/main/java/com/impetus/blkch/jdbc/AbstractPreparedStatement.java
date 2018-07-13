@@ -595,7 +595,8 @@ public abstract class AbstractPreparedStatement implements PreparedStatement {
                     placeholderIndexes.add(filterItemIndex);
                 filterItemIndex++;
             } else
-                throw new BlkchnException("ERROR while setting up the placeholder (?) indexes. Please verify if query is executable.");
+                throw new BlkchnException(
+                        "ERROR while setting up the placeholder (?) indexes. Please verify if query is executable.");
         }
     }
 
