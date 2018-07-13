@@ -18,17 +18,17 @@ package com.impetus.blkch.sql.smartcontract;
 import com.impetus.blkch.sql.parser.LogicalPlan;
 
 public class SmartCnrtListType extends LogicalPlan {
-	public static final String DESCRIPTION = "ListType";
-	
-	private String listTypeDec;
+    public static final String DESCRIPTION = "ListType";
 
-	public SmartCnrtListType(String listTypeDec) {
-		super(DESCRIPTION);
-		this.listTypeDec = listTypeDec;
-	}
+    private String listTypeDec;
 
-	public String getListTypeDec() {
-		return listTypeDec;
-	}
+    public SmartCnrtListType(String listTypeDec) {
+        super(DESCRIPTION);
+        this.listTypeDec = listTypeDec;
+    }
+
+    public String getListTypeDec() {
+        return listTypeDec;
+    }
 
 }

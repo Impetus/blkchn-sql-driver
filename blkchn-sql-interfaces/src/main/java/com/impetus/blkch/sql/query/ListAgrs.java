@@ -19,11 +19,11 @@ import com.impetus.blkch.sql.parser.LogicalPlan;
 
 public class ListAgrs extends LogicalPlan {
 
-	public static final String DESCRIPTION = "ListAgrs";
-	
-	public ListAgrs() {
-		super(DESCRIPTION);
-		// TODO Auto-generated constructor stub
-	}
+    public static final String DESCRIPTION = "ListAgrs";
+
+    public ListAgrs() {
+        super(DESCRIPTION);
+        // TODO Auto-generated constructor stub
+    }
 
 }

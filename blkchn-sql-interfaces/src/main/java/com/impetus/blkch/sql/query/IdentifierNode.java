@@ -29,7 +29,7 @@ public class IdentifierNode extends TreeNode {
         this.value = value;
     }
 
-    public IdentifierNode(String value,IdentType type) {
+    public IdentifierNode(String value, IdentType type) {
         super(DESCRIPTION + ":" + value);
         this.value = value;
         this.type = type;
@@ -38,16 +38,13 @@ public class IdentifierNode extends TreeNode {
     public String getValue() {
         return value;
     }
+
     public IdentType getType() {
         return type;
     }
-    
+
     public static enum IdentType {
-        NUMBER,
-        BOOLEAN,
-        STRING,
-        BYTES;
+                                  NUMBER, BOOLEAN, STRING, BYTES;
     }
-    
 
 }

@@ -17,18 +17,18 @@ package com.impetus.blkch.sql.smartcontract;
 
 import com.impetus.blkch.sql.parser.LogicalPlan;
 
-public class SmartCnrtAddressOption  extends LogicalPlan {
-	public static final String DESCRIPTION = "AddressOption";
-	
-	private String addressOption;
+public class SmartCnrtAddressOption extends LogicalPlan {
+    public static final String DESCRIPTION = "AddressOption";
 
-	public SmartCnrtAddressOption(String addressOption) {
-		super(DESCRIPTION);
-		this.addressOption = addressOption;
-	}
-	
-	public String getAddressOption() {
-		return addressOption;
-	}
+    private String addressOption;
+
+    public SmartCnrtAddressOption(String addressOption) {
+        super(DESCRIPTION);
+        this.addressOption = addressOption;
+    }
+
+    public String getAddressOption() {
+        return addressOption;
+    }
 
 }

@@ -18,16 +18,16 @@ package com.impetus.blkch.sql.smartcontract;
 import com.impetus.blkch.sql.parser.LogicalPlan;
 
 public class SmartCnrtAsyncOption extends LogicalPlan {
-	public static final String DESCRIPTION = "AsyncOption";
-	private String asyncOption;
-	
-	public SmartCnrtAsyncOption(String asyncOption) {
-		super(DESCRIPTION);
-		this.asyncOption = asyncOption;
-	}
-	
-	public String getAsyncOption() {
-		return asyncOption;
-	}
+    public static final String DESCRIPTION = "AsyncOption";
+    private String asyncOption;
+
+    public SmartCnrtAsyncOption(String asyncOption) {
+        super(DESCRIPTION);
+        this.asyncOption = asyncOption;
+    }
+
+    public String getAsyncOption() {
+        return asyncOption;
+    }
 
 }

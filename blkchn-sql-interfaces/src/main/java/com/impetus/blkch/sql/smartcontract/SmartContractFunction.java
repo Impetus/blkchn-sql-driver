@@ -17,12 +17,12 @@ package com.impetus.blkch.sql.smartcontract;
 
 import com.impetus.blkch.sql.parser.TreeNode;
 
-public class SmartContractFunction  extends TreeNode{
-	
-	public static final String DESCRIPTION = "SMARTCONTRACT_FUNCTION";
+public class SmartContractFunction extends TreeNode {
 
-	public SmartContractFunction() {
-		super(DESCRIPTION);
-	}
+    public static final String DESCRIPTION = "SMARTCONTRACT_FUNCTION";
+
+    public SmartContractFunction() {
+        super(DESCRIPTION);
+    }
 
 }

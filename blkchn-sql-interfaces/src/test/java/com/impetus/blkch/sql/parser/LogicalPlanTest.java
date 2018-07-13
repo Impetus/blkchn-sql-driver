@@ -126,7 +126,8 @@ public class LogicalPlanTest extends TestCase {
 
     @Test
     public void testSelectWithHavingOrderByAndLimit() {
-        String sql = "select a, b from TRANSACTION t where a = 'hello world' group by c having b > 100 order by b desc limit 10";
+        String sql =
+            "select a, b from TRANSACTION t where a = 'hello world' group by c having b > 100 order by b desc limit 10";
         LogicalPlan plan = getLogicalPlan(sql);
 
         LogicalPlan logicalPlan = buildOrderByClause();
@@ -191,25 +192,26 @@ public class LogicalPlanTest extends TestCase {
 
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
-    
+
     @Test
     public void testDeploySmartContract() {
-    	String sql = "DEPLOY smartcontract 'com.impetus.blkchn.eth.FirstSmartContract'()";
-    	LogicalPlan plan = getLogicalPlan(sql);
-    	SmartCnrtDeploy actual = plan.getSmartCnrtDeploy();
-    	SmartCnrtDeploy expected = new SmartCnrtDeploy();
-    	expected.addChildNode(new ClassName("'com.impetus.blkchn.eth.FirstSmartContract'"));
-    	assertEquals(expected, actual);
+        String sql = "DEPLOY smartcontract 'com.impetus.blkchn.eth.FirstSmartContract'()";
+        LogicalPlan plan = getLogicalPlan(sql);
+        SmartCnrtDeploy actual = plan.getSmartCnrtDeploy();
+        SmartCnrtDeploy expected = new SmartCnrtDeploy();
+        expected.addChildNode(new ClassName("'com.impetus.blkchn.eth.FirstSmartContract'"));
+        assertEquals(expected, actual);
     }
-    
+
     @Test
     public void testDeploySmartContractParameters() {
-    	String sql = "DEPLOY smartcontract 'com.impetus.blkchn.eth.FirstSmartContract'('xyz','qwerty',500,[1,2,3],HEX('0x123'))";
-    	LogicalPlan plan = getLogicalPlan(sql);
-    	SmartCnrtDeploy actual = plan.getSmartCnrtDeploy();
-    	SmartCnrtDeploy expected = new SmartCnrtDeploy();
-    	expected.addChildNode(new ClassName("'com.impetus.blkchn.eth.FirstSmartContract'"));
-    	Parameters parameters = new Parameters();
+        String sql =
+            "DEPLOY smartcontract 'com.impetus.blkchn.eth.FirstSmartContract'('xyz','qwerty',500,[1,2,3],HEX('0x123'))";
+        LogicalPlan plan = getLogicalPlan(sql);
+        SmartCnrtDeploy actual = plan.getSmartCnrtDeploy();
+        SmartCnrtDeploy expected = new SmartCnrtDeploy();
+        expected.addChildNode(new ClassName("'com.impetus.blkchn.eth.FirstSmartContract'"));
+        Parameters parameters = new Parameters();
         parameters.addChildNode(new IdentifierNode("'xyz'"));
         parameters.addChildNode(new IdentifierNode("'qwerty'"));
         parameters.addChildNode(new IdentifierNode("500"));
@@ -223,7 +225,7 @@ public class LogicalPlanTest extends TestCase {
         parameters.addChildNode(lstArgs);
         parameters.addChildNode(byt);
         expected.addChildNode(parameters);
-    	assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -303,14 +305,15 @@ public class LogicalPlanTest extends TestCase {
 
     @Test
     public void testCreateFunction() {
-        String sql = "Create Function someFunction AS '/home/xyz' WITH VERSION '1.0' WITH ENDORSEMENT POLICY FILE '/home/username/fileloc' "
+        String sql =
+            "Create Function someFunction AS '/home/xyz' WITH VERSION '1.0' WITH ENDORSEMENT POLICY FILE '/home/username/fileloc' "
                 + "WITH ARGS 'init', 500, 230";
         LogicalPlan plan = getLogicalPlan(sql);
         CreateFunction actual = plan.getCreateFunction();
         CreateFunction expected = buildCreateFunction();
         assertEquals(expected, actual);
     }
-    
+
     @Test
     public void testCallFunction() {
         String sql = "CALL someFunc('xyz', 'abc', 300)";
@@ -319,14 +322,14 @@ public class LogicalPlanTest extends TestCase {
         CallFunction expected = buildCallFunction();
         assertEquals(expected, actual);
     }
-    
+
     @Test
     public void testInsert() {
-       String sql = "INSERT INTO someTable VALUES('first', 'second', 'third', 4, false)";
-       LogicalPlan plan = getLogicalPlan(sql);
-       Insert actual = plan.getInsert();
-       Insert expected = buildInsert();
-       assertEquals(expected, actual);
+        String sql = "INSERT INTO someTable VALUES('first', 'second', 'third', 4, false)";
+        LogicalPlan plan = getLogicalPlan(sql);
+        Insert actual = plan.getInsert();
+        Insert expected = buildInsert();
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -389,8 +392,7 @@ public class LogicalPlanTest extends TestCase {
 
     @Test
     public void testCreateAssetWithJSONStorage() {
-        String sql = "CREATE ASSET user_asset"
-                + " WITH STORAGE TYPE JSON";
+        String sql = "CREATE ASSET user_asset" + " WITH STORAGE TYPE JSON";
         LogicalPlan plan = getLogicalPlan(sql);
         CreateAsset actual = plan.getCreateAsset();
         CreateAsset expected = buildCreateAssetJSON();
@@ -399,20 +401,14 @@ public class LogicalPlanTest extends TestCase {
 
     @Test
     public void testCreateAssetWithCSVStorage() {
-        String sql = "CREATE ASSET user_asset ("
-                + "id int,"
-                + "name string,"
-                + "designation string"
-                + ")"
-                + " WITH STORAGE TYPE CSV "
-                + "FIELDS DELIMITED BY ',' "
-                + "RECORDS DELIMITED BY \"\\n\"";
+        String sql = "CREATE ASSET user_asset (" + "id int," + "name string," + "designation string" + ")"
+            + " WITH STORAGE TYPE CSV " + "FIELDS DELIMITED BY ',' " + "RECORDS DELIMITED BY \"\\n\"";
         LogicalPlan plan = getLogicalPlan(sql);
         CreateAsset actual = plan.getCreateAsset();
         CreateAsset expected = buildCreateAssetCSV();
         assertEquals(expected, actual);
     }
-    
+
     @Test
     public void testDeleteFunction() {
         String sql = "DELETE chaincod('deleteFunc', 'USER', 1001)";
@@ -421,7 +417,7 @@ public class LogicalPlanTest extends TestCase {
         DeleteFunction expected = buildDeleteFunction();
         assertEquals(expected, actual);
     }
-    
+
     @Test
     public void testDropAsset() {
         String sql = "DROP ASSET assetchain";
@@ -431,14 +427,11 @@ public class LogicalPlanTest extends TestCase {
         assertEquals(expected, actual);
     }
 
-
-    @Test(expected =  BlkchnException.class)
+    @Test(expected = BlkchnException.class)
     public void testWrongQuery() {
         String sql = "select * from block blk where blockNo = 2 And blockNo>=2 blockNo <=300";
         LogicalPlan plan = getLogicalPlan(sql);
     }
-
-
 
     private LogicalPlan buildOrderByClause() {
         LogicalPlan logicalPlan = buildHaving();
@@ -537,7 +530,7 @@ public class LogicalPlanTest extends TestCase {
         filterItem.addChildNode(ident7);
         return logicalPlan;
     }
-    
+
     private CreateFunction buildCreateFunction() {
         CreateFunction createFunction = new CreateFunction();
         createFunction.addChildNode(new IdentifierNode("someFunction"));
@@ -554,7 +547,7 @@ public class LogicalPlanTest extends TestCase {
         createFunction.addChildNode(args);
         return createFunction;
     }
-    
+
     private CallFunction buildCallFunction() {
         CallFunction callFunction = new CallFunction();
         callFunction.addChildNode(new IdentifierNode("someFunc"));
@@ -565,7 +558,7 @@ public class LogicalPlanTest extends TestCase {
         callFunction.addChildNode(parameters);
         return callFunction;
     }
-    
+
     private Insert buildInsert() {
         Insert insert = new Insert();
         Table table = new Table();
@@ -580,7 +573,7 @@ public class LogicalPlanTest extends TestCase {
         insert.addChildNode(columnValue);
         return insert;
     }
-    
+
     private CreateAsset buildCreateAssetJSON() {
         CreateAsset createAsset = new CreateAsset();
         Asset asset = new Asset();
@@ -591,7 +584,7 @@ public class LogicalPlanTest extends TestCase {
         createAsset.addChildNode(storageType);
         return createAsset;
     }
-    
+
     private CreateAsset buildCreateAssetCSV() {
         CreateAsset createAsset = new CreateAsset();
         Asset asset = new Asset();
@@ -622,7 +615,7 @@ public class LogicalPlanTest extends TestCase {
         createAsset.addChildNode(recordDelimiter);
         return createAsset;
     }
-    
+
     private DeleteFunction buildDeleteFunction() {
         DeleteFunction deleteFunction = new DeleteFunction();
         deleteFunction.addChildNode(new IdentifierNode("chaincod"));
@@ -633,7 +626,7 @@ public class LogicalPlanTest extends TestCase {
         deleteFunction.addChildNode(parameters);
         return deleteFunction;
     }
-    
+
     private DropAsset buildDropAsset() {
         DropAsset dropAsset = new DropAsset();
         Asset asset = new Asset();

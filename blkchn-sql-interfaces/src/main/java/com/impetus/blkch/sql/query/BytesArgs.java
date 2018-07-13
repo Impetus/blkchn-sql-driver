@@ -20,16 +20,16 @@ import com.impetus.blkch.util.Utilities;
 
 public class BytesArgs extends LogicalPlan {
 
-	public static final String DESCRIPTION = "BytesArgs";
-	private String value;
-	
-	public BytesArgs(String value) {
-		super(DESCRIPTION);
-		this.value = value;
-	}
-	
-	public String getValue() {
-		return value.replace("HEX('", "").replace("')", "");
-	}
+    public static final String DESCRIPTION = "BytesArgs";
+    private String value;
+
+    public BytesArgs(String value) {
+        super(DESCRIPTION);
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value.replace("HEX('", "").replace("')", "");
+    }
 
 }

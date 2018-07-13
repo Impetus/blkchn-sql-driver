@@ -99,7 +99,6 @@ import com.impetus.blkch.sql.query.QuantifierNode.Quantifier;
 import com.impetus.blkch.sql.query.Table;
 import com.impetus.blkch.sql.smartcontract.*;
 
-
 public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
 
     private static final Logger logger = LoggerFactory.getLogger(BlockchainVisitor.class);
@@ -127,10 +126,9 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setType(SQLType.QUERY);
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
-    public LogicalPlan visitSingleInsert(SingleInsertContext ctx)
-    {
+    public LogicalPlan visitSingleInsert(SingleInsertContext ctx) {
         logger.trace("In visitSingleInsert " + ctx.getText());
         insert = new Insert();
         logicalPlan.setInsert(insert);
@@ -148,7 +146,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setType(SQLType.CREATE_FUNCTION);
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitCallFunction(CallFunctionContext ctx) {
         logger.trace("In visitCallFunction " + ctx.getText());
@@ -160,7 +158,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     }
 
     @Override
-    public LogicalPlan visitClassName(BlkchnSqlParser.ClassNameContext ctx){
+    public LogicalPlan visitClassName(BlkchnSqlParser.ClassNameContext ctx) {
         logger.trace("In visitClassName " + ctx.getText());
         className = new ClassName(ctx.getText());
         logicalPlan.getCurrentNode().addChildNode(className);
@@ -346,21 +344,21 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitNumericLiteral(NumericLiteralContext ctx) {
         logger.trace("In visitNumericLiteral " + ctx.getText());
-        logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText(),IdentType.NUMBER));
+        logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText(), IdentType.NUMBER));
         return visitChildren(ctx);
     }
 
     @Override
     public LogicalPlan visitStringLiteral(StringLiteralContext ctx) {
         logger.trace("In visitStringLiteral " + ctx.getText());
-        logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText(),IdentType.STRING));
+        logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText(), IdentType.STRING));
         return visitChildren(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitBooleanLiteral(BooleanLiteralContext ctx) {
         logger.trace("In visitBooleanLiteral " + ctx.getText());
-        logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText(),IdentType.BOOLEAN));
+        logicalPlan.getCurrentNode().addChildNode(new IdentifierNode(ctx.getText(), IdentType.BOOLEAN));
         return visitChildren(ctx);
     }
 
@@ -377,7 +375,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         }
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitVersion(VersionContext ctx) {
         logger.trace("In visitVersion " + ctx.getText());
@@ -386,7 +384,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setCurrentNode(version);
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitEndorsersFile(EndorsersFileContext ctx) {
         logger.trace("In visitEndorsersFile " + ctx.getText());
@@ -395,7 +393,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setCurrentNode(endorsers);
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitPolicyFile(PolicyFileContext ctx) {
         logger.trace("In visitPolicyFile " + ctx.getText());
@@ -404,7 +402,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setCurrentNode(policyFile);
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitArgs(ArgsContext ctx) {
         logger.trace("In visitArgs " + ctx.getText());
@@ -413,10 +411,9 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setCurrentNode(args);
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
-    public LogicalPlan visitColumnNames(ColumnNamesContext ctx)
-    {
+    public LogicalPlan visitColumnNames(ColumnNamesContext ctx) {
         logger.trace("In visitColumnNames " + ctx.getText());
         ColumnName columnName = new ColumnName();
         logicalPlan.getCurrentNode().addChildNode(columnName);
@@ -425,15 +422,14 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     }
 
     @Override
-    public LogicalPlan visitColumnValues(ColumnValuesContext ctx)
-    {
+    public LogicalPlan visitColumnValues(ColumnValuesContext ctx) {
         logger.trace("In visitColumnValues " + ctx.getText());
         ColumnValue columnValue = new ColumnValue();
         logicalPlan.getCurrentNode().addChildNode(columnValue);
         logicalPlan.setCurrentNode(columnValue);
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitParameterValues(ParameterValuesContext ctx) {
         logger.trace("In visitParameterValues " + ctx.getText());
@@ -442,7 +438,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setCurrentNode(parameters);
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitCreateAsset(CreateAssetContext ctx) {
         logger.trace("In visitCreateAsset " + ctx.getText());
@@ -452,7 +448,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setType(SQLType.CREATE_ASSET);
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitAsset(AssetContext ctx) {
         logger.trace("In visitAsset " + ctx.getText());
@@ -461,7 +457,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setCurrentNode(asset);
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitColTypeList(ColTypeListContext ctx) {
         logger.trace("In visitColTypeList " + ctx.getText());
@@ -470,7 +466,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setCurrentNode(columnTypeList);
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitColType(ColTypeContext ctx) {
         logger.trace("In visitColType " + ctx.getText());
@@ -479,12 +475,12 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setCurrentNode(columnType);
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitStorageType(StorageTypeContext ctx) {
         logger.trace("In visitStorageType " + ctx.getText());
         StorageType storageType = new StorageType();
-        if(ctx.JSON() != null) {
+        if (ctx.JSON() != null) {
             storageType.addChildNode(new IdentifierNode("JSON"));
         } else {
             storageType.addChildNode(new IdentifierNode("CSV"));
@@ -492,7 +488,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.getCurrentNode().addChildNode(storageType);
         return visitChildren(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitFieldDelimiter(FieldDelimiterContext ctx) {
         logger.trace("In visitFieldDelimiter " + ctx.getText());
@@ -501,7 +497,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.getCurrentNode().addChildNode(fieldDelimiter);
         return visitChildren(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitRecordDelimiter(RecordDelimiterContext ctx) {
         logger.trace("In visitRecordDelimiter " + ctx.getText());
@@ -510,7 +506,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.getCurrentNode().addChildNode(recordDelimiter);
         return visitChildren(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitDeleteFunction(DeleteFunctionContext ctx) {
         logger.trace("In visitDeleteFunction " + ctx.getText());
@@ -520,17 +516,17 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setType(SQLType.DELETE_FUNCTION);
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
-	public LogicalPlan visitDeploySmartContractRule(DeploySmartContractRuleContext ctx) {
-		logger.trace("In visitDeploySmartContractRule " + ctx.getText());
-		smartCnrtDeploy = new SmartCnrtDeploy();
+    public LogicalPlan visitDeploySmartContractRule(DeploySmartContractRuleContext ctx) {
+        logger.trace("In visitDeploySmartContractRule " + ctx.getText());
+        smartCnrtDeploy = new SmartCnrtDeploy();
         logicalPlan.setSmartCnrtDeploy(smartCnrtDeploy);
         logicalPlan.setCurrentNode(smartCnrtDeploy);
         logicalPlan.setType(SQLType.DEPLOY_SMARTCONTRACT);
-		return visitChildrenAndResetNode(ctx);
-	}
-    
+        return visitChildrenAndResetNode(ctx);
+    }
+
     @Override
     public LogicalPlan visitDropAsset(DropAssetContext ctx) {
         logger.trace("In visitDropAsset " + ctx.getText());
@@ -540,7 +536,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setType(SQLType.DROP_ASSET);
         return visitChildrenAndResetNode(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitUpgradeFunction(UpgradeFunctionContext ctx) {
         logger.trace("In visitUpgradeFunction " + ctx.getText());
@@ -557,11 +553,9 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     }
 
     /*
-     * If you call logicalPlan.setCurrentNode(node); then call this method so
-     * that node pointer can be reset to parent after visiting children. Note
-     * that this will happen recursively for each level of tree. If you are not
-     * setting current node and just creating and adding nodes to parent call
-     * visitChildren directly.
+     * If you call logicalPlan.setCurrentNode(node); then call this method so that node pointer can be reset to parent
+     * after visiting children. Note that this will happen recursively for each level of tree. If you are not setting
+     * current node and just creating and adding nodes to parent call visitChildren directly.
      */
     public LogicalPlan visitChildrenAndResetNode(RuleNode node) {
         try {
@@ -571,71 +565,67 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         }
     }
 
-	@Override
-	public LogicalPlan visitList(ListContext ctx) {
-		logger.trace("In visitList " + ctx.getText());
-		ListAgrs args = new ListAgrs();
-		logicalPlan.getCurrentNode().addChildNode(args);
+    @Override
+    public LogicalPlan visitList(ListContext ctx) {
+        logger.trace("In visitList " + ctx.getText());
+        ListAgrs args = new ListAgrs();
+        logicalPlan.getCurrentNode().addChildNode(args);
         logicalPlan.setCurrentNode(args);
         return visitChildrenAndResetNode(ctx);
-	}
-	
-	@Override
-	public LogicalPlan visitSmartFunction(SmartFunctionContext ctx) {
-		logger.trace("In visitSmartFunction " + ctx.getText());
-		smartContractFunction = new SmartContractFunction();
-		logicalPlan.getCurrentNode().addChildNode(smartContractFunction);
+    }
+
+    @Override
+    public LogicalPlan visitSmartFunction(SmartFunctionContext ctx) {
+        logger.trace("In visitSmartFunction " + ctx.getText());
+        smartContractFunction = new SmartContractFunction();
+        logicalPlan.getCurrentNode().addChildNode(smartContractFunction);
         logicalPlan.setCurrentNode(smartContractFunction);
         return visitChildrenAndResetNode(ctx);
-	}
+    }
 
-	@Override
-	public LogicalPlan visitBytes(BytesContext ctx) {
-		logger.trace("In visitBytes " + ctx.getText());
-		BytesArgs args = new BytesArgs(ctx.getText());
-		logicalPlan.getCurrentNode().addChildNode(args);
+    @Override
+    public LogicalPlan visitBytes(BytesContext ctx) {
+        logger.trace("In visitBytes " + ctx.getText());
+        BytesArgs args = new BytesArgs(ctx.getText());
+        logicalPlan.getCurrentNode().addChildNode(args);
         logicalPlan.setCurrentNode(args);
         return visitChildrenAndResetNode(ctx);
-	}
+    }
 
-
-
-	@Override
-	public LogicalPlan visitClassOption(ClassOptionContext ctx) {
-		logger.trace("In visitClassOption " + ctx.getText());
-		SmartCnrtClassOption args = new SmartCnrtClassOption(ctx.getText());
-		logicalPlan.getCurrentNode().addChildNode(args);
+    @Override
+    public LogicalPlan visitClassOption(ClassOptionContext ctx) {
+        logger.trace("In visitClassOption " + ctx.getText());
+        SmartCnrtClassOption args = new SmartCnrtClassOption(ctx.getText());
+        logicalPlan.getCurrentNode().addChildNode(args);
         logicalPlan.setCurrentNode(args);
         return visitChildrenAndResetNode(ctx);
-	}
+    }
 
-	@Override
-	public LogicalPlan visitAsyncOption(AsyncOptionContext ctx) {
-		logger.trace("In visitAsyncOption " + ctx.getText());
-		SmartCnrtAsyncOption args = new SmartCnrtAsyncOption(ctx.getText());
-		logicalPlan.getCurrentNode().addChildNode(args);
+    @Override
+    public LogicalPlan visitAsyncOption(AsyncOptionContext ctx) {
+        logger.trace("In visitAsyncOption " + ctx.getText());
+        SmartCnrtAsyncOption args = new SmartCnrtAsyncOption(ctx.getText());
+        logicalPlan.getCurrentNode().addChildNode(args);
         logicalPlan.setCurrentNode(args);
         return visitChildrenAndResetNode(ctx);
-	}
-	
-	@Override
-	public LogicalPlan visitListType(ListTypeContext ctx) {		
-		logger.trace("In visitListType " + ctx.getText());
-		SmartCnrtListType args = new SmartCnrtListType(ctx.getText());
-		logicalPlan.getCurrentNode().addChildNode(args);
+    }
+
+    @Override
+    public LogicalPlan visitListType(ListTypeContext ctx) {
+        logger.trace("In visitListType " + ctx.getText());
+        SmartCnrtListType args = new SmartCnrtListType(ctx.getText());
+        logicalPlan.getCurrentNode().addChildNode(args);
         logicalPlan.setCurrentNode(args);
         return visitChildrenAndResetNode(ctx);
-	}
+    }
 
-	@Override
-	public LogicalPlan visitAddressVlaue(AddressVlaueContext ctx) {
-		logger.trace("In visitAddressVlaue " + ctx.getText());
-		SmartCnrtAddressOption args = new SmartCnrtAddressOption(ctx.getText());
-		logicalPlan.getCurrentNode().addChildNode(args);
+    @Override
+    public LogicalPlan visitAddressVlaue(AddressVlaueContext ctx) {
+        logger.trace("In visitAddressVlaue " + ctx.getText());
+        SmartCnrtAddressOption args = new SmartCnrtAddressOption(ctx.getText());
+        logicalPlan.getCurrentNode().addChildNode(args);
         logicalPlan.setCurrentNode(args);
         return visitChildrenAndResetNode(ctx);
-	}
-
-
+    }
 
 }

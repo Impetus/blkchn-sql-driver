@@ -36,22 +36,22 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
     private CreateFunction createFunction;
 
     private ClassName className;
-    
+
     private Insert insert;
-    
+
     private CallFunction callFunction;
-    
+
     private CreateAsset createAsset;
-    
+
     private DeleteFunction deleteFunction;
-    
+
     private DropAsset dropAsset;
-    
+
     private UpgradeFunction upgradeFunction;
-    
+
     private SQLType type;
 
-	private SmartCnrtDeploy smartCnrtDeploy;
+    private SmartCnrtDeploy smartCnrtDeploy;
 
     public LogicalPlan(String description) {
         super(description);
@@ -73,28 +73,30 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
         this.query = query;
     }
 
-    public CreateFunction getCreateFunction() {return createFunction;}
+    public CreateFunction getCreateFunction() {
+        return createFunction;
+    }
 
-    public void setCreateFunction(CreateFunction createFunction){
+    public void setCreateFunction(CreateFunction createFunction) {
         this.createFunction = createFunction;
     }
 
-    public ClassName getClassName(){ return className;}
+    public ClassName getClassName() {
+        return className;
+    }
 
-    public void setClassName(ClassName className){
+    public void setClassName(ClassName className) {
         this.className = className;
     }
 
-    public Insert getInsert()
-    {
+    public Insert getInsert() {
         return insert;
     }
 
-    public void setInsert(Insert insert)
-    {
+    public void setInsert(Insert insert) {
         this.insert = insert;
     }
-    
+
     public CallFunction getCallFunction() {
         return callFunction;
     }
@@ -102,75 +104,75 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
     public void setCallFunction(CallFunction callFunction) {
         this.callFunction = callFunction;
     }
-    
+
     public CreateAsset getCreateAsset() {
         return createAsset;
     }
-    
+
     public void setCreateAsset(CreateAsset createAsset) {
         this.createAsset = createAsset;
     }
-    
+
     public DeleteFunction getDeleteFunction() {
         return deleteFunction;
     }
-    
+
     public void setDeleteFunction(DeleteFunction deleteFunction) {
         this.deleteFunction = deleteFunction;
     }
-    
+
     public DropAsset getDropAsset() {
         return dropAsset;
     }
-    
+
     public void setDropAsset(DropAsset dropAsset) {
         this.dropAsset = dropAsset;
     }
-    
+
     public UpgradeFunction getUpgradeFunction() {
         return upgradeFunction;
     }
-    
+
     public void setSmartCnrtDeploy(SmartCnrtDeploy smartCnrtDeploy) {
-		this.smartCnrtDeploy = smartCnrtDeploy;
-		
-	}
-    
-    public SmartCnrtDeploy getSmartCnrtDeploy() {
-    	return smartCnrtDeploy;
+        this.smartCnrtDeploy = smartCnrtDeploy;
+
     }
-    
+
+    public SmartCnrtDeploy getSmartCnrtDeploy() {
+        return smartCnrtDeploy;
+    }
+
     public void setUpgradeFunction(UpgradeFunction upgradeFunction) {
         this.upgradeFunction = upgradeFunction;
     }
-    
+
     public SQLType getType() {
         return type;
     }
-    
+
     public void setType(SQLType type) {
         this.type = type;
     }
 
     public static enum SQLType {
-        
-        QUERY,
-        
-        INSERT,
-        
-        CREATE_FUNCTION,
-        
-        CALL_FUNCTION,
-        
-        CREATE_ASSET,
-        
-        DELETE_FUNCTION,
-        
-        DROP_ASSET,
-        
-        UPGRADE_FUNCTION, 
-        
-        DEPLOY_SMARTCONTRACT
+
+                                QUERY,
+
+                                INSERT,
+
+                                CREATE_FUNCTION,
+
+                                CALL_FUNCTION,
+
+                                CREATE_ASSET,
+
+                                DELETE_FUNCTION,
+
+                                DROP_ASSET,
+
+                                UPGRADE_FUNCTION,
+
+                                DEPLOY_SMARTCONTRACT
     }
 
 }
