@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.impetus.blkch.sql.generated.*;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.*;
 
-public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan> implements
+public  class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan> implements
         BlkchnSqlVisitor<LogicalPlan> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractSyntaxTreeVisitor.class);
@@ -726,13 +726,6 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     }
 
     @Override
-    public LogicalPlan visitConstantSeq(ConstantSeqContext ctx)
-    {
-        logger.trace("In visitConstantSeq " + ctx.getText());
-        return visitChildren(ctx);
-    }
-
-    @Override
     public LogicalPlan visitCreateAssetRule(CreateAssetRuleContext ctx) {
         logger.trace("In visitCreateAssetRule " + ctx.getText());
         return visitChildren(ctx);
@@ -825,6 +818,18 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     @Override
     public LogicalPlan visitPolicyFile(PolicyFileContext ctx) {
         logger.trace("In visitPolicyFile " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitColumnValue(ColumnValueContext ctx) {
+        logger.trace("In visitColumnValue " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitQuestionMark(QuestionMarkContext ctx) {
+        logger.trace("In visitQuestionMark " + ctx.getText());
         return visitChildren(ctx);
     }
 

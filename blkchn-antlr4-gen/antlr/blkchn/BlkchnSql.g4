@@ -52,12 +52,12 @@ columnNames
 	;
 	
 columnValues
-	: constantSeq
+	: columnValue(',' columnValue)*
 	;
-	
-constantSeq
-	: constant (',' constant)*
-	;
+		
+columnValue
+	:constant|questionMark
+    ;
     
 createFunction
 	: CREATE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? endorsersFile? args?
@@ -277,9 +277,13 @@ valueExpression
     | left=valueExpression operator=HAT right=valueExpression                                #arithmeticBinary
     | left=valueExpression operator=PIPE right=valueExpression                               #arithmeticBinary
     | left=valueExpression comparisonOperator right=valueExpression                          #comparison
-    | QUESTIONMARK                                                                           #placeholder
+    | questionMark                                                                           #placeholder
     ;
-    
+
+questionMark
+	: QUESTIONMARK
+	;
+ 
 primaryExpression
     : name=(CURRENT_DATE | CURRENT_TIMESTAMP)                                                  #timeFunctionCall
     | CASE whenClause+ (ELSE elseExpression=expression)? END                                   #searchedCase

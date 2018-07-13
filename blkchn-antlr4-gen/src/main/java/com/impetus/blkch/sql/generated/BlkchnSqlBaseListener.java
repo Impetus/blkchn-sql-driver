@@ -161,13 +161,13 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConstantSeq(BlkchnSqlParser.ConstantSeqContext ctx) { }
+	@Override public void enterColumnValue(BlkchnSqlParser.ColumnValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConstantSeq(BlkchnSqlParser.ConstantSeqContext ctx) { }
+	@Override public void exitColumnValue(BlkchnSqlParser.ColumnValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -876,6 +876,18 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitArithmeticUnary(BlkchnSqlParser.ArithmeticUnaryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterQuestionMark(BlkchnSqlParser.QuestionMarkContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitQuestionMark(BlkchnSqlParser.QuestionMarkContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
