@@ -59,14 +59,14 @@ import com.impetus.blkch.sql.query.WhereClause;
 
 public abstract class AbstractPreparedStatement implements PreparedStatement {
 
-    protected LogicalPlan logicalPlan;
+   /* protected LogicalPlan logicalPlan;
 
     protected Object[] placeholderValues;
 
     protected List<Integer> placeholderIndexes = new ArrayList<Integer>();
 
     protected int filterItemIndex;
-
+*/
     @Override
     public ResultSet executeQuery(String sql) throws SQLException {
         throw new UnsupportedOperationException();
@@ -585,7 +585,7 @@ public abstract class AbstractPreparedStatement implements PreparedStatement {
         return parser;
     }
 
-    protected void setPlaceholderIndexes(TreeNode node) {
+   /* protected void setPlaceholderIndexes(TreeNode node) {
         for (TreeNode child : node.getChildNodes()) {
             if (child.getClass().isAssignableFrom((LogicalOperation.class))) {
                 setPlaceholderIndexes(child);
@@ -624,5 +624,5 @@ public abstract class AbstractPreparedStatement implements PreparedStatement {
                 throw new BlkchnException("ERROR while setting up filterItem values");
         }
     }
-
+*/
 }
