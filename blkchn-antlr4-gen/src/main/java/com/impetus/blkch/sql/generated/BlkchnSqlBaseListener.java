@@ -485,6 +485,18 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCheckIsValid(BlkchnSqlParser.CheckIsValidContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCheckIsValid(BlkchnSqlParser.CheckIsValidContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterClassOption(BlkchnSqlParser.ClassOptionContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -45,6 +45,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.AsyncOptionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.BooleanLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.BytesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CallFunctionContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.CheckIsValidContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ClassOptionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColTypeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColTypeListContext;
@@ -623,6 +624,15 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     public LogicalPlan visitAddressVlaue(AddressVlaueContext ctx) {
         logger.trace("In visitAddressVlaue " + ctx.getText());
         SmartCnrtAddressOption args = new SmartCnrtAddressOption(ctx.getText());
+        logicalPlan.getCurrentNode().addChildNode(args);
+        logicalPlan.setCurrentNode(args);
+        return visitChildrenAndResetNode(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitCheckIsValid(CheckIsValidContext ctx) {
+        logger.trace("In visitCheckIsValid " + ctx.getText());
+        SmartCnrtIsValidFlag args = new SmartCnrtIsValidFlag();
         logicalPlan.getCurrentNode().addChildNode(args);
         logicalPlan.setCurrentNode(args);
         return visitChildrenAndResetNode(ctx);

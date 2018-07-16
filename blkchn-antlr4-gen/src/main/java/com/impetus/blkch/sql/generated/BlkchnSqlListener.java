@@ -417,6 +417,16 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitAssetFunction(BlkchnSqlParser.AssetFunctionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#checkIsValid}.
+	 * @param ctx the parse tree
+	 */
+	void enterCheckIsValid(BlkchnSqlParser.CheckIsValidContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#checkIsValid}.
+	 * @param ctx the parse tree
+	 */
+	void exitCheckIsValid(BlkchnSqlParser.CheckIsValidContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#classOption}.
 	 * @param ctx the parse tree
 	 */

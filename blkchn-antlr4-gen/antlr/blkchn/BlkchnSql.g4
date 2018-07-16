@@ -173,12 +173,16 @@ callFunction
     ;
 
 smartFunction
-    : USE classOption WITH addressOption (AND WITHASYNC asyncOption)?
+    : USE classOption WITH addressOption (AND WITHASYNC asyncOption)? checkIsValid? 
     ;
 
 assetFunction
     : (AS (ASSET | TABLE) asset)?
     ;
+    
+checkIsValid
+	: 'IS_VALID'
+	;
 
 classOption
     : SMARTCONTRACT className

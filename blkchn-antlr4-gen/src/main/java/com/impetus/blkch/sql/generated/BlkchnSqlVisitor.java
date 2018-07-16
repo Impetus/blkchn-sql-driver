@@ -255,6 +255,12 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssetFunction(BlkchnSqlParser.AssetFunctionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#checkIsValid}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCheckIsValid(BlkchnSqlParser.CheckIsValidContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#classOption}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
