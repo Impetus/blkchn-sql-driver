@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.impetus.blkch.BlkchnException;
 import com.impetus.blkch.sql.parser.LogicalPlan;
 import com.impetus.blkch.sql.parser.TreeNode;
@@ -31,7 +30,6 @@ import com.impetus.blkch.sql.query.Placeholder;
 import com.impetus.blkch.sql.query.WhereClause;
 
 public class QueryPlaceholderHandler implements PlaceholderHandler {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(QueryPlaceholderHandler.class);
 
     protected LogicalPlan logicalPlan;

@@ -36,26 +36,17 @@ import java.sql.SQLWarning;
 import java.sql.SQLXML;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import org.antlr.v4.runtime.CommonTokenStream;
 
 import com.impetus.blkch.BlkchnErrorListener;
-import com.impetus.blkch.BlkchnException;
 import com.impetus.blkch.sql.generated.BlkchnSqlLexer;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 import com.impetus.blkch.sql.parser.AbstractSyntaxTreeVisitor;
 import com.impetus.blkch.sql.parser.BlockchainVisitor;
 import com.impetus.blkch.sql.parser.CaseInsensitiveCharStream;
 import com.impetus.blkch.sql.parser.LogicalPlan;
-import com.impetus.blkch.sql.parser.TreeNode;
-import com.impetus.blkch.sql.query.FilterItem;
-import com.impetus.blkch.sql.query.IdentifierNode;
-import com.impetus.blkch.sql.query.LogicalOperation;
-import com.impetus.blkch.sql.query.Placeholder;
-import com.impetus.blkch.sql.query.WhereClause;
 
 public abstract class AbstractPreparedStatement implements PreparedStatement {
 
@@ -70,6 +61,7 @@ public abstract class AbstractPreparedStatement implements PreparedStatement {
 
     protected int filterItemIndex;
 */
+
 
     @Override
     public ResultSet executeQuery(String sql) throws SQLException {
@@ -589,5 +581,4 @@ public abstract class AbstractPreparedStatement implements PreparedStatement {
         BlkchnSqlParser parser = new BlkchnSqlParser(tokens);
         return parser;
     }
-
 }
