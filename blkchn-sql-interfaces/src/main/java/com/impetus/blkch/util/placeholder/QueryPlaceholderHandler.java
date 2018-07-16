@@ -44,6 +44,8 @@ public class QueryPlaceholderHandler implements PlaceholderHandler {
 
     protected TreeNode whereClause;
 
+    protected boolean isListEmpty = true;
+
     public QueryPlaceholderHandler(LogicalPlan logicalPlan) {
         this.logicalPlan = logicalPlan;
         this.filterItemIndex = 0;
