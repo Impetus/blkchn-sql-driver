@@ -86,7 +86,7 @@ public class LogicalPlanTest extends TestCase {
         LogicalPlan logicalPlan = buildSimpleSelect();
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
-    
+
     @Test
     public void testPlaceHolder1() {
         String sql = "select count(*) as cnt, blocknumber from transaction where blocknumber = ? and name='ashish' and address=? and phone=13244 group by blocknumber";
