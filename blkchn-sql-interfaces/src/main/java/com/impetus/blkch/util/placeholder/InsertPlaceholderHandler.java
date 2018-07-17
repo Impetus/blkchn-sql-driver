@@ -21,6 +21,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import com.impetus.blkch.BlkchnException;
 import com.impetus.blkch.sql.insert.ColumnValue;
 import com.impetus.blkch.sql.parser.LogicalPlan;
@@ -58,6 +59,7 @@ public class InsertPlaceholderHandler implements PlaceholderHandler {
             if (child.getClass().isAssignableFrom((Placeholder.class))) {
                 placeholderIndexes.add(columnValIndex);
             }
+
             columnValIndex++;
 
         }
@@ -108,5 +110,6 @@ public class InsertPlaceholderHandler implements PlaceholderHandler {
             LOGGER.error("ERROR :Index List is empty");
             throw new BlkchnException("ERROR :Index List is empty");
         }
+
     }
 }

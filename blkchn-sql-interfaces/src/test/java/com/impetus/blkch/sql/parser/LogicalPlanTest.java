@@ -86,7 +86,7 @@ public class LogicalPlanTest extends TestCase {
         LogicalPlan logicalPlan = buildSimpleSelect();
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
-    
+
     @Test
     public void testPlaceHolder() {
         String sql = "select count(*) as cnt, blocknumber from transaction where blocknumber = ? group by blocknumber";
@@ -415,6 +415,7 @@ public class LogicalPlanTest extends TestCase {
     public void testCreateAssetWithCSVStorage() {
         String sql = "CREATE ASSET user_asset (" + "id int," + "name string," + "designation string" + ")"
             + " WITH STORAGE TYPE CSV " + "FIELDS DELIMITED BY ',' " + "RECORDS DELIMITED BY \"\\n\"";
+
         LogicalPlan plan = getLogicalPlan(sql);
         CreateAsset actual = plan.getCreateAsset();
         CreateAsset expected = buildCreateAssetCSV();
