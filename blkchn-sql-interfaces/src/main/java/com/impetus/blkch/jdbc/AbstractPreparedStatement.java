@@ -58,15 +58,6 @@ import com.impetus.blkch.sql.query.Placeholder;
 import com.impetus.blkch.sql.query.WhereClause;
 
 public abstract class AbstractPreparedStatement implements PreparedStatement {
-
-   /* protected LogicalPlan logicalPlan;
-
-    protected Object[] placeholderValues;
-
-    protected List<Integer> placeholderIndexes = new ArrayList<Integer>();
-
-    protected int filterItemIndex;
-*/
     @Override
     public ResultSet executeQuery(String sql) throws SQLException {
         throw new UnsupportedOperationException();
@@ -585,44 +576,4 @@ public abstract class AbstractPreparedStatement implements PreparedStatement {
         return parser;
     }
 
-   /* protected void setPlaceholderIndexes(TreeNode node) {
-        for (TreeNode child : node.getChildNodes()) {
-            if (child.getClass().isAssignableFrom((LogicalOperation.class))) {
-                setPlaceholderIndexes(child);
-            } else if (child.getClass().isAssignableFrom((FilterItem.class))) {
-                if (child.hasChildType(Placeholder.class))
-                    placeholderIndexes.add(filterItemIndex);
-                filterItemIndex++;
-            } else
-                throw new BlkchnException(
-                        "ERROR while setting up the placeholder (?) indexes. Please verify if query is executable.");
-        }
-    }
-
-    protected void alterLogicalPlan() {
-        filterItemIndex = 0;
-        WhereClause whereClause = logicalPlan.getQuery().getChildType(WhereClause.class, 0);
-        setFilterItemValues(whereClause);
-    }
-
-    protected void setFilterItemValues(TreeNode node) {
-        for (TreeNode child : node.getChildNodes()) {
-            if (child.getClass().isAssignableFrom((LogicalOperation.class))) {
-                setFilterItemValues(child);
-            } else if (child.getClass().isAssignableFrom((FilterItem.class))) {
-                if ((child.hasChildType(Placeholder.class) || child.hasChildType(IdentifierNode.class))
-                        && placeholderIndexes.contains(filterItemIndex)) {
-                    if (null != placeholderValues[placeholderIndexes.indexOf(filterItemIndex)]) {
-                        IdentifierNode ident = new IdentifierNode(
-                                placeholderValues[placeholderIndexes.indexOf(filterItemIndex)].toString());
-                        child.setChildNode(ident, 2);
-                    } else
-                        throw new BlkchnException("Can't set NULL value");
-                }
-                filterItemIndex++;
-            } else
-                throw new BlkchnException("ERROR while setting up filterItem values");
-        }
-    }
-*/
 }
