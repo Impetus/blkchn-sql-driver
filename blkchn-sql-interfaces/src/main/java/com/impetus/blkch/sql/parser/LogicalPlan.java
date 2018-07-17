@@ -153,6 +153,16 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
     public void setType(SQLType type) {
         this.type = type;
     }
+    
+    @Override
+    public Object clone() {
+        LogicalPlan plan = (LogicalPlan) super.clone();
+        if(this.getType() != null && this.getType().equals(SQLType.QUERY)) {
+            plan.query = (Query) this.query.clone();
+        }
+
+        return plan;
+    }
 
     public static enum SQLType {
 

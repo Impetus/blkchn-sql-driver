@@ -15,6 +15,7 @@
 ******************************************************************************/
 package com.impetus.blkch.sql.query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.impetus.blkch.sql.parser.TreeNode;
@@ -79,5 +80,15 @@ public class DataNode<T> extends TreeNode {
         }
         hashCode = prime * hashCode + listHashCode;
         return hashCode;
+    }
+    
+    @Override
+    public Object clone() {
+        DataNode<T> root = (DataNode<T>) super.clone();
+        root.keys = new ArrayList<>();
+        for(T key : this.keys) {
+            root.keys.add(key);
+        }
+        return root;
     }
 }

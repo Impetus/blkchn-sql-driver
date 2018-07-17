@@ -38,6 +38,8 @@ public abstract class AbstractQueryExecutor {
     
     protected LogicalPlan logicalPlan;
     
+    protected PhysicalPlan originalPhysicalPlan;
+    
     protected PhysicalPlan physicalPlan;
 
     protected Map<String, Object> dataMap = new HashMap<>();
@@ -286,6 +288,10 @@ public abstract class AbstractQueryExecutor {
             }
         }
         return new DataNode<>(first.getTable(), newKeys);
+    }
+    
+    public void paginate(RangeNode<?> rangeNode) {
+        this.physicalPlan = originalPhysicalPlan.paginate(rangeNode);
     }
     
     protected abstract DataNode<?> getDataNode(String table, String column, String value);

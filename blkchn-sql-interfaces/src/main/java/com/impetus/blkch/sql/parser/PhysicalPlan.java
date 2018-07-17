@@ -16,6 +16,7 @@
 package com.impetus.blkch.sql.parser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -203,6 +204,57 @@ public abstract class PhysicalPlan extends TreeNode {
         filterItem.addChildNode(new IdentifierNode(value));
         return filterItem;
     }
+    
+    public PhysicalPlan paginate(RangeNode<?> rangeNode) {
+        if (!logicalPlan.getType().equals(SQLType.QUERY)) {
+            return this;
+        }
+        PhysicalPlan paginatedPlan = (PhysicalPlan) this.clone();
+        if(whereClause == null) {
+            paginatedPlan.whereClause = new WhereClause();
+            paginatedPlan.whereClause.addChildNode(rangeNode);
+        } else {
+            TreeNode whereClassNode = generatePage(whereClause.getChildNode(0), rangeNode,
+                    paginatedPlan.validateLogicalPlan());
+            TreeNode reducedWhereClassNode = processLogicalOperation((LogicalOperation) whereClassNode);
+            paginatedPlan.whereClause.setChildNodes(Arrays.asList(reducedWhereClassNode)); // Using setChildNodes since old child nodes should be overridden
+        }
+        return paginatedPlan;
+    }
+    
+    private TreeNode generatePage(TreeNode currentNode, RangeNode<?> rangeNode, boolean isExecutable) {
+        if (currentNode instanceof LogicalOperation) {
+            LogicalOperation oper = (LogicalOperation) currentNode;
+            if (oper.isAnd()) {
+                TreeNode left = generatePage(oper.getChildNode(0), rangeNode, isExecutable);
+                TreeNode right = generatePage(oper.getChildNode(1), rangeNode, true);
+                LogicalOperation returnOper = new LogicalOperation(Operator.AND);
+                returnOper.addChildNode(left);
+                returnOper.addChildNode(right);
+                return returnOper;
+            } else {
+                TreeNode left = generatePage(oper.getChildNode(0), rangeNode, isExecutable);
+                TreeNode right = generatePage(oper.getChildNode(1), rangeNode, isExecutable);
+                LogicalOperation returnOper = new LogicalOperation(Operator.OR);
+                returnOper.addChildNode(left);
+                returnOper.addChildNode(right);
+                return returnOper;
+            }
+        } else if ((currentNode instanceof RangeNode<?>) || (currentNode instanceof DirectAPINode)) {
+            LogicalOperation oper = new LogicalOperation(Operator.AND);
+            oper.addChildNode((TreeNode) rangeNode.clone());
+            oper.addChildNode((TreeNode) currentNode.clone());
+            return oper;
+        } else {
+            if (!isExecutable) {
+                LogicalOperation oper = new LogicalOperation(Operator.AND);
+                oper.addChildNode((TreeNode) rangeNode.clone());
+                oper.addChildNode((TreeNode) currentNode.clone());
+                return oper;
+            }
+            return (TreeNode) currentNode.clone();
+        }
+    }
 
     public abstract List<String> getRangeCols(String table);
 
@@ -233,6 +285,22 @@ public abstract class PhysicalPlan extends TreeNode {
                 return RED;
             }
         }
+    }
+    
+    @Override
+    public Object clone() {
+        PhysicalPlan root = (PhysicalPlan) super.clone();
+        root.logicalPlan = (LogicalPlan) this.logicalPlan.clone();
+        root.whereClause = this.whereClause == null ? null : (WhereClause) this.whereClause.clone();
+        root.selectItems = new ArrayList<>();
+        for (SelectItem selectItem : this.selectItems) {
+            root.selectItems.add((SelectItem) selectItem.clone());
+        }
+        root.columnAliasMapping = new HashMap<>();
+        for (Map.Entry<String, String> columnAliasEntry : columnAliasMapping.entrySet()) {
+            root.columnAliasMapping.put(columnAliasEntry.getKey(), columnAliasEntry.getValue());
+        }
+        return root;
     }
 
 }

@@ -15,6 +15,7 @@
 ******************************************************************************/
 package com.impetus.blkch.sql.parser;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,12 @@ import com.impetus.blkch.BlkchnException;
 import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.Placeholder;
 
-public class TreeNode {
+public class TreeNode implements Cloneable, Serializable {
+    
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -5244526440190973169L;
 
     private static final Logger logger = LoggerFactory.getLogger(TreeNode.class);
 
@@ -194,5 +200,22 @@ public class TreeNode {
         }
         throw new BlkchnException("Index out of Bounds " + i);
     }
-
+    
+    @Override
+    public Object clone()  {
+        TreeNode root;
+        try {
+            root = (TreeNode) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new BlkchnException("Cannot perform clone of " + this.getClass().getName() + " class", e);
+        }
+        root.parent = null;
+        root.childNodes = new ArrayList<>();
+        for(TreeNode child : childNodes) {
+            TreeNode newChild = (TreeNode) child.clone();
+            root.addChildNode(newChild);
+            newChild.setParent(root);
+        }
+        return root;
+    }
 }

@@ -15,11 +15,12 @@
 ******************************************************************************/
 package com.impetus.blkch.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public final class RangeList<T extends Number & Comparable<T>> {
+public final class RangeList<T extends Number & Comparable<T>> implements Serializable {
 
     private List<Range<T>> ranges = new ArrayList<>();
     

@@ -82,5 +82,15 @@ public class RangeNode<T extends Number & Comparable<T>> extends TreeNode {
         sb.append("]");
         return sb.toString();
     }
+    
+    @Override
+    public Object clone() {
+        RangeNode<T> rangeNode = (RangeNode<T>)super.clone();
+        rangeNode.rangeList = new RangeList<>();
+        for(Range<T> range : this.rangeList.getRanges()) {
+            rangeNode.rangeList.addRange(new Range<T>(range.getMin(), range.getMax()));
+        }
+        return rangeNode;
+    }
 
 }

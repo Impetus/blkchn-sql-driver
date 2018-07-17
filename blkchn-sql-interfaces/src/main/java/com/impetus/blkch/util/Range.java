@@ -15,7 +15,9 @@
 ******************************************************************************/
 package com.impetus.blkch.util;
 
-public final class Range<T extends Number & Comparable<T>> {
+import java.io.Serializable;
+
+public final class Range<T extends Number & Comparable<T>> implements Serializable {
     
     private T min;
     
