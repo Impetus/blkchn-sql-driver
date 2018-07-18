@@ -1,7 +1,25 @@
+/******************************************************************************* 
+* * Copyright 2018 Impetus Infotech.
+* *
+* * Licensed under the Apache License, Version 2.0 (the "License");
+* * you may not use this file except in compliance with the License.
+* * You may obtain a copy of the License at
+* *
+* * http://www.apache.org/licenses/LICENSE-2.0
+* *
+* * Unless required by applicable law or agreed to in writing, software
+* * distributed under the License is distributed on an "AS IS" BASIS,
+* * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* * See the License for the specific language governing permissions and
+* * limitations under the License.
+******************************************************************************/
 package com.impetus.blkch.util.placeholder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.impetus.blkch.BlkchnException;
 import com.impetus.blkch.sql.insert.ColumnValue;
@@ -11,6 +29,7 @@ import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.Placeholder;
 
 public class InsertPlaceholderHandler implements PlaceholderHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(InsertPlaceholderHandler.class);
 
     protected LogicalPlan logicalPlan;
 
@@ -56,10 +75,15 @@ public class InsertPlaceholderHandler implements PlaceholderHandler {
             if ((child.getClass().isAssignableFrom((Placeholder.class))
                     || child.getClass().isAssignableFrom((IdentifierNode.class)))
                     && placeholderIndexes.contains(columnValIndex)) {
-                IdentifierNode ident = new IdentifierNode(
-                        placeholderValues[placeholderIndexes.indexOf(columnValIndex)].toString());
-                ident.setParent(node);
-                child.getParent().setChildNode(ident, columnValIndex);
+                if (null != placeholderValues[placeholderIndexes.indexOf(columnValIndex)]) {
+                    IdentifierNode ident = new IdentifierNode(
+                            placeholderValues[placeholderIndexes.indexOf(columnValIndex)].toString());
+                    ident.setParent(node);
+                    child.getParent().setChildNode(ident, columnValIndex);
+                } else {
+                    LOGGER.error("ERROR: Can't set NULL value");
+                    throw new BlkchnException("Can't set NULL value");
+                }
 
             }
             columnValIndex++;
@@ -79,7 +103,9 @@ public class InsertPlaceholderHandler implements PlaceholderHandler {
     public int getIndexListCount() {
         if (!placeholderIndexes.isEmpty())
             return placeholderIndexes.size();
-        else
+        else {
+            LOGGER.error("ERROR :Index List is empty");
             throw new BlkchnException("ERROR :Index List is empty");
+        }
     }
 }
