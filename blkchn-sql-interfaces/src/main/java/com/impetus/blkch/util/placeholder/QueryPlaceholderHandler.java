@@ -44,8 +44,6 @@ public class QueryPlaceholderHandler implements PlaceholderHandler {
 
     protected TreeNode whereClause;
 
-    protected boolean isListEmpty = true;
-
     public QueryPlaceholderHandler(LogicalPlan logicalPlan) {
         this.logicalPlan = logicalPlan;
         this.filterItemIndex = 0;
@@ -85,6 +83,7 @@ public class QueryPlaceholderHandler implements PlaceholderHandler {
 
     @Override
     public void setPlaceholderValue(TreeNode node) {
+        System.out.println(filterItemIndex);
         for (TreeNode child : node.getChildNodes()) {
             if (child.getClass().isAssignableFrom((LogicalOperation.class))) {
                 setPlaceholderValue(child);

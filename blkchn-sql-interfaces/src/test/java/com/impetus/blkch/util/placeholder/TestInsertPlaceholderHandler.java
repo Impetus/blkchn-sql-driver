@@ -64,6 +64,7 @@ public class TestInsertPlaceholderHandler extends TestCase {
         handler.columnValIndex = 0;
         handler.placeholderValues = placeholderValues;
         handler.setPlaceholderValue(handler.columnValue);
+
         IdentifierNode ident = handler.columnValue.getChildType(IdentifierNode.class, 0);
         assertEquals(String.valueOf(5564), ident.getValue());
     }
