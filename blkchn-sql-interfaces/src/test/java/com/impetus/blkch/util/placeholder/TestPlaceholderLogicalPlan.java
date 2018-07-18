@@ -95,7 +95,6 @@ public class TestPlaceholderLogicalPlan extends TestCase {
 
     @Test
     public void testInsertWithPlaceHolder() {
-        /* Test Insert with place Holder at some place */
         String sql = "INSERT INTO someTable VALUES('first', ?, 'third', 4, ?)";
         LogicalPlan pHLogicalPlan = new LogicalPlanGen().getLogicalPlan(sql);
         InsertPlaceholderHandler handler = new InsertPlaceholderHandler(pHLogicalPlan);
@@ -173,7 +172,6 @@ public class TestPlaceholderLogicalPlan extends TestCase {
         op2.addChildNode(filterItem3);
         return whereClause;
     }
-
     public static LogicalPlan buildSelectWithWherePlaceHolder() {
         LogicalPlan logicalPlan = LogicalPlanTest.buildSimpleSelect();
 
