@@ -82,7 +82,6 @@ public class QueryPlaceholderHandler implements PlaceholderHandler {
 
     @Override
     public void setPlaceholderValue(TreeNode node) {
-        System.out.println(filterItemIndex);
         for (TreeNode child : node.getChildNodes()) {
             if (child.getClass().isAssignableFrom((LogicalOperation.class))) {
                 setPlaceholderValue(child);
