@@ -17,6 +17,9 @@ package com.impetus.blkch.jdbc;
 
 import java.sql.Statement;
 
+import com.impetus.blkch.sql.query.RangeNode;
+
 public interface BlkchnStatement extends Statement {
 
+    public void setPageRange(RangeNode<?> pageRange);
 }

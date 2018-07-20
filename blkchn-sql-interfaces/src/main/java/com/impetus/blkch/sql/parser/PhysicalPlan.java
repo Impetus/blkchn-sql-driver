@@ -266,6 +266,8 @@ public abstract class PhysicalPlan extends TreeNode {
     
     public abstract boolean columnExists(String table, String column);
     
+    public abstract Map<String, Integer> getColumnTypeMap(String table);
+    
     public static enum Color {
         RED,
         GREEN;
