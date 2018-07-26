@@ -29,6 +29,7 @@ import com.impetus.blkch.sql.query.DirectAPINode;
 import com.impetus.blkch.sql.query.FilterItem;
 import com.impetus.blkch.sql.query.FromItem;
 import com.impetus.blkch.sql.query.FunctionNode;
+import com.impetus.blkch.sql.query.GetRowsNode;
 import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.LogicalOperation;
 import com.impetus.blkch.sql.query.LogicalOperation.Operator;
@@ -37,63 +38,58 @@ import com.impetus.blkch.sql.query.SelectClause;
 import com.impetus.blkch.sql.query.SelectItem;
 import com.impetus.blkch.sql.query.Table;
 import com.impetus.blkch.sql.query.WhereClause;
+import com.impetus.blkch.sql.query.GetRowsNode.NumRows;
 import com.impetus.blkch.util.RangeOperations;
 import com.impetus.blkch.util.Utilities;
 
 public abstract class PhysicalPlan extends TreeNode {
 
     private LogicalPlan logicalPlan;
-    
+
     private WhereClause whereClause;
-    
+
     private List<SelectItem> selectItems = new ArrayList<>();
-    
+
     private Map<String, String> columnAliasMapping = new HashMap<>();
 
     public PhysicalPlan(String description, LogicalPlan logicalPlan) {
         super(description);
         this.logicalPlan = logicalPlan;
-        if(logicalPlan.getType() == SQLType.QUERY) {
-            String table = logicalPlan.getQuery().getChildType(FromItem.class, 0).getChildType(Table.class, 0).getChildType(IdentifierNode.class, 0).getValue();
-            if(!tableExists(table)) {
+        if (logicalPlan.getType() == SQLType.QUERY) {
+            String table = logicalPlan.getQuery().getChildType(FromItem.class, 0).getChildType(Table.class, 0)
+                    .getChildType(IdentifierNode.class, 0).getValue();
+            if (!tableExists(table)) {
                 throw new BlkchnException(String.format("Table %s doesn't exist", table));
             }
-            //process aliases and add to map
+            // process aliases and add to map
             processAliasMapping(logicalPlan.getQuery().getChildType(SelectClause.class, 0));
-            if(logicalPlan.getQuery().hasChildType(WhereClause.class)) {
+            if (logicalPlan.getQuery().hasChildType(WhereClause.class)) {
                 this.whereClause = getPhysicalWhereClause();
             }
         }
     }
-    
 
-    private void processAliasMapping(SelectClause selectClause)
-    {
-        for (SelectItem item : selectClause.getChildType(SelectItem.class))
-        {
+    private void processAliasMapping(SelectClause selectClause) {
+        for (SelectItem item : selectClause.getChildType(SelectItem.class)) {
             selectItems.add(item);
-            if (item.getChildType(IdentifierNode.class, 0) != null && item.hasChildType(Column.class))
-            {
+            if (item.getChildType(IdentifierNode.class, 0) != null && item.hasChildType(Column.class)) {
                 columnAliasMapping.put(item.getChildType(IdentifierNode.class, 0).getValue(),
                         item.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue());
-            }
-            else if (item.getChildType(IdentifierNode.class, 0) != null && item.hasChildType(FunctionNode.class))
-            {
-                columnAliasMapping.put(item.getChildType(IdentifierNode.class, 0).getValue(), 
+            } else if (item.getChildType(IdentifierNode.class, 0) != null && item.hasChildType(FunctionNode.class)) {
+                columnAliasMapping.put(item.getChildType(IdentifierNode.class, 0).getValue(),
                         Utilities.createFunctionColName(item.getChildType(FunctionNode.class, 0)));
             }
         }
     }
 
-
     public WhereClause getWhereClause() {
         return whereClause;
     }
-    
+
     public Map<String, String> getColumnAliasMapping() {
         return columnAliasMapping;
     }
-    
+
     public List<SelectItem> getSelectItems() {
         return selectItems;
     }
@@ -101,10 +97,11 @@ public abstract class PhysicalPlan extends TreeNode {
     private WhereClause getPhysicalWhereClause() {
         WhereClause whereClause = new WhereClause();
         if (logicalPlan.getQuery().getChildType(WhereClause.class, 0).hasChildType(FilterItem.class)) {
-            whereClause.addChildNode(processFilterItem(logicalPlan.getQuery().getChildType(WhereClause.class, 0).getChildType(FilterItem.class, 0)));
+            whereClause.addChildNode(processFilterItem(
+                    logicalPlan.getQuery().getChildType(WhereClause.class, 0).getChildType(FilterItem.class, 0)));
         } else {
-            TreeNode whereClauseNodes = processLogicalOperation(logicalPlan.getQuery().getChildType(WhereClause.class, 0).
-                    getChildType(LogicalOperation.class, 0));
+            TreeNode whereClauseNodes = processLogicalOperation(
+                    logicalPlan.getQuery().getChildType(WhereClause.class, 0).getChildType(LogicalOperation.class, 0));
             whereClause.addChildNode(whereClauseNodes);
         }
         return whereClause;
@@ -142,67 +139,74 @@ public abstract class PhysicalPlan extends TreeNode {
                 return rangeOperations.processRangeNodes(firstRange, secondRange, logicalOperation);
             }
         }
-        LogicalOperation physicalLogicalOperation = new LogicalOperation(logicalOperation.isAnd() ? Operator.AND : Operator.OR);
+        LogicalOperation physicalLogicalOperation = new LogicalOperation(
+                logicalOperation.isAnd() ? Operator.AND : Operator.OR);
         physicalLogicalOperation.addChildNode(firstChild);
         physicalLogicalOperation.addChildNode(secondChild);
         return physicalLogicalOperation;
     }
 
     private TreeNode processFilterItem(FilterItem filterItem) {
-        String table = logicalPlan.getQuery().getChildType(FromItem.class, 0).getChildType(Table.class, 0).getChildType(IdentifierNode.class, 0).getValue();
-        String column = filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
-        if(columnAliasMapping.get(column) != null){
-            column = columnAliasMapping.get(column);
-        }
-        if(!columnExists(table, column)) {
-            throw new BlkchnException(String.format("Column %s doesn't exist in table %s", column, table));
-        }
-        if(getRangeCols(table).contains(column)) {
-            RangeOperations<?> rangeOperations =  getRangeOperations(table, column);
-            return rangeOperations.processFilterItem(filterItem, table, column);
-        } else if(getQueryCols(table).contains(column) && filterItem.getChildType(Comparator.class, 0).isEQ()) {
-            String value = filterItem.getChildType(IdentifierNode.class, 0).getValue();
-            return new DirectAPINode(table, column, value);
+        String table = logicalPlan.getQuery().getChildType(FromItem.class, 0).getChildType(Table.class, 0)
+                .getChildType(IdentifierNode.class, 0).getValue();
+        if (filterItem.hasChildType(Column.class)) {
+            String column = filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue();
+            if (columnAliasMapping.get(column) != null) {
+                column = columnAliasMapping.get(column);
+            }
+            if (!columnExists(table, column)) {
+                throw new BlkchnException(String.format("Column %s doesn't exist in table %s", column, table));
+            }
+            if (getRangeCols(table).contains(column)) {
+                RangeOperations<?> rangeOperations = getRangeOperations(table, column);
+                return rangeOperations.processFilterItem(filterItem, table, column);
+            } else if (getQueryCols(table).contains(column) && filterItem.getChildType(Comparator.class, 0).isEQ()) {
+                String value = filterItem.getChildType(IdentifierNode.class, 0).getValue();
+                return new DirectAPINode(table, column, value);
+            } else {
+                return createFilterItem(column, filterItem.getChildType(Comparator.class, 0),
+                        filterItem.getChildType(IdentifierNode.class, 0).getValue());
+            }
         } else {
-            return createFilterItem(column, filterItem.getChildType(Comparator.class, 0), filterItem.getChildType(IdentifierNode.class, 0).getValue());
+            return createGetRowsNode(filterItem);
         }
     }
-    
+
     public boolean validateLogicalPlan() {
         Color color = Color.GREEN;
-        if(logicalPlan.getType() == SQLType.QUERY) {
-            if(whereClause != null) {
+        if (logicalPlan.getType() == SQLType.QUERY) {
+            if (whereClause != null) {
                 color = validateNode(whereClause.getChildNode(0));
             }
         }
         return color == Color.GREEN;
     }
-    
+
     public Color validateNode(TreeNode node) {
-        if(node instanceof LogicalOperation) {
+        if (node instanceof LogicalOperation) {
             Color first = validateNode(node.getChildNode(0));
             Color second = validateNode(node.getChildNode(1));
-            if(((LogicalOperation)node).isAnd()) {
+            if (((LogicalOperation) node).isAnd()) {
                 return Color.and(first, second);
             } else {
                 return Color.or(first, second);
             }
         } else {
-            if(node instanceof FilterItem) {
+            if (node instanceof FilterItem && node.hasChildType(Column.class)) {
                 return Color.RED;
             } else {
                 return Color.GREEN;
             }
         }
     }
-    
+
     private Column createColumn(String colName) {
         Column column = new Column();
         IdentifierNode identifierNode = new IdentifierNode(colName);
         column.addChildNode(identifierNode);
         return column;
     }
-    
+
     private FilterItem createFilterItem(String colName, Comparator cmp, String value) {
         FilterItem filterItem = new FilterItem();
         filterItem.addChildNode(createColumn(colName));
@@ -265,32 +269,47 @@ public abstract class PhysicalPlan extends TreeNode {
         }
     }
 
+    private GetRowsNode createGetRowsNode(FilterItem filterItem) {
+        filterItem.traverse();
+        GetRowsNode getRows;
+        if (filterItem.getChildType(IdentifierNode.class, 0).getValue()
+                .equals(filterItem.getChildType(IdentifierNode.class, 1).getValue()))
+            getRows = new GetRowsNode(NumRows.ALL);
+        else if (!filterItem.getChildType(IdentifierNode.class, 0).getValue()
+                .equals(filterItem.getChildType(IdentifierNode.class, 1).getValue()))
+            getRows = new GetRowsNode(NumRows.NONE);
+        else
+            throw new BlkchnException("Query not Supported");
+        return getRows;
+
+    }
+
     public abstract List<String> getRangeCols(String table);
 
     public abstract List<String> getQueryCols(String table);
-    
+
     public abstract RangeOperations<?> getRangeOperations(String table, String column);
-    
+
     public abstract boolean tableExists(String table);
-    
+
     public abstract boolean columnExists(String table, String column);
     
     public abstract Map<String, Integer> getColumnTypeMap(String table);
     
+
     public static enum Color {
-        RED,
-        GREEN;
-        
+        RED, GREEN;
+
         public static Color and(Color first, Color second) {
-            if(first == RED && second == RED) {
+            if (first == RED && second == RED) {
                 return RED;
             } else {
                 return GREEN;
             }
         }
-        
+
         public static Color or(Color first, Color second) {
-            if(first == GREEN && second == GREEN) {
+            if (first == GREEN && second == GREEN) {
                 return GREEN;
             } else {
                 return RED;
