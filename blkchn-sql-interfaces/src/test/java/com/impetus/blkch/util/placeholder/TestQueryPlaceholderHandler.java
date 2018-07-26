@@ -18,7 +18,9 @@ package com.impetus.blkch.util.placeholder;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.impetus.blkch.sql.parser.DummyPhysicalPlan;
 import com.impetus.blkch.sql.parser.LogicalPlan;
+import com.impetus.blkch.sql.parser.PhysicalPlan;
 import com.impetus.blkch.sql.query.IdentifierNode;
 
 import junit.framework.TestCase;
@@ -68,4 +70,18 @@ public class TestQueryPlaceholderHandler extends TestCase {
         assertEquals(String.valueOf(5564), ident.getValue());
     }
 
+    @Test
+    public void testOneEqualsZero() {
+        String sql = "select * from transaction where 1=0";
+        LogicalPlan logicalPlan = new LogicalPlanGen().getLogicalPlan(sql);
+        logicalPlan.getQuery().traverse();
+    }
+    
+    @Test
+    public void testPhysicalPlan() {
+        String sql = "select * from block where blocknumber > 21 and blocknumber < 30 or Blocknumber=25";
+        LogicalPlan logicalPlan = new LogicalPlanGen().getLogicalPlan(sql);
+        DummyPhysicalPlan physicalPlan = new DummyPhysicalPlan("dummyPlan", logicalPlan);
+        physicalPlan.getWhereClause().traverse();
+    }
 }

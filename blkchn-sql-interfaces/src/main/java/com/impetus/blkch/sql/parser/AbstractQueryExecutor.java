@@ -28,7 +28,7 @@ import com.impetus.blkch.sql.query.LogicalOperation.Operator;
 import com.impetus.blkch.util.RangeOperations;
 
 public abstract class AbstractQueryExecutor {
-    
+
     protected LogicalPlan logicalPlan;
     
     protected PhysicalPlan originalPhysicalPlan;
@@ -38,7 +38,7 @@ public abstract class AbstractQueryExecutor {
     protected Map<String, Object> dataMap = new HashMap<>();
 
     protected Map<String, Map<String, Object>> auxillaryDataMap = new HashMap<>();
-    
+
     protected TreeNode executeDirectAPIs(String table, TreeNode node) {
         if (node instanceof LogicalOperation) {
             LogicalOperation oper = (LogicalOperation) node;
@@ -55,9 +55,8 @@ public abstract class AbstractQueryExecutor {
             return getDataNode(table, column, value);
         } else if (node instanceof RangeNode<?>) {
             RangeNode<?> rangeNode = (RangeNode<?>) node;
-            if (rangeNode.getRangeList().getRanges().size() == 1
-                    && rangeNode.getRangeList().getRanges().get(0).getMin() == rangeNode.getRangeList().getRanges()
-                            .get(0).getMax()) {
+            if (rangeNode.getRangeList().getRanges().size() == 1 && rangeNode.getRangeList().getRanges().get(0)
+                    .getMin() == rangeNode.getRangeList().getRanges().get(0).getMax()) {
                 String column = rangeNode.getColumn();
                 String value = rangeNode.getRangeList().getRanges().get(0).getMin().toString();
                 return getDataNode(table, column, value);
@@ -68,7 +67,7 @@ public abstract class AbstractQueryExecutor {
             return node;
         }
     }
-    
+
     protected <T> TreeNode optimize(TreeNode node) {
         if (!(node instanceof LogicalOperation)) {
             return node;
@@ -82,7 +81,7 @@ public abstract class AbstractQueryExecutor {
             return optimizeAnd(left, right);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     protected <T> DataNode<T> execute(TreeNode node) {
         if (node instanceof LogicalOperation) {
@@ -109,6 +108,8 @@ public abstract class AbstractQueryExecutor {
 
     @SuppressWarnings("unchecked")
     private <T> TreeNode optimizeAnd(TreeNode left, TreeNode right) {
+        if (left instanceof GetRowsNode || right instanceof GetRowsNode)
+            throw new BlkchnException("Boolean expression in WhereClause with other filter conditions not supported");
         if (left instanceof DataNode<?>) {
             DataNode<T> dataNode = (DataNode<T>) left;
             if (right instanceof LogicalOperation) {
@@ -162,9 +163,11 @@ public abstract class AbstractQueryExecutor {
             return newOper;
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     private <T> TreeNode optimizeOr(TreeNode left, TreeNode right) {
+        if (left instanceof GetRowsNode || right instanceof GetRowsNode)
+            throw new BlkchnException("Boolean expression in WhereClause with other filter conditions not supported");
         if (left instanceof DataNode<?>) {
             DataNode<T> dataNode = (DataNode<T>) left;
             if (right instanceof LogicalOperation || right instanceof FilterItem) {
@@ -212,14 +215,14 @@ public abstract class AbstractQueryExecutor {
             return newOper;
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     private <T> DataNode<T> filterWithValue(TreeNode node, DataNode<T> dataNode) {
         if (node instanceof LogicalOperation) {
             LogicalOperation oper = (LogicalOperation) node;
             DataNode<T> first = filterWithValue(oper.getChildNode(0), dataNode);
             DataNode<T> second = filterWithValue(oper.getChildNode(1), dataNode);
-            if(oper.isAnd()) {
+            if (oper.isAnd()) {
                 return mergeDataNodes(first, second, Operator.AND);
             } else {
                 return mergeDataNodes(first, second, Operator.OR);
@@ -232,7 +235,7 @@ public abstract class AbstractQueryExecutor {
             return combineFilterItemAndDataNodes((FilterItem) node, dataNode);
         }
     }
-    
+
     private <T> DataNode<T> combineFilterItemAndDataNodes(FilterItem filterItem, DataNode<T> dataNode) {
         String filterColName = filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0)
                 .getValue();
@@ -244,7 +247,7 @@ public abstract class AbstractQueryExecutor {
         }).collect(Collectors.toList());
         return new DataNode<>(dataNode.getTable(), filterKeys);
     }
-    
+
     protected boolean compareNumbers(Number first, Number second, Comparator comparator) {
         if (comparator.isEQ()) {
             return first.doubleValue() == second.doubleValue();
@@ -260,7 +263,7 @@ public abstract class AbstractQueryExecutor {
             return first.doubleValue() != second.doubleValue();
         }
     }
-    
+
     protected <T> DataNode<T> mergeDataNodes(DataNode<T> first, DataNode<T> second, Operator op) {
         List<T> newKeys = new ArrayList<>();
         if (op == Operator.AND) {
@@ -346,16 +349,15 @@ public abstract class AbstractQueryExecutor {
         this.physicalPlan = originalPhysicalPlan.paginate(rangeNode);
     }
 
-    
     protected abstract DataNode<?> getDataNode(String table, String column, String value);
-    
+
     protected abstract <T extends Number & Comparable<T>> DataNode<?> executeRangeNode(RangeNode<T> rangeNode);
-    
+
     protected abstract <T extends Number & Comparable<T>> TreeNode combineRangeAndDataNodes(RangeNode<T> rangeNode,
             DataNode<?> dataNode, LogicalOperation oper);
-    
+
     protected abstract boolean filterField(String fieldName, Object obj, String value, Comparator comparator);
-    
+
     protected abstract <T> DataNode<T> filterRangeNodeWithValue(RangeNode<?> rangeNode, DataNode<T> dataNode);
 
 }
