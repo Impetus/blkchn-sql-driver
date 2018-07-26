@@ -116,7 +116,7 @@ public abstract class PhysicalPlan extends TreeNode {
         if (logicalOperation.getChildNode(0) instanceof LogicalOperation) {
             firstChild = processLogicalOperation((LogicalOperation) logicalOperation.getChildNode(0));
         } else if (logicalOperation.getChildNode(0) instanceof FilterItem) {
-            firstChild = processFilterItem((FilterItem)logicalOperation.getChildNode(0));
+            firstChild = processFilterItem((FilterItem) logicalOperation.getChildNode(0));
         } else {
             firstChild = (TreeNode) logicalOperation.getChildNode(0).clone();
         }
@@ -124,17 +124,18 @@ public abstract class PhysicalPlan extends TreeNode {
         if (logicalOperation.getChildNode(1) instanceof LogicalOperation) {
             secondChild = processLogicalOperation((LogicalOperation) logicalOperation.getChildNode(1));
         } else if (logicalOperation.getChildNode(1) instanceof FilterItem) {
-            secondChild = processFilterItem((FilterItem)logicalOperation.getChildNode(1));
+            secondChild = processFilterItem((FilterItem) logicalOperation.getChildNode(1));
         } else {
             secondChild = (TreeNode) logicalOperation.getChildNode(1).clone();
         }
 
-        if((firstChild instanceof RangeNode<?>) && (secondChild instanceof RangeNode<?>)) {
-            RangeNode<?> firstRange = (RangeNode<?>)firstChild;
-            RangeNode<?> secondRange = (RangeNode<?>)secondChild;
-            if(firstRange.getColumn().equals(secondRange.getColumn()) &&
-                    firstRange.getTable().equals(secondRange.getTable())) {
-                String table = logicalPlan.getQuery().getChildType(FromItem.class, 0).getChildType(Table.class, 0).getChildType(IdentifierNode.class, 0).getValue();
+        if ((firstChild instanceof RangeNode<?>) && (secondChild instanceof RangeNode<?>)) {
+            RangeNode<?> firstRange = (RangeNode<?>) firstChild;
+            RangeNode<?> secondRange = (RangeNode<?>) secondChild;
+            if (firstRange.getColumn().equals(secondRange.getColumn())
+                    && firstRange.getTable().equals(secondRange.getTable())) {
+                String table = logicalPlan.getQuery().getChildType(FromItem.class, 0).getChildType(Table.class, 0)
+                        .getChildType(IdentifierNode.class, 0).getValue();
                 RangeOperations<?> rangeOperations = getRangeOperations(table, firstRange.getColumn());
                 return rangeOperations.processRangeNodes(firstRange, secondRange, logicalOperation);
             }
@@ -214,7 +215,7 @@ public abstract class PhysicalPlan extends TreeNode {
         filterItem.addChildNode(new IdentifierNode(value));
         return filterItem;
     }
-    
+
     public PhysicalPlan paginate(RangeNode<?> rangeNode) {
         if (!logicalPlan.getType().equals(SQLType.QUERY)) {
             return this;
@@ -223,18 +224,18 @@ public abstract class PhysicalPlan extends TreeNode {
         String tableName = table.getChildType(IdentifierNode.class, 0).getValue();
         rangeNode.setTable(tableName);
         PhysicalPlan paginatedPlan = (PhysicalPlan) this.clone();
-        if(whereClause == null) {
+        if (whereClause == null) {
             paginatedPlan.whereClause = new WhereClause();
             paginatedPlan.whereClause.addChildNode(rangeNode);
         } else {
             TreeNode whereClassNode = generatePage(whereClause.getChildNode(0), rangeNode,
                     paginatedPlan.validateLogicalPlan());
             TreeNode reducedWhereClassNode = processLogicalOperation((LogicalOperation) whereClassNode);
-            paginatedPlan.whereClause.setChildNodes(Arrays.asList(reducedWhereClassNode)); // Using setChildNodes since old child nodes should be overridden
+            paginatedPlan.whereClause.setChildNodes(Arrays.asList(reducedWhereClassNode));
         }
         return paginatedPlan;
     }
-    
+
     private TreeNode generatePage(TreeNode currentNode, RangeNode<?> rangeNode, boolean isExecutable) {
         if (currentNode instanceof LogicalOperation) {
             LogicalOperation oper = (LogicalOperation) currentNode;
@@ -293,9 +294,9 @@ public abstract class PhysicalPlan extends TreeNode {
     public abstract boolean tableExists(String table);
 
     public abstract boolean columnExists(String table, String column);
-    
+
     public abstract Map<String, Integer> getColumnTypeMap(String table);
-    
+
 
     public static enum Color {
         RED, GREEN;
@@ -316,7 +317,7 @@ public abstract class PhysicalPlan extends TreeNode {
             }
         }
     }
-    
+
     @Override
     public Object clone() {
         PhysicalPlan root = (PhysicalPlan) super.clone();
