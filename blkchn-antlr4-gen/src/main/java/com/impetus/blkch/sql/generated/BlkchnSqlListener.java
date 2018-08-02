@@ -127,6 +127,48 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitDeploySmartContractRule(BlkchnSqlParser.DeploySmartContractRuleContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code createUserRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCreateUserRule(BlkchnSqlParser.CreateUserRuleContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code createUserRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCreateUserRule(BlkchnSqlParser.CreateUserRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#createUser}.
+	 * @param ctx the parse tree
+	 */
+	void enterCreateUser(BlkchnSqlParser.CreateUserContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#createUser}.
+	 * @param ctx the parse tree
+	 */
+	void exitCreateUser(BlkchnSqlParser.CreateUserContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#secret}.
+	 * @param ctx the parse tree
+	 */
+	void enterSecret(BlkchnSqlParser.SecretContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#secret}.
+	 * @param ctx the parse tree
+	 */
+	void exitSecret(BlkchnSqlParser.SecretContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#affiliation}.
+	 * @param ctx the parse tree
+	 */
+	void enterAffiliation(BlkchnSqlParser.AffiliationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#affiliation}.
+	 * @param ctx the parse tree
+	 */
+	void exitAffiliation(BlkchnSqlParser.AffiliationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#insertInto}.
 	 * @param ctx the parse tree
 	 */

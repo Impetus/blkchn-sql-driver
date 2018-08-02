@@ -57,6 +57,20 @@ statement
     | dropAsset                                                    #dropAssetRule
     | upgradeFunction                                              #upgradeFunctionRule
     | deploySmartContract 										   #deploySmartContractRule
+    | createUser                                                   #createUserRule
+    ;
+    
+createUser
+    : CREATE USER identifier IDENTIFIED BY secret AFFILIATED TO affiliation
+    ;
+    
+secret
+    : STRING
+    ;
+    
+affiliation
+    : IDENTIFIER
+    | NESTED_IDENTIFIER
     ;
        
 insertInto
@@ -593,6 +607,10 @@ UPGRADE: 'UPGRADE';
 ADDRESS : 'ADDRESS';
 WITHASYNC:'WITHASYNC';
 DEPLOY:'DEPLOY';
+USER: 'USER';
+IDENTIFIED: 'IDENTIFIED';
+AFFILIATED: 'AFFILIATED';
+
 IF: 'IF';
 
 EQ  : '=' | '==';
@@ -681,6 +699,10 @@ BIGDECIMAL_LITERAL
 
 IDENTIFIER
     : (LETTER | DIGIT | '_')+
+    ;
+    
+NESTED_IDENTIFIER
+    : IDENTIFIER ('.' IDENTIFIER)+
     ;
 
 

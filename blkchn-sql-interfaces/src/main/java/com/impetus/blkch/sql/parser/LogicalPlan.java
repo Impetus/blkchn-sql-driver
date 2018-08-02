@@ -26,6 +26,7 @@ import com.impetus.blkch.sql.insert.Insert;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.QueryItemInterface;
 import com.impetus.blkch.sql.smartcontract.SmartCnrtDeploy;
+import com.impetus.blkch.sql.user.CreateUser;
 
 public class LogicalPlan extends TreeNode implements QueryItemInterface {
 
@@ -48,7 +49,9 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
     private DropAsset dropAsset;
 
     private UpgradeFunction upgradeFunction;
-
+    
+    private CreateUser createUser;
+    
     private SQLType type;
 
     private SmartCnrtDeploy smartCnrtDeploy;
@@ -145,7 +148,15 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
     public void setUpgradeFunction(UpgradeFunction upgradeFunction) {
         this.upgradeFunction = upgradeFunction;
     }
-
+    
+    public void setCreateUser(CreateUser createUser) {
+        this.createUser = createUser;
+    }
+    
+    public CreateUser getCreateUser() {
+        return createUser;
+    }
+    
     public SQLType getType() {
         return type;
     }
@@ -165,24 +176,26 @@ public class LogicalPlan extends TreeNode implements QueryItemInterface {
     }
 
     public static enum SQLType {
+        
+        QUERY,
+        
+        INSERT,
+        
+        CREATE_FUNCTION,
+        
+        CALL_FUNCTION,
+        
+        CREATE_ASSET,
+        
+        DELETE_FUNCTION,
+        
+        DROP_ASSET,
+        
+        UPGRADE_FUNCTION,
 
-                                QUERY,
-
-                                INSERT,
-
-                                CREATE_FUNCTION,
-
-                                CALL_FUNCTION,
-
-                                CREATE_ASSET,
-
-                                DELETE_FUNCTION,
-
-                                DROP_ASSET,
-
-                                UPGRADE_FUNCTION,
-
-                                DEPLOY_SMARTCONTRACT
+        DEPLOY_SMARTCONTRACT,
+        
+        CREATE_USER
     }
 
 }

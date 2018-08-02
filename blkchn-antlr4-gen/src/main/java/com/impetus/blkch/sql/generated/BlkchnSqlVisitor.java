@@ -81,6 +81,31 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeploySmartContractRule(BlkchnSqlParser.DeploySmartContractRuleContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code createUserRule}
+	 * labeled alternative in {@link BlkchnSqlParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCreateUserRule(BlkchnSqlParser.CreateUserRuleContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#createUser}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCreateUser(BlkchnSqlParser.CreateUserContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#secret}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSecret(BlkchnSqlParser.SecretContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#affiliation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAffiliation(BlkchnSqlParser.AffiliationContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#insertInto}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
