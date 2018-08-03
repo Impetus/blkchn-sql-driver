@@ -90,23 +90,32 @@ columnValue
     ;
     
 createFunction
-    : CREATE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? endorsersFile? args?
-    ;
-    
+	: CREATE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? endorsersFile? args? createFlag?
+	;
+
 upgradeFunction
-    : UPGRADE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? endorsersFile? args?
+    : UPGRADE (FUNCTION | CHAINCODE | SMARTCONTRACT) qualifiedName AS className version? endorsersFile? args? upgradeFlag?
     ;
     
 createAsset
     : CREATE (ASSET | TABLE) asset ('(' colTypeList ')')? WITH STORAGE TYPE storageType
       fieldDelimiter? recordDelimiter?
     ;
-
    
 deploySmartContract
 	: DEPLOY SMARTCONTRACT className '(' parameterValues? ')' (AND WITHASYNC asyncOption)?
 	;
-	
+    
+createFlag
+    : INSTALL_ONLY
+    | INSTANTIATE_ONLY
+    ;
+    
+upgradeFlag
+    : INSTALL_ONLY
+    | UPGRADE_ONLY
+    ;
+
 asset
     : identifier
     ;
@@ -656,6 +665,9 @@ INDEX: 'INDEX';
 INDEXES: 'INDEXES';
 CURRENT_DATE: 'CURRENT_DATE';
 CURRENT_TIMESTAMP: 'CURRENT_TIMESTAMP';
+INSTALL_ONLY: 'INSTALL ONLY';
+INSTANTIATE_ONLY: 'INSTANTIATE ONLY';
+UPGRADE_ONLY: 'UPGRADE ONLY';
 
 STRING
     : '\'' ( ~('\''|'\\') | ('\\' .) )* '\''

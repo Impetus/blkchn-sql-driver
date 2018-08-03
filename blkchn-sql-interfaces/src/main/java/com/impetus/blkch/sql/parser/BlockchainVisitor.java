@@ -33,9 +33,12 @@ import com.impetus.blkch.sql.function.ClassName;
 import com.impetus.blkch.sql.function.CreateFunction;
 import com.impetus.blkch.sql.function.DeleteFunction;
 import com.impetus.blkch.sql.function.Endorsers;
+import com.impetus.blkch.sql.function.InstallOnly;
+import com.impetus.blkch.sql.function.InstantiateOnly;
 import com.impetus.blkch.sql.function.Parameters;
 import com.impetus.blkch.sql.function.PolicyFile;
 import com.impetus.blkch.sql.function.UpgradeFunction;
+import com.impetus.blkch.sql.function.UpgradeOnly;
 import com.impetus.blkch.sql.function.Version;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.AddressVlaueContext;
@@ -56,6 +59,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.ColumnValuesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ComparisonOperatorContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateAssetContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateFlagContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.CreateUserContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DeleteFunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.DeploySmartContractRuleContext;
@@ -90,6 +94,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.StorageTypeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.StringLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.TableIdentifierContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.UnquotedIdentifierContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.UpgradeFlagContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.UpgradeFunctionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.VersionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.WhereClauseContext;
@@ -595,6 +600,36 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         Affiliation affiliation = new Affiliation(ctx.getText());
         logicalPlan.getCurrentNode().addChildNode(affiliation);
         logicalPlan.setCurrentNode(affiliation);
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitCreateFlag(CreateFlagContext ctx) {
+        logger.trace("In visitAffiliation " + ctx.getText());
+        if(ctx.INSTALL_ONLY() != null) {
+            InstallOnly installOnly = new InstallOnly();
+            logicalPlan.getCurrentNode().addChildNode(installOnly);
+            logicalPlan.setCurrentNode(installOnly);
+        } else {
+            InstantiateOnly instantiateOnly = new InstantiateOnly();
+            logicalPlan.getCurrentNode().addChildNode(instantiateOnly);
+            logicalPlan.setCurrentNode(instantiateOnly);
+        }
+        return visitChildrenAndResetNode(ctx);
+    }
+    
+    @Override
+    public LogicalPlan visitUpgradeFlag(UpgradeFlagContext ctx) {
+        logger.trace("In visitUpgradeFlag " + ctx.getText());
+        if(ctx.INSTALL_ONLY() != null) {
+            InstallOnly installOnly = new InstallOnly();
+            logicalPlan.getCurrentNode().addChildNode(installOnly);
+            logicalPlan.setCurrentNode(installOnly);
+        } else {
+            UpgradeOnly upgradeOnly = new UpgradeOnly();
+            logicalPlan.getCurrentNode().addChildNode(upgradeOnly);
+            logicalPlan.setCurrentNode(upgradeOnly);
+        }
         return visitChildrenAndResetNode(ctx);
     }
 

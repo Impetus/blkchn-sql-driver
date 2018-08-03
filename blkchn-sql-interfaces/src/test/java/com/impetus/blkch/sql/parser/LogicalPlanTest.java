@@ -15,14 +15,15 @@
 ******************************************************************************/
 package com.impetus.blkch.sql.parser;
 
-import com.impetus.blkch.BlkchnErrorListener;
-import com.impetus.blkch.BlkchnException;
-
 import junit.framework.TestCase;
 
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.impetus.blkch.BlkchnErrorListener;
+import com.impetus.blkch.BlkchnException;
 import com.impetus.blkch.sql.asset.Asset;
 import com.impetus.blkch.sql.asset.ColumnType;
 import com.impetus.blkch.sql.asset.ColumnTypeList;
@@ -37,8 +38,12 @@ import com.impetus.blkch.sql.function.ClassName;
 import com.impetus.blkch.sql.function.CreateFunction;
 import com.impetus.blkch.sql.function.DeleteFunction;
 import com.impetus.blkch.sql.function.Endorsers;
+import com.impetus.blkch.sql.function.InstallOnly;
+import com.impetus.blkch.sql.function.InstantiateOnly;
 import com.impetus.blkch.sql.function.Parameters;
 import com.impetus.blkch.sql.function.PolicyFile;
+import com.impetus.blkch.sql.function.UpgradeFunction;
+import com.impetus.blkch.sql.function.UpgradeOnly;
 import com.impetus.blkch.sql.function.Version;
 import com.impetus.blkch.sql.generated.BlkchnSqlLexer;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser;
@@ -70,9 +75,6 @@ import com.impetus.blkch.sql.query.WhereClause;
 import com.impetus.blkch.sql.user.Affiliation;
 import com.impetus.blkch.sql.user.CreateUser;
 import com.impetus.blkch.sql.user.Secret;
-
-import org.junit.runner.RunWith;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 public class LogicalPlanTest extends TestCase {
@@ -445,6 +447,42 @@ public class LogicalPlanTest extends TestCase {
         CreateUser expected = buildCreateUser();
         assertEquals(expected, actual);
     }
+    
+    @Test
+    public void testCreateFlagInstall() {
+        String sql = "CREATE CHAINCODE test_chain AS '/home/username/path' WITH VERSION '1.0' INSTALL ONLY";
+        LogicalPlan plan = getLogicalPlan(sql);
+        CreateFunction actual = plan.getCreateFunction();
+        CreateFunction expected = buildCreateFlagInstall();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void testUpgradeFlagInstall() {
+        String sql = "UPGRADE CHAINCODE test_chain AS '/home/username/path' WITH VERSION '1.0' INSTALL ONLY";
+        LogicalPlan plan = getLogicalPlan(sql);
+        UpgradeFunction actual = plan.getUpgradeFunction();
+        UpgradeFunction expected = buildUpgradeFlagInstall();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void testCreateFlagInstantiate() {
+        String sql = "CREATE CHAINCODE test_chain AS '/home/username/path' WITH VERSION '1.0' INSTANTIATE ONLY";
+        LogicalPlan plan = getLogicalPlan(sql);
+        CreateFunction actual = plan.getCreateFunction();
+        CreateFunction expected = buildCreateFlagInstantiate();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void testUpgradeFlagUpgrade() {
+        String sql = "UPGRADE CHAINCODE test_chain AS '/home/username/path' WITH VERSION '1.0' UPGRADE ONLY";
+        LogicalPlan plan = getLogicalPlan(sql);
+        UpgradeFunction actual = plan.getUpgradeFunction();
+        UpgradeFunction expected = buildUpgradeFlagUpgrade();
+        assertEquals(expected, actual);
+    }
 
     @Test(expected =  BlkchnException.class)
     public void testWrongQuery() {
@@ -660,6 +698,42 @@ public class LogicalPlanTest extends TestCase {
         createUser.addChildNode(new Secret("mypassword"));
         createUser.addChildNode(new Affiliation("org1.dept1"));
         return createUser;
+    }
+    
+    private CreateFunction buildCreateFlagInstall() {
+        CreateFunction createFunction = new CreateFunction();
+        createFunction.addChildNode(new IdentifierNode("test_chain"));
+        createFunction.addChildNode(new ClassName("'/home/username/path'"));
+        createFunction.addChildNode(new Version("'1.0'"));
+        createFunction.addChildNode(new InstallOnly());
+        return createFunction;
+    }
+    
+    private UpgradeFunction buildUpgradeFlagInstall() {
+        UpgradeFunction upgradeFunction = new UpgradeFunction();
+        upgradeFunction.addChildNode(new IdentifierNode("test_chain"));
+        upgradeFunction.addChildNode(new ClassName("'/home/username/path'"));
+        upgradeFunction.addChildNode(new Version("'1.0'"));
+        upgradeFunction.addChildNode(new InstallOnly());
+        return upgradeFunction;
+    }
+    
+    private CreateFunction buildCreateFlagInstantiate() {
+        CreateFunction createFunction = new CreateFunction();
+        createFunction.addChildNode(new IdentifierNode("test_chain"));
+        createFunction.addChildNode(new ClassName("'/home/username/path'"));
+        createFunction.addChildNode(new Version("'1.0'"));
+        createFunction.addChildNode(new InstantiateOnly());
+        return createFunction;
+    }
+    
+    private UpgradeFunction buildUpgradeFlagUpgrade() {
+        UpgradeFunction upgradeFunction = new UpgradeFunction();
+        upgradeFunction.addChildNode(new IdentifierNode("test_chain"));
+        upgradeFunction.addChildNode(new ClassName("'/home/username/path'"));
+        upgradeFunction.addChildNode(new Version("'1.0'"));
+        upgradeFunction.addChildNode(new UpgradeOnly());
+        return upgradeFunction;
     }
 
     public LogicalPlan getLogicalPlan(String sqlText) {

@@ -249,6 +249,26 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitDeploySmartContract(BlkchnSqlParser.DeploySmartContractContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#createFlag}.
+	 * @param ctx the parse tree
+	 */
+	void enterCreateFlag(BlkchnSqlParser.CreateFlagContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#createFlag}.
+	 * @param ctx the parse tree
+	 */
+	void exitCreateFlag(BlkchnSqlParser.CreateFlagContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#upgradeFlag}.
+	 * @param ctx the parse tree
+	 */
+	void enterUpgradeFlag(BlkchnSqlParser.UpgradeFlagContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#upgradeFlag}.
+	 * @param ctx the parse tree
+	 */
+	void exitUpgradeFlag(BlkchnSqlParser.UpgradeFlagContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#asset}.
 	 * @param ctx the parse tree
 	 */
