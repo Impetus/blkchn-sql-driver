@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.*;
 import com.impetus.blkch.sql.generated.BlkchnSqlVisitor;
 
-public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan> implements
-        BlkchnSqlVisitor<LogicalPlan> {
+public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan>
+        implements BlkchnSqlVisitor<LogicalPlan> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractSyntaxTreeVisitor.class);
 
@@ -229,13 +229,6 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     @Override
     public LogicalPlan visitPredicated(PredicatedContext ctx) {
         logger.trace("In visitPredicated " + ctx.getText());
-        return visitChildren(ctx);
-
-    }
-
-    @Override
-    public LogicalPlan visitPredicate(PredicateContext ctx) {
-        logger.trace("In visitPredicate " + ctx.getText());
         return visitChildren(ctx);
 
     }
@@ -835,7 +828,7 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
         logger.trace("In visitColumnValue " + ctx.getText());
         return visitChildren(ctx);
     }
-    
+
     @Override
     public LogicalPlan visitCreateUserRule(CreateUserRuleContext ctx) {
         logger.trace("In visitCreateUserRule " + ctx.getText());
@@ -846,7 +839,8 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     public LogicalPlan visitQuestionMark(QuestionMarkContext ctx) {
         logger.trace("In visitQuestionMark " + ctx.getText());
         return visitChildren(ctx);
-    }    
+    }
+
     @Override
     public LogicalPlan visitCreateUser(CreateUserContext ctx) {
         logger.trace("In visitCreateUser " + ctx.getText());
@@ -870,6 +864,7 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
         logger.trace("In visitPlaceholder " + ctx.getText());
         return visitChildren(ctx);
     }
+
     @Override
     public LogicalPlan visitDeploySmartContractRule(DeploySmartContractRuleContext ctx) {
         logger.trace("In visitDeploySmartContractRule " + ctx.getText());
@@ -946,6 +941,42 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     public LogicalPlan visitSecret(SecretContext ctx) {
         logger.trace("In visitSecret " + ctx.getText());
         return visitSecret(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitNotBetween(NotBetweenContext ctx) {
+        logger.trace("In visitNotBetween " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitNotIn(NotInContext ctx) {
+        logger.trace("In visitNotIn " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitNotInSubQuery(NotInSubQueryContext ctx) {
+        logger.trace("In visitNotInSubQuery " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitNotLike(NotLikeContext ctx) {
+        logger.trace("In visitNotLike " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitIsNotNULL(IsNotNULLContext ctx) {
+        logger.trace("In visitIsNotNULL " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitPredicateExpression(PredicateExpressionContext ctx) {
+        logger.trace("In visitPredicateExpression " + ctx.getText());
+        return visitChildren(ctx);
     }
 
 }

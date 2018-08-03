@@ -31,7 +31,7 @@ import com.impetus.blkch.sql.query.RangeNode;
 public class TestRangeOperations extends TestCase {
 
     private RangeOperations<Long> rangeOperations = new LongRangeOperations();
-    
+
     @Test
     public void testDiscreteAnd() {
         Range<Long> range1 = new Range<>(1l, 3l);
@@ -39,7 +39,7 @@ public class TestRangeOperations extends TestCase {
         RangeList<Long> andRange = rangeOperations.and(range1, range2);
         assertNull(andRange);
     }
-    
+
     @Test
     public void testOverlappingAnd() {
         Range<Long> range1 = new Range<>(1l, 3l);
@@ -49,7 +49,7 @@ public class TestRangeOperations extends TestCase {
         expectedRangeList.addRange(new Range<>(2l, 3l));
         assertEquals(expectedRangeList, andRange);
     }
-    
+
     @Test
     public void testEdgeCaseAnd() {
         Range<Long> range1 = new Range<>(1l, 3l);
@@ -59,7 +59,7 @@ public class TestRangeOperations extends TestCase {
         expectedRangeList.addRange(new Range<>(3l, 3l));
         assertEquals(expectedRangeList, andRange);
     }
-    
+
     @Test
     public void testDiscreteOr() {
         Range<Long> range1 = new Range<>(1l, 3l);
@@ -69,7 +69,7 @@ public class TestRangeOperations extends TestCase {
         expectedRangeList.addAllRanges(new Range<Long>(1l, 3l), new Range<Long>(4l, 5l));
         assertEquals(expectedRangeList, orRange);
     }
-    
+
     @Test
     public void testOverlappingOr() {
         Range<Long> range1 = new Range<>(1l, 3l);
@@ -79,7 +79,7 @@ public class TestRangeOperations extends TestCase {
         expectedRangeList.addAllRanges(new Range<Long>(1l, 5l));
         assertEquals(expectedRangeList, orRange);
     }
-    
+
     @Test
     public void testEdgeCaseOr() {
         Range<Long> range1 = new Range<>(1l, 3l);
@@ -89,7 +89,7 @@ public class TestRangeOperations extends TestCase {
         expectedRangeList.addAllRanges(new Range<Long>(1l, 5l));
         assertEquals(expectedRangeList, orRange);
     }
-    
+
     @Test
     public void testProcessFilterItem() {
         FilterItem filterItem = new FilterItem();
@@ -106,84 +106,96 @@ public class TestRangeOperations extends TestCase {
         expected.getRangeList().addRange(new Range<Long>(51l, Long.MAX_VALUE));
         assertEquals(expected, actual);
     }
-    
+
     @Test
     public void testRangeNodeOr() {
         RangeNode<Long> rangeNode1 = new RangeNode<>("table", "column");
         rangeNode1.getRangeList().addAllRanges(new Range<>(1l, 5l), new Range<>(7l, 10l), new Range<>(13l, 18l));
         RangeNode<Long> rangeNode2 = new RangeNode<>("table", "column");
-        rangeNode2.getRangeList().addAllRanges(new Range<>(8l, 9l), new Range<>(15l, 20l), new Range<>(22l, 25l), new Range<>(2l, 6l));
+        rangeNode2.getRangeList().addAllRanges(new Range<>(8l, 9l), new Range<>(15l, 20l), new Range<>(22l, 25l),
+                new Range<>(2l, 6l));
         RangeNode<Long> actual = rangeOperations.rangeNodeOr(rangeNode1, rangeNode2);
         RangeNode<Long> expected = new RangeNode<>("table", "column");
-        expected.getRangeList().addAllRanges(new Range<>(1l, 6l), new Range<>(7l, 10l), new Range<>(13l, 20l), new Range<>(22l, 25l));
+        expected.getRangeList().addAllRanges(new Range<>(1l, 6l), new Range<>(7l, 10l), new Range<>(13l, 20l),
+                new Range<>(22l, 25l));
         assertEquals(expected, actual);
     }
-    
+
     @Test
     public void testRangeNodeAnd() {
         RangeNode<Long> rangeNode1 = new RangeNode<>("table", "column");
         rangeNode1.getRangeList().addAllRanges(new Range<>(1l, 5l), new Range<>(7l, 10l), new Range<>(13l, 18l));
         RangeNode<Long> rangeNode2 = new RangeNode<>("table", "column");
-        rangeNode2.getRangeList().addAllRanges(new Range<>(8l, 9l), new Range<>(15l, 20l), new Range<>(22l, 25l), new Range<>(2l, 6l));
+        rangeNode2.getRangeList().addAllRanges(new Range<>(8l, 9l), new Range<>(15l, 20l), new Range<>(22l, 25l),
+                new Range<>(2l, 6l));
         RangeNode<Long> actual = rangeOperations.rangeNodeAnd(rangeNode1, rangeNode2);
         RangeNode<Long> expected = new RangeNode<Long>("table", "column");
         expected.getRangeList().addAllRanges(new Range<>(2l, 5l), new Range<>(8l, 9l), new Range<>(15l, 18l));
         assertEquals(expected, actual);
     }
-    
+
     @Test
     public void testProcessRangeNodesAnd() {
         RangeNode<Long> rangeNode1 = new RangeNode<>("table", "column");
         rangeNode1.getRangeList().addAllRanges(new Range<>(1l, 5l), new Range<>(7l, 10l), new Range<>(13l, 18l));
         RangeNode<Long> rangeNode2 = new RangeNode<>("table", "column");
-        rangeNode2.getRangeList().addAllRanges(new Range<>(8l, 9l), new Range<>(15l, 20l), new Range<>(22l, 25l), new Range<>(2l, 6l));
-        RangeNode<Long> actual = rangeOperations.processRangeNodes(rangeNode1, rangeNode2, new LogicalOperation(Operator.AND));
+        rangeNode2.getRangeList().addAllRanges(new Range<>(8l, 9l), new Range<>(15l, 20l), new Range<>(22l, 25l),
+                new Range<>(2l, 6l));
+        RangeNode<Long> actual = rangeOperations.processRangeNodes(rangeNode1, rangeNode2,
+                new LogicalOperation(Operator.AND));
         RangeNode<Long> expected = new RangeNode<Long>("table", "column");
         expected.getRangeList().addAllRanges(new Range<>(2l, 5l), new Range<>(8l, 9l), new Range<>(15l, 18l));
         assertEquals(expected, actual);
     }
-    
+
     @Test
     public void testProcessRangeNodesOr() {
         RangeNode<Long> rangeNode1 = new RangeNode<>("table", "column");
         rangeNode1.getRangeList().addAllRanges(new Range<>(1l, 5l), new Range<>(7l, 10l), new Range<>(13l, 18l));
         RangeNode<Long> rangeNode2 = new RangeNode<>("table", "column");
-        rangeNode2.getRangeList().addAllRanges(new Range<>(8l, 9l), new Range<>(15l, 20l), new Range<>(22l, 25l), new Range<>(2l, 6l));
-        RangeNode<Long> actual = rangeOperations.processRangeNodes(rangeNode1, rangeNode2, new LogicalOperation(Operator.OR));
+        rangeNode2.getRangeList().addAllRanges(new Range<>(8l, 9l), new Range<>(15l, 20l), new Range<>(22l, 25l),
+                new Range<>(2l, 6l));
+        RangeNode<Long> actual = rangeOperations.processRangeNodes(rangeNode1, rangeNode2,
+                new LogicalOperation(Operator.OR));
         RangeNode<Long> expected = new RangeNode<Long>("table", "column");
-        expected.getRangeList().addAllRanges(new Range<>(1l, 6l), new Range<>(13l, 20l), new Range<>(7l, 10l), new Range<>(22l, 25l));
+        expected.getRangeList().addAllRanges(new Range<>(1l, 6l), new Range<>(13l, 20l), new Range<>(7l, 10l),
+                new Range<>(22l, 25l));
         assertEquals(expected, actual);
     }
 
-
     @Test
-    public void testNullInRange(){
-        Range<Long> range1 = new Range<>(1l,4l);
+    public void testNullInRange() {
+        Range<Long> range1 = new Range<>(1l, 4l);
         Range<Long> range2 = null;
         Boolean result = range1.equals(range2);
-        assert(!result);
+        assert (!result);
     }
 
     @Test
-    public void testThreeDiscreteRangeAnd(){
-        Range<Long> range1 = new Range<>(2l,10l);
-        Range<Long> raneg2 = new Range<>(3l,8l);
-        Range<Long> range3 = new Range<>(7l,8l);
-        RangeList<Long> threeAndRange = rangeOperations.and(range1,rangeOperations.and(raneg2,range3).getRanges().get(0));
+    public void testThreeDiscreteRangeAnd() {
+        Range<Long> range1 = new Range<>(2l, 10l);
+        Range<Long> raneg2 = new Range<>(3l, 8l);
+        Range<Long> range3 = new Range<>(7l, 8l);
+        RangeList<Long> threeAndRange = rangeOperations.and(range1,
+                rangeOperations.and(raneg2, range3).getRanges().get(0));
         assertNotNull(threeAndRange);
     }
 
-
     @Test
-    public void testOrOperatorWithReverseRange(){
-        Range<Long> range1 = new Range<>(10l,12l);
-        Range<Long> range2 = new Range<>(7l,11l);
-        RangeList<Long> result = rangeOperations.or(range1,range2);
+    public void testOrOperatorWithReverseRange() {
+        Range<Long> range1 = new Range<>(10l, 12l);
+        Range<Long> range2 = new Range<>(7l, 11l);
+        RangeList<Long> result = rangeOperations.or(range1, range2);
         RangeList<Long> expected = new RangeList<>();
-        expected.addAllRanges(new Range<>(7l,12l));
-        assertEquals(result,expected);
+        expected.addAllRanges(new Range<>(7l, 12l));
+        assertEquals(result, expected);
 
     }
 
+    @Test
+    public void testOrOperatorWithReverseRangeNode() {
+        RangeNode range = new RangeNode<>("as", "");
+        System.out.println(range.getRangeList().getRanges());
 
+    }
 }
