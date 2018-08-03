@@ -663,6 +663,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         } else {
             throw new BlkchnException("please provide either 'is null' or 'is not null'");
         }
+
         comparator.addChildNode(compIdent);
         TreeNode identifier = new IdentifierNode(null);
         logicalPlan.getCurrentNode().addChildNode(comparator);

@@ -945,39 +945,38 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
 
     @Override
     public LogicalPlan visitNotBetween(NotBetweenContext ctx) {
-        // TODO Auto-generated method stub
-        return null;
+        logger.trace("In visitNotBetween " + ctx.getText());
+        return visitChildren(ctx);
     }
 
     @Override
     public LogicalPlan visitNotIn(NotInContext ctx) {
-        // TODO Auto-generated method stub
-        return null;
+        logger.trace("In visitNotIn " + ctx.getText());
+        return visitChildren(ctx);
     }
 
     @Override
     public LogicalPlan visitNotInSubQuery(NotInSubQueryContext ctx) {
-        // TODO Auto-generated method stub
-        return null;
+        logger.trace("In visitNotInSubQuery " + ctx.getText());
+        return visitChildren(ctx);
     }
 
     @Override
     public LogicalPlan visitNotLike(NotLikeContext ctx) {
-        // TODO Auto-generated method stub
-        return null;
+        logger.trace("In visitNotLike " + ctx.getText());
+        return visitChildren(ctx);
     }
 
     @Override
     public LogicalPlan visitIsNotNULL(IsNotNULLContext ctx) {
-        // TODO Auto-generated method stub
-        return null;
+        logger.trace("In visitIsNotNULL " + ctx.getText());
+        return visitChildren(ctx);
     }
 
     @Override
     public LogicalPlan visitPredicateExpression(PredicateExpressionContext ctx) {
-        // TODO Auto-generated method stub
-        return null;
-
+        logger.trace("In visitPredicateExpression " + ctx.getText());
+        return visitChildren(ctx);
     }
 
 }
