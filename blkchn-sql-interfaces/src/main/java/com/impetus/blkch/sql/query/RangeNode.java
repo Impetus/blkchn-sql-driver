@@ -34,11 +34,15 @@ public class RangeNode<T extends Number & Comparable<T>> extends TreeNode {
         this.table = table;
         this.column = column;
     }
-    
+
     public String getTable() {
         return table;
     }
-    
+
+    public void setTable(String table) {
+        this.table = table;
+    }
+
     public String getColumn() {
         return column;
     }

@@ -23,15 +23,8 @@ import java.util.stream.Collectors;
 
 import com.impetus.blkch.BlkchnException;
 import com.impetus.blkch.sql.parser.PhysicalPlan.Color;
-import com.impetus.blkch.sql.query.Column;
-import com.impetus.blkch.sql.query.Comparator;
-import com.impetus.blkch.sql.query.DataNode;
-import com.impetus.blkch.sql.query.DirectAPINode;
-import com.impetus.blkch.sql.query.FilterItem;
-import com.impetus.blkch.sql.query.IdentifierNode;
-import com.impetus.blkch.sql.query.LogicalOperation;
+import com.impetus.blkch.sql.query.*;
 import com.impetus.blkch.sql.query.LogicalOperation.Operator;
-import com.impetus.blkch.sql.query.RangeNode;
 import com.impetus.blkch.util.RangeOperations;
 
 public abstract class AbstractQueryExecutor {
@@ -289,10 +282,70 @@ public abstract class AbstractQueryExecutor {
         }
         return new DataNode<>(first.getTable(), newKeys);
     }
-    
+
+    public RangeNode getProbableRange(){
+        WhereClause whereClause = this.physicalPlan.getWhereClause();
+        if(whereClause != null) {
+        whereClause.traverse();
+            if (this.physicalPlan.getWhereClause().hasChildType(LogicalOperation.class)) {
+                LogicalOperation logOpr = this.physicalPlan.getWhereClause().getChildType(LogicalOperation.class, 0);
+                return processLogicalOperationForRange(logOpr);
+            } else if (this.physicalPlan.getWhereClause().hasChildType(DirectAPINode.class)) {
+                return processDirectAPINodeForRange(this.physicalPlan.getWhereClause().getChildType(DirectAPINode.class, 0));
+            } else if (this.physicalPlan.getWhereClause().hasChildType(RangeNode.class)) {
+                return this.physicalPlan.getWhereClause().getChildType(RangeNode.class, 0);
+            } else {
+                return getFullRange();
+            }
+        }else{
+            return getFullRange();
+        }
+    }
+
+    private RangeNode processLogicalOperationForRange(LogicalOperation logicalOperation){
+        TreeNode firstChild = logicalOperation.getChildNode(0);
+        TreeNode secondChild = logicalOperation.getChildNode(1);
+
+        if (firstChild instanceof LogicalOperation) {
+            firstChild = processLogicalOperationForRange((LogicalOperation) firstChild);
+        } else if (firstChild instanceof DirectAPINode) {
+            firstChild = processDirectAPINodeForRange((DirectAPINode) firstChild);
+        } else if (firstChild instanceof FilterItem) {
+            firstChild = getFullRange();
+        }
+
+        if (secondChild instanceof LogicalOperation) {
+            secondChild = processLogicalOperationForRange((LogicalOperation) secondChild);
+        } else if (secondChild instanceof DirectAPINode) {
+            secondChild = processDirectAPINodeForRange((DirectAPINode) secondChild);
+        } else if (secondChild instanceof FilterItem) {
+            secondChild = getFullRange();
+        }
+
+        if(firstChild instanceof RangeNode && secondChild instanceof RangeNode) {
+            RangeNode<?> firstRange = (RangeNode<?>)firstChild;
+            RangeNode<?> secondRange = (RangeNode<?>)secondChild;
+            String table = logicalPlan.getQuery().getChildType(FromItem.class, 0).getChildType(Table.class, 0).
+                    getChildType(IdentifierNode.class, 0).getValue();
+            RangeOperations<?> rangeOperations = this.physicalPlan.getRangeOperations(table, firstRange.getColumn());
+            return rangeOperations.processRangeNodes(firstRange, secondRange, logicalOperation);
+        }else{
+            return getFullRange();
+        }
+    }
+
+    public RangeNode processDirectAPINodeForRange(DirectAPINode node) {
+        DataNode dataNode = getDataNode(node.getTable(), node.getColumn(), node.getValue());
+        return getRangeNodeFromDataNode(dataNode);
+    }
+
+    public abstract RangeNode getFullRange();
+    public abstract RangeNode getRangeNodeFromDataNode(DataNode dataNode);
+
     public void paginate(RangeNode<?> rangeNode) {
         this.physicalPlan = originalPhysicalPlan.paginate(rangeNode);
     }
+
     
     protected abstract DataNode<?> getDataNode(String table, String column, String value);
     

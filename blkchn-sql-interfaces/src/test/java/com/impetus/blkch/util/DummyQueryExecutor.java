@@ -23,16 +23,23 @@ import java.util.stream.Collectors;
 import com.impetus.blkch.sql.parser.AbstractQueryExecutor;
 import com.impetus.blkch.sql.parser.DummyPhysicalPlan;
 import com.impetus.blkch.sql.parser.LogicalPlan;
-import com.impetus.blkch.sql.query.Comparator;
-import com.impetus.blkch.sql.query.DataNode;
-import com.impetus.blkch.sql.query.LogicalOperation;
-import com.impetus.blkch.sql.query.RangeNode;
+import com.impetus.blkch.sql.query.*;
 
 public class DummyQueryExecutor extends AbstractQueryExecutor {
 
     public DummyQueryExecutor(LogicalPlan logicalPlan) {
         this.logicalPlan = logicalPlan;
         this.physicalPlan = new DummyPhysicalPlan("DummyPhysicalPlan", logicalPlan);
+    }
+
+    @Override
+    public RangeNode getFullRange() {
+        return null;
+    }
+
+    @Override
+    public RangeNode getRangeNodeFromDataNode(DataNode dataNode) {
+        return null;
     }
 
     @Override

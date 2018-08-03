@@ -20,6 +20,7 @@ case class ReadConf(splitCount: Option[Int] = ReadConf.SplitCount.default,
       case Some(x) => options + (ReadConf.FetchSizeInRows.name -> x.toString)
       case None => options
     }
+    options = if(partitioner != null) options + (ReadConf.Partitioner.name -> partitioner.getClass.getName.replaceAll("\\$","")) else options
     options
   }
 }

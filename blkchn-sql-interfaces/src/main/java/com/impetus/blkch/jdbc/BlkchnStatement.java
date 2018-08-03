@@ -22,4 +22,8 @@ import com.impetus.blkch.sql.query.RangeNode;
 public interface BlkchnStatement extends Statement {
 
     public void setPageRange(RangeNode<?> pageRange);
+
+    public Number getBlockHeight();
+
+    public RangeNode getProbableRange(String sql);
 }

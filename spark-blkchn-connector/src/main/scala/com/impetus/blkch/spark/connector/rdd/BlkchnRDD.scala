@@ -8,8 +8,8 @@ import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.catalyst.expressions.GenericRowWithSchema
 import org.apache.spark.sql.types._
-import org.apache.spark.{Dependency, Partition, SparkContext, TaskContext}
-
+import org.apache.spark.{Partition, SparkContext, TaskContext}
+import java.math.BigInteger
 import scala.reflect.ClassTag
 
 class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
@@ -31,7 +31,14 @@ class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
         val columnCount = metadata.getColumnCount
         while(rs.next()) {
           val rowVals = (for(i <- 1 to columnCount) yield {
-            (rs.getObject(i).asInstanceOf[Any], getStructField(i, metadata))
+            if(rs.getObject(i).isInstanceOf[BigInteger]){
+              val dataValue = new BigDecimal(new java.math.BigDecimal(new BigInteger(rs.getObject(i).toString)))
+              (dataValue.asInstanceOf[Any], StructField(metadata.getColumnLabel(i), DecimalType(38,0), true))
+            } else if(rs.getObject(i).isInstanceOf[java.util.ArrayList[_]]) {
+              handleExtraType(i, metadata, rs.getObject(i))
+            }else {
+              (rs.getObject(i).asInstanceOf[Any], getStructField(i, metadata))
+            }
           }).toArray
           buffer = buffer :+ new GenericRowWithSchema(rowVals.map(_._1), StructType(rowVals.map(_._2))).asInstanceOf[R]
         }
@@ -41,13 +48,15 @@ class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
 
   private def getStructField(index: Int, metadata: ResultSetMetaData): StructField = {
     val dataType = metadata.getColumnType(index) match {
-      case Types.INTEGER => IntegerType
-      case Types.BIGINT => LongType
-      case Types.DOUBLE => DoubleType
-      case Types.FLOAT => FloatType
-      case Types.BOOLEAN => BooleanType
-      case _ => StringType
-    }
+        case Types.INTEGER => IntegerType
+        case Types.DOUBLE => DoubleType
+        case Types.BIGINT => LongType
+        case Types.FLOAT => FloatType
+        case Types.BOOLEAN => BooleanType
+        case _ => StringType
+      }
     StructField(metadata.getColumnLabel(index), dataType, true)
   }
+
+  def handleExtraType(index: Int, metadata: ResultSetMetaData,data: java.lang.Object):(Any,StructField) = ???
 }
