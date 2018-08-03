@@ -71,15 +71,21 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.FromClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionCallContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.GroupByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.HavingClauseContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.IsNotNULLContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.LimitClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ListContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ListTypeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.LogicalBinaryContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.NamedExpressionContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.NotBetweenContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.NotInContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.NotInSubQueryContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.NotLikeContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.NumericLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.OrderByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ParameterValuesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.PolicyFileContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.PredicateExpressionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.QuestionMarkContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.RecordDelimiterContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SecretContext;
@@ -643,6 +649,27 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     }
 
     @Override
+    public LogicalPlan visitIsNotNULL(IsNotNULLContext ctx) {
+        logger.trace("In visitIsNotNULL " + ctx.getText());
+        TreeNode comparator = new Comparator(ComparisionOperator.NEQ);
+        TreeNode compIdent = new IdentifierNode("!=");
+        comparator.addChildNode(compIdent);
+        TreeNode identifier = new IdentifierNode(null);
+        logicalPlan.getCurrentNode().addChildNode(comparator);
+        logicalPlan.getCurrentNode().addChildNode(identifier);
+        return defaultResult();
+    }
+
+    @Override
+    public LogicalPlan visitPredicateExpression(PredicateExpressionContext ctx) {
+        logger.trace("In visitPredicateExpression " + ctx.getText());
+        TreeNode filterItem = new FilterItem();
+        logicalPlan.getCurrentNode().addChildNode(filterItem);
+        logicalPlan.setCurrentNode(filterItem);
+        return visitChildrenAndResetNode(ctx);
+    }
+
+    @Override
     public LogicalPlan defaultResult() {
         return logicalPlan;
     }
@@ -732,5 +759,29 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.getCurrentNode().addChildNode(args);
         logicalPlan.setCurrentNode(args);
         return visitChildrenAndResetNode(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitNotBetween(NotBetweenContext ctx) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public LogicalPlan visitNotIn(NotInContext ctx) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public LogicalPlan visitNotInSubQuery(NotInSubQueryContext ctx) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public LogicalPlan visitNotLike(NotLikeContext ctx) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -157,7 +157,11 @@ public abstract class PhysicalPlan extends TreeNode {
             if (!columnExists(table, column)) {
                 throw new BlkchnException(String.format("Column %s doesn't exist in table %s", column, table));
             }
-            if (getRangeCols(table).contains(column)) {
+            if (checkFilterNull(filterItem.getChildType(Comparator.class, 0),
+                    filterItem.getChildType(IdentifierNode.class, 0).getValue())) {
+                return createFilterItem(column, filterItem.getChildType(Comparator.class, 0),
+                        filterItem.getChildType(IdentifierNode.class, 0).getValue());
+            } else if (getRangeCols(table).contains(column)) {
                 RangeOperations<?> rangeOperations = getRangeOperations(table, column);
                 return rangeOperations.processFilterItem(filterItem, table, column);
             } else if (getQueryCols(table).contains(column) && filterItem.getChildType(Comparator.class, 0).isEQ()) {
@@ -333,4 +337,11 @@ public abstract class PhysicalPlan extends TreeNode {
         return root;
     }
 
+    public boolean checkFilterNull(Comparator cmp, String value) {
+        if ((cmp.isEQ() || cmp.isNEQ()) && value == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
