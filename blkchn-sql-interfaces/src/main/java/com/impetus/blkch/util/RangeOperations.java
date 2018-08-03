@@ -72,7 +72,7 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
         Comparator comparator = filterItem.getChildType(Comparator.class, 0);
         String column = columnName == null? filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue() : columnName;
         String valueString = filterItem.getChildType(IdentifierNode.class, 0).getValue();
-        T value = getValue(valueString);
+        T value = getValue(valueString.replaceAll("'", ""));
         if(value.compareTo(getMinValue()) < 0 || value.compareTo(getMaxValue()) > 0){
             String errMsg = "Value: " + value + " is not in valid range";
             logger.error(errMsg);

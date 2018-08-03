@@ -809,13 +809,61 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPredicate(BlkchnSqlParser.PredicateContext ctx) { }
+	@Override public void enterNotBetween(BlkchnSqlParser.NotBetweenContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPredicate(BlkchnSqlParser.PredicateContext ctx) { }
+	@Override public void exitNotBetween(BlkchnSqlParser.NotBetweenContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNotIn(BlkchnSqlParser.NotInContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNotIn(BlkchnSqlParser.NotInContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNotInSubQuery(BlkchnSqlParser.NotInSubQueryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNotInSubQuery(BlkchnSqlParser.NotInSubQueryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNotLike(BlkchnSqlParser.NotLikeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNotLike(BlkchnSqlParser.NotLikeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIsNotNULL(BlkchnSqlParser.IsNotNULLContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIsNotNULL(BlkchnSqlParser.IsNotNULLContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -876,6 +924,18 @@ public class BlkchnSqlBaseListener implements BlkchnSqlListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitArithmeticUnary(BlkchnSqlParser.ArithmeticUnaryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPredicateExpression(BlkchnSqlParser.PredicateExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPredicateExpression(BlkchnSqlParser.PredicateExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

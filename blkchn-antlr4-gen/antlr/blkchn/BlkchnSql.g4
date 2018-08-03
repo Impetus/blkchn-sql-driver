@@ -261,11 +261,11 @@ predicated
     ;
     
 predicate
-    : NOT? kind=BETWEEN lower=valueExpression AND upper=valueExpression
-    | NOT? kind=IN '(' expression (',' expression)* ')'
-    | NOT? kind=IN '(' query ')'
-    | NOT? kind=(RLIKE | LIKE) pattern=valueExpression
-    | IS NOT? kind=NULL
+    : NOT? kind=BETWEEN lower=valueExpression AND upper=valueExpression    #notBetween
+    | NOT? kind=IN '(' expression (',' expression)* ')'		               #notIn					
+    | NOT? kind=IN '(' query ')'                                           #notInSubQuery
+    | NOT? kind=(RLIKE | LIKE) pattern=valueExpression                     #notLike
+    | IS NOT? kind=NULL                                                    #isNotNULL
     ;
     
 valueExpression
@@ -277,6 +277,7 @@ valueExpression
     | left=valueExpression operator=HAT right=valueExpression                                #arithmeticBinary
     | left=valueExpression operator=PIPE right=valueExpression                               #arithmeticBinary
     | left=valueExpression comparisonOperator right=valueExpression                          #comparison
+    | valueExpression predicate                                                              #predicateExpression
     | questionMark                                                                           #placeholder
     ;
 

@@ -72,6 +72,16 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 public class LogicalPlanTest extends TestCase {
+
+    @Test
+    public void testSimpleIsNotNULL() {
+        String sql = " SELECT \"blocknumber\",\"hash\",\"parenthash\",\"nonce\" FROM block WHERE (blocknumber IS NOT NULL) AND (blocknumber = '22222')";
+        LogicalPlan plan = getLogicalPlan(sql);
+        plan.getQuery().traverse();
+        // LogicalPlan logicalPlan = buildSimpleSelect();
+        // assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
+    }
+
     @Test
     public void testSimpleSelect() {
         String sql = "select a, b from TRANSACTION t";

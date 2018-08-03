@@ -709,15 +709,65 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitPredicated(BlkchnSqlParser.PredicatedContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link BlkchnSqlParser#predicate}.
+	 * Enter a parse tree produced by the {@code notBetween}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
 	 * @param ctx the parse tree
 	 */
-	void enterPredicate(BlkchnSqlParser.PredicateContext ctx);
+	void enterNotBetween(BlkchnSqlParser.NotBetweenContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link BlkchnSqlParser#predicate}.
+	 * Exit a parse tree produced by the {@code notBetween}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
 	 * @param ctx the parse tree
 	 */
-	void exitPredicate(BlkchnSqlParser.PredicateContext ctx);
+	void exitNotBetween(BlkchnSqlParser.NotBetweenContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code notIn}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotIn(BlkchnSqlParser.NotInContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code notIn}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotIn(BlkchnSqlParser.NotInContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code notInSubQuery}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotInSubQuery(BlkchnSqlParser.NotInSubQueryContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code notInSubQuery}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotInSubQuery(BlkchnSqlParser.NotInSubQueryContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code notLike}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotLike(BlkchnSqlParser.NotLikeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code notLike}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotLike(BlkchnSqlParser.NotLikeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code isNotNULL}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
+	 * @param ctx the parse tree
+	 */
+	void enterIsNotNULL(BlkchnSqlParser.IsNotNULLContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code isNotNULL}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
+	 * @param ctx the parse tree
+	 */
+	void exitIsNotNULL(BlkchnSqlParser.IsNotNULLContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code valueExpressionDefault}
 	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
@@ -778,6 +828,18 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArithmeticUnary(BlkchnSqlParser.ArithmeticUnaryContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code predicateExpression}
+	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterPredicateExpression(BlkchnSqlParser.PredicateExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code predicateExpression}
+	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitPredicateExpression(BlkchnSqlParser.PredicateExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#questionMark}.
 	 * @param ctx the parse tree

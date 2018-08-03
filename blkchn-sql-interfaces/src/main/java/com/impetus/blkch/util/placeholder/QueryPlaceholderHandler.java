@@ -52,7 +52,8 @@ public class QueryPlaceholderHandler implements PlaceholderHandler {
 
     @Override
     public void setPlaceholderIndex() {
-        setPlaceholderIndex(whereClause);
+        if (null != whereClause)
+            setPlaceholderIndex(whereClause);
     }
 
     @Override
@@ -64,12 +65,7 @@ public class QueryPlaceholderHandler implements PlaceholderHandler {
                 if (child.hasChildType(Placeholder.class))
                     placeholderIndexes.add(filterItemIndex);
                 filterItemIndex++;
-            } else {
-                LOGGER.error(
-                        "ERROR while setting up the placeholder (?) indexes. Please verify if query is executable.");
-                throw new BlkchnException(
-                        "ERROR while setting up the placeholder (?) indexes. Please verify if query is executable.");
-            }
+            } 
         }
     }
 

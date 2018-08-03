@@ -428,11 +428,40 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPredicated(BlkchnSqlParser.PredicatedContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link BlkchnSqlParser#predicate}.
+	 * Visit a parse tree produced by the {@code notBetween}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPredicate(BlkchnSqlParser.PredicateContext ctx);
+	T visitNotBetween(BlkchnSqlParser.NotBetweenContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code notIn}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNotIn(BlkchnSqlParser.NotInContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code notInSubQuery}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNotInSubQuery(BlkchnSqlParser.NotInSubQueryContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code notLike}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNotLike(BlkchnSqlParser.NotLikeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code isNotNULL}
+	 * labeled alternative in {@link BlkchnSqlParser#predicate}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIsNotNULL(BlkchnSqlParser.IsNotNULLContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code valueExpressionDefault}
 	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
@@ -468,6 +497,13 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitArithmeticUnary(BlkchnSqlParser.ArithmeticUnaryContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code predicateExpression}
+	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPredicateExpression(BlkchnSqlParser.PredicateExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#questionMark}.
 	 * @param ctx the parse tree

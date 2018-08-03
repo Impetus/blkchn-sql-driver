@@ -59,6 +59,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.FromClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.FunctionCallContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.GroupByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.HavingClauseContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.IsNotNULLContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.LimitClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.LogicalBinaryContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.NamedExpressionContext;
@@ -66,6 +67,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.NumericLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.OrderByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ParameterValuesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.PolicyFileContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.PredicateExpressionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.QuestionMarkContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.RecordDelimiterContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SelectClauseContext;
@@ -562,6 +564,27 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         TreeNode node = new Placeholder(ctx.getText());
         logicalPlan.getCurrentNode().addChildNode(node);
         return defaultResult();
+    }
+
+    @Override
+    public LogicalPlan visitIsNotNULL(IsNotNULLContext ctx) {
+        logger.trace("In visitIsNotNULL " + ctx.getText());
+        TreeNode comparator = new Comparator(ComparisionOperator.NEQ);
+        TreeNode compIdent = new IdentifierNode("!=");
+        comparator.addChildNode(compIdent);
+        TreeNode identifier = new IdentifierNode(null);
+        logicalPlan.getCurrentNode().addChildNode(comparator);
+        logicalPlan.getCurrentNode().addChildNode(identifier);
+        return defaultResult();
+    }
+
+    @Override
+    public LogicalPlan visitPredicateExpression(PredicateExpressionContext ctx) {
+        logger.trace("In visitPredicateExpression " + ctx.getText());
+        TreeNode filterItem = new FilterItem();
+        logicalPlan.getCurrentNode().addChildNode(filterItem);
+        logicalPlan.setCurrentNode(filterItem);
+        return visitChildrenAndResetNode(ctx);
     }
 
     @Override
