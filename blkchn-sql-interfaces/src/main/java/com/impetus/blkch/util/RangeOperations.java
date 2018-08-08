@@ -80,6 +80,7 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
                 rangeNode.getRangeList().addRange(new Range<T>(getMinValue(), getMaxValue()));
             } else {
                 rangeNode.getRangeList().addRange(new Range<T>(getMaxValue(),getMaxValue()));
+
             }
             return rangeNode;
 
