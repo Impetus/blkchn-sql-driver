@@ -30,7 +30,7 @@ import com.impetus.blkch.sql.query.LogicalOperation;
 import com.impetus.blkch.sql.query.RangeNode;
 
 public abstract class RangeOperations<T extends Number & Comparable<T>> {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(RangeOperations.class);
 
     public RangeList<T> and(Range<T> r1, Range<T> r2) {
@@ -59,7 +59,7 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
     }
 
     private boolean checkDiscrete(Range<T> r1, Range<T> r2) {
-        if(r1 == null || r2 == null) {
+        if (r1 == null || r2 == null) {
             return true;
         }
         if (r1.getMax().compareTo(r2.getMin()) < 0 || r2.getMax().compareTo(r1.getMin()) < 0) {
@@ -70,15 +70,26 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
 
     public RangeNode<T> processFilterItem(FilterItem filterItem, String table, String columnName) {
         Comparator comparator = filterItem.getChildType(Comparator.class, 0);
-        String column = columnName == null? filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue() : columnName;
+        String column = columnName == null
+                ? filterItem.getChildType(Column.class, 0).getChildType(IdentifierNode.class, 0).getValue()
+                : columnName;
         String valueString = filterItem.getChildType(IdentifierNode.class, 0).getValue();
+        RangeNode<T> rangeNode = new RangeNode<>(table, column);
+        if (valueString == null) {
+            if (comparator.isNEQ()) {
+                rangeNode.getRangeList().addRange(new Range<T>(getMinValue(), getMaxValue()));
+            } else {
+                rangeNode.getRangeList().addRange(null);
+            }
+            return rangeNode;
+
+        }
         T value = getValue(valueString.replaceAll("'", ""));
-        if(value.compareTo(getMinValue()) < 0 || value.compareTo(getMaxValue()) > 0){
+        if (value.compareTo(getMinValue()) < 0 || value.compareTo(getMaxValue()) > 0) {
             String errMsg = "Value: " + value + " is not in valid range";
             logger.error(errMsg);
             throw new BlkchnException(errMsg);
         }
-        RangeNode<T> rangeNode = new RangeNode<>(table, column);
         if (comparator.isEQ()) {
             Range<T> range = new Range<T>(value, value);
             rangeNode.getRangeList().addRange(range);
@@ -116,16 +127,15 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
         resultNode.getRangeList().addAllRanges(processOrList(resultRange.getRanges()));
         return resultNode;
     }
-    
-    
+
     private List<Range<T>> processOrList(List<Range<T>> list) {
         List<Range<T>> temp = new ArrayList<>();
         int delIndex = -1;
-        for(Range<T> r : list) {
+        for (Range<T> r : list) {
             boolean isDiscrete = true;
             RangeList<T> merged = null;
-            for(Range<T> t : temp) {
-                if(!checkDiscrete(r, t)) {
+            for (Range<T> t : temp) {
+                if (!checkDiscrete(r, t)) {
                     merged = or(r, t);
                     delIndex = temp.indexOf(t);
                     isDiscrete = false;
@@ -139,19 +149,17 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
                 temp.addAll(merged.getRanges());
             }
         }
-        if(checkDiscreteList(temp)){
+        if (checkDiscreteList(temp)) {
             return temp;
-        }
-        else{
+        } else {
             return processOrList(temp);
         }
     }
 
-    private boolean checkDiscreteList(List<Range<T>> temp)
-    {
-        for(int i = 0 ; i < temp.size() - 1 ; i++) {
-            for(int j = i + 1 ; j < temp.size() ; j++) {
-                if(!checkDiscrete(temp.get(i), temp.get(j))) {
+    private boolean checkDiscreteList(List<Range<T>> temp) {
+        for (int i = 0; i < temp.size() - 1; i++) {
+            for (int j = i + 1; j < temp.size(); j++) {
+                if (!checkDiscrete(temp.get(i), temp.get(j))) {
                     return false;
                 }
             }
