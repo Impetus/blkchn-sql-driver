@@ -19,6 +19,7 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.impetus.blkch.BlkchnException;
 import com.impetus.blkch.sql.asset.Asset;
 import com.impetus.blkch.sql.asset.ColumnType;
 import com.impetus.blkch.sql.asset.ColumnTypeList;
@@ -651,8 +652,18 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     @Override
     public LogicalPlan visitIsNotNULL(IsNotNULLContext ctx) {
         logger.trace("In visitIsNotNULL " + ctx.getText());
-        TreeNode comparator = new Comparator(ComparisionOperator.NEQ);
-        TreeNode compIdent = new IdentifierNode("!=");
+        TreeNode comparator;
+        TreeNode compIdent;
+        if (ctx.getText().toLowerCase().equals("isnotnull")) {
+            comparator = new Comparator(ComparisionOperator.NEQ);
+            compIdent = new IdentifierNode("!=");
+        } else if (ctx.getText().toLowerCase().equals("isnull")) {
+            comparator = new Comparator(ComparisionOperator.EQ);
+            compIdent = new IdentifierNode("=");
+
+        } else {
+            throw new BlkchnException("please provide either 'is null' or 'is not null'");
+        }
         comparator.addChildNode(compIdent);
         TreeNode identifier = new IdentifierNode(null);
         logicalPlan.getCurrentNode().addChildNode(comparator);
