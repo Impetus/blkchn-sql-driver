@@ -99,11 +99,11 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitColumnValues(BlkchnSqlParser.ColumnValuesContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link BlkchnSqlParser#constantSeq}.
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#columnValue}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitConstantSeq(BlkchnSqlParser.ConstantSeqContext ctx);
+	T visitColumnValue(BlkchnSqlParser.ColumnValueContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link BlkchnSqlParser#createFunction}.
 	 * @param ctx the parse tree
@@ -533,6 +533,13 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitComparison(BlkchnSqlParser.ComparisonContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code placeholder}
+	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPlaceholder(BlkchnSqlParser.PlaceholderContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code arithmeticBinary}
 	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
 	 * @param ctx the parse tree
@@ -546,6 +553,12 @@ public interface BlkchnSqlVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitArithmeticUnary(BlkchnSqlParser.ArithmeticUnaryContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link BlkchnSqlParser#questionMark}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitQuestionMark(BlkchnSqlParser.QuestionMarkContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code dereference}
 	 * labeled alternative in {@link BlkchnSqlParser#primaryExpression}.

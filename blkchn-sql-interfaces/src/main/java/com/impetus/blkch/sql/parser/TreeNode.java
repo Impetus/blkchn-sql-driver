@@ -21,6 +21,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.impetus.blkch.BlkchnException;
+import com.impetus.blkch.sql.query.IdentifierNode;
+import com.impetus.blkch.sql.query.Placeholder;
+
 public class TreeNode {
 
     private static final Logger logger = LoggerFactory.getLogger(TreeNode.class);
@@ -50,11 +54,15 @@ public class TreeNode {
         child.setParent(this);
     }
 
+    public TreeNode setChildNode(TreeNode child, int i) {
+        return setPlaceHolderNode(child, i);
+    }
+
     public TreeNode getChildNode(int i) {
         if (i < childNodes.size()) {
             return childNodes.get(i);
         }
-        return null;
+        throw new BlkchnException("Index out of Bounds " + i);
     }
 
     public List<TreeNode> getChildNodes() {
@@ -140,11 +148,13 @@ public class TreeNode {
         }
         return null;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-    	if (this == obj) return true;
-    	if (obj == null) return false;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
         if (!this.getClass().isAssignableFrom(obj.getClass())) {
             return false;
         }
@@ -152,13 +162,13 @@ public class TreeNode {
         if ((this.description == null) ? (other.description != null) : !this.description.equals(other.description)) {
             return false;
         }
-        if(this.getChildNodes().size() != other.getChildNodes().size()){
-        	return false;
+        if (this.getChildNodes().size() != other.getChildNodes().size()) {
+            return false;
         }
-        for(int i = 0; i < this.getChildNodes().size(); i++){
-        	if(!this.getChildNode(i).equals(other.getChildNode(i))){
-        		return false;
-        	}
+        for (int i = 0; i < this.getChildNodes().size(); i++) {
+            if (!this.getChildNode(i).equals(other.getChildNode(i))) {
+                return false;
+            }
         }
         return true;
     }
@@ -167,13 +177,22 @@ public class TreeNode {
     public int hashCode() {
         return hashWithDepth(0);
     }
-    
+
     private int hashWithDepth(int level) {
         int hash = 3;
         hash = 53 * (hash + (this.description != null ? this.description.hashCode() : 0)) * (level + 1);
-        for(int i = 0; i < this.getChildNodes().size(); i++){
-        	hash += this.getChildNode(i).hashWithDepth(level + 1) * (i + 1);
+        for (int i = 0; i < this.getChildNodes().size(); i++) {
+            hash += this.getChildNode(i).hashWithDepth(level + 1) * (i + 1);
         }
         return hash;
     }
+
+    private TreeNode setPlaceHolderNode(TreeNode child, int i) {
+        if (i < childNodes.size() && (child instanceof Placeholder || child instanceof IdentifierNode)) {
+            this.childNodes.set(i, child);
+            return child;
+        }
+        throw new BlkchnException("Index out of Bounds " + i);
+    }
+
 }

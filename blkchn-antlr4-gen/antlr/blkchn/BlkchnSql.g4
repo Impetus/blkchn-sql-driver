@@ -68,11 +68,11 @@ columnNames
     ;
     
 columnValues
-    : constantSeq
-    ;
-    
-constantSeq
-    : constant (',' constant)*
+	: columnValue(',' columnValue)*
+	;
+		
+columnValue
+	:constant|questionMark
     ;
     
 createFunction
@@ -348,8 +348,13 @@ valueExpression
     | left=valueExpression operator=HAT right=valueExpression                                #arithmeticBinary
     | left=valueExpression operator=PIPE right=valueExpression                               #arithmeticBinary
     | left=valueExpression comparisonOperator right=valueExpression                          #comparison
+    | questionMark                                                                           #placeholder
     ;
-    
+
+questionMark
+	: QUESTIONMARK
+	;
+ 
 primaryExpression
     : name=(CURRENT_DATE | CURRENT_TIMESTAMP)                                                  #timeFunctionCall
     | CASE whenClause+ (ELSE elseExpression=expression)? END                                   #searchedCase
@@ -609,6 +614,7 @@ TILDE: '~';
 AMPERSAND: '&';
 PIPE: '|';
 HAT: '^';
+QUESTIONMARK: '?';
 
 PERCENTLIT: 'PERCENT';
 OUT: 'OUT';

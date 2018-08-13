@@ -56,16 +56,15 @@ import com.impetus.blkch.sql.query.IdentifierNode;
 import com.impetus.blkch.sql.query.LimitClause;
 import com.impetus.blkch.sql.query.ListAgrs;
 import com.impetus.blkch.sql.query.LogicalOperation;
-import com.impetus.blkch.sql.query.LogicalOperation.Operator;
 import com.impetus.blkch.sql.query.OrderByClause;
 import com.impetus.blkch.sql.query.OrderItem;
 import com.impetus.blkch.sql.query.OrderingDirection;
 import com.impetus.blkch.sql.query.OrderingDirection.Direction;
 import com.impetus.blkch.sql.smartcontract.SmartCnrtDeploy;
+import com.impetus.blkch.sql.query.Placeholder;
 import com.impetus.blkch.sql.query.Query;
 import com.impetus.blkch.sql.query.SelectClause;
 import com.impetus.blkch.sql.query.SelectItem;
-import com.impetus.blkch.sql.query.StarNode;
 import com.impetus.blkch.sql.query.Table;
 import com.impetus.blkch.sql.query.WhereClause;
 
@@ -74,7 +73,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 public class LogicalPlanTest extends TestCase {
-
     @Test
     public void testSimpleSelect() {
         String sql = "select a, b from TRANSACTION t";
@@ -85,10 +83,19 @@ public class LogicalPlanTest extends TestCase {
     }
 
     @Test
+    public void testPlaceHolder() {
+        String sql = "select count(*) as cnt, blocknumber from transaction where blocknumber = ? group by blocknumber";
+        LogicalPlan plan = getLogicalPlan(sql);
+        plan.getQuery().traverse();
+        TreeNode node = plan.getQuery().getChildType(WhereClause.class, 0).getChildType(FilterItem.class, 0);
+
+        assertTrue(node.hasChildType(Placeholder.class));
+    }
+
+    @Test
     public void testSimpleSelectWithWhereClause() {
         String sql = "select a, b from TRANSACTION t where a = 'hello world'";
         LogicalPlan plan = getLogicalPlan(sql);
-
         LogicalPlan logicalPlan = buildSelectWithWhere();
 
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
@@ -480,7 +487,7 @@ public class LogicalPlanTest extends TestCase {
         return logicalPlan;
     }
 
-    private LogicalPlan buildSimpleSelect() {
+    public static LogicalPlan buildSimpleSelect() {
         LogicalPlan logicalPlan = new LogicalPlan("BlockchainVisitor");
         Query query = new Query();
         logicalPlan.setQuery(query);
@@ -511,7 +518,7 @@ public class LogicalPlanTest extends TestCase {
         return logicalPlan;
     }
 
-    private LogicalPlan buildSelectWithWhere() {
+    public static LogicalPlan buildSelectWithWhere() {
         LogicalPlan logicalPlan = buildSimpleSelect();
 
         TreeNode whereClause = new WhereClause();
@@ -559,7 +566,7 @@ public class LogicalPlanTest extends TestCase {
         return callFunction;
     }
 
-    private Insert buildInsert() {
+    public static Insert buildInsert() {
         Insert insert = new Insert();
         Table table = new Table();
         table.addChildNode(new IdentifierNode("someTable"));

@@ -74,6 +74,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.NumericLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.OrderByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ParameterValuesContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.PolicyFileContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.QuestionMarkContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.RecordDelimiterContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SelectClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SetQuantifierContext;
@@ -96,6 +97,8 @@ import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
 import com.impetus.blkch.sql.query.IdentifierNode.IdentType;
 import com.impetus.blkch.sql.query.LogicalOperation.Operator;
 import com.impetus.blkch.sql.query.OrderingDirection.Direction;
+import com.impetus.blkch.sql.query.Placeholder;
+import com.impetus.blkch.sql.query.QuantifierNode;
 import com.impetus.blkch.sql.query.QuantifierNode.Quantifier;
 import com.impetus.blkch.sql.query.Table;
 import com.impetus.blkch.sql.smartcontract.*;
@@ -107,15 +110,25 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     LogicalPlan logicalPlan = new LogicalPlan("BlockchainVisitor");
 
     Query query;
+
     CreateFunction crtFunction;
+
     ClassName className;
+
     Insert insert;
+
     CallFunction callFunction;
+
     CreateAsset createAsset;
+
     DeleteFunction deleteFunction;
+
     DropAsset dropAsset;
+
     UpgradeFunction upgradeFunction;
+
     SmartContractFunction smartContractFunction;
+
     SmartCnrtDeploy smartCnrtDeploy;
 
     @Override
@@ -549,14 +562,24 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     }
 
     @Override
+    public LogicalPlan visitQuestionMark(QuestionMarkContext ctx) {
+        logger.trace("In visitQuestionMark " + ctx.getText());
+        TreeNode node = new Placeholder(ctx.getText());
+        logicalPlan.getCurrentNode().addChildNode(node);
+        return defaultResult();
+    }
+
+    @Override
     public LogicalPlan defaultResult() {
         return logicalPlan;
     }
 
     /*
-     * If you call logicalPlan.setCurrentNode(node); then call this method so that node pointer can be reset to parent
-     * after visiting children. Note that this will happen recursively for each level of tree. If you are not setting
-     * current node and just creating and adding nodes to parent call visitChildren directly.
+     * If you call logicalPlan.setCurrentNode(node); then call this method so
+     * that node pointer can be reset to parent after visiting children. Note
+     * that this will happen recursively for each level of tree. If you are not
+     * setting current node and just creating and adding nodes to parent call
+     * visitChildren directly.
      */
     public LogicalPlan visitChildrenAndResetNode(RuleNode node) {
         try {
@@ -637,5 +660,4 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setCurrentNode(args);
         return visitChildrenAndResetNode(ctx);
     }
-
 }

@@ -157,15 +157,15 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitColumnValues(BlkchnSqlParser.ColumnValuesContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link BlkchnSqlParser#constantSeq}.
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#columnValue}.
 	 * @param ctx the parse tree
 	 */
-	void enterConstantSeq(BlkchnSqlParser.ConstantSeqContext ctx);
+	void enterColumnValue(BlkchnSqlParser.ColumnValueContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link BlkchnSqlParser#constantSeq}.
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#columnValue}.
 	 * @param ctx the parse tree
 	 */
-	void exitConstantSeq(BlkchnSqlParser.ConstantSeqContext ctx);
+	void exitColumnValue(BlkchnSqlParser.ColumnValueContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link BlkchnSqlParser#createFunction}.
 	 * @param ctx the parse tree
@@ -885,6 +885,18 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 */
 	void exitComparison(BlkchnSqlParser.ComparisonContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code placeholder}
+	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterPlaceholder(BlkchnSqlParser.PlaceholderContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code placeholder}
+	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitPlaceholder(BlkchnSqlParser.PlaceholderContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code arithmeticBinary}
 	 * labeled alternative in {@link BlkchnSqlParser#valueExpression}.
 	 * @param ctx the parse tree
@@ -908,6 +920,16 @@ public interface BlkchnSqlListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArithmeticUnary(BlkchnSqlParser.ArithmeticUnaryContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link BlkchnSqlParser#questionMark}.
+	 * @param ctx the parse tree
+	 */
+	void enterQuestionMark(BlkchnSqlParser.QuestionMarkContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BlkchnSqlParser#questionMark}.
+	 * @param ctx the parse tree
+	 */
+	void exitQuestionMark(BlkchnSqlParser.QuestionMarkContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code dereference}
 	 * labeled alternative in {@link BlkchnSqlParser#primaryExpression}.
