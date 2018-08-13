@@ -15,7 +15,7 @@ After discussion, Raise a new issue on [github](https://github.com/Impetus/blkch
 - Add proper javadocs and comments.
 - Contributed code must pass existing test cases.
 - Write new test cases using junit.
-- For Eclipse: use this [Formatter](https://github.com/JeetenJaiswal/blkchn-sql-driver/blob/updateReadme/sites/eclipse-java-code-formatter.xml)
+- For Eclipse: use this [Formatter](https://github.com/Impetus/blkchn-sql-driver/blob/master/sites/eclipse-java-code-formatter.xml)
 - We recommend contributor to use Java 8.
 
 
@@ -23,7 +23,7 @@ After discussion, Raise a new issue on [github](https://github.com/Impetus/blkch
 
 The contributor needs to open a pull request on the [trunk](https://github.com/Impetus/blkchn-sql-driver/pulls) and get it reviewed by blkchn-sql-driver developers.
 
-Please follow [these steps](https://github.com/JeetenJaiswal/blkchn-sql-driver/wiki/Git-Workflow) before creating pull request.
+Please follow [these steps](https://github.com/Impetus/blkchn-sql-driver/wiki/Git-Workflow) before creating pull request.
 
 
 The contributor needs to incorporate code changes (_if any_).
