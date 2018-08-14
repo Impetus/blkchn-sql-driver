@@ -605,7 +605,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     
     @Override
     public LogicalPlan visitCreateFlag(CreateFlagContext ctx) {
-        logger.trace("In visitAffiliation " + ctx.getText());
+        logger.trace("In visitCreateFlag " + ctx.getText());
         if(ctx.INSTALL_ONLY() != null) {
             InstallOnly installOnly = new InstallOnly();
             logicalPlan.getCurrentNode().addChildNode(installOnly);
