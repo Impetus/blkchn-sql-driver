@@ -33,7 +33,7 @@ import com.impetus.blkch.spark.connector.BlkchnConnector
 import com.impetus.blkch.spark.connector.rdd.partitioner.BlkchnPartition
 import com.impetus.blkch.BlkchnException
 
-class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
+abstract class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
                              private[impetus] val connector: Broadcast[BlkchnConnector],
                              private[impetus] val readConf: ReadConf) extends RDD[R](sc, Nil) {
 
@@ -58,7 +58,7 @@ class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
         } else {
           for(i <- 1 to columnCount) yield {
             if(rs.getObject(i).isInstanceOf[BigInteger]){
-              val dataValue = new BigDecimal(new java.math.BigDecimal(new BigInteger(rs.getObject(i).toString)))
+              val dataValue = new BigDecimal(rs.getBigDecimal(i))
               firstRow += dataValue
               StructField(metadata.getColumnLabel(i), DecimalType(38,0), true)
             } else if(rs.getObject(i).isInstanceOf[java.util.ArrayList[_]]) {
@@ -79,7 +79,7 @@ class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
         while(rs.next()) {
           val rowVals = (for(i <- 1 to columnCount) yield {
             if(rs.getObject(i).isInstanceOf[BigInteger]){
-              val dataValue = new BigDecimal(new java.math.BigDecimal(new BigInteger(rs.getObject(i).toString)))
+              val dataValue = new BigDecimal(rs.getBigDecimal(i))
               dataValue
             } else if(rs.getObject(i).isInstanceOf[java.util.ArrayList[_]]) {
               handleExtraData(i, metadata, rs.getObject(i))
@@ -108,9 +108,9 @@ class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
     StructField(metadata.getColumnLabel(index), dataType, true)
   }
 
-  def handleExtraType(index: Int, metadata: ResultSetMetaData,data: java.lang.Object): StructField = ???
+  def handleExtraType(index: Int, metadata: ResultSetMetaData,data: java.lang.Object): StructField
   
-  def handleExtraData(index: Int, metadata: ResultSetMetaData,data: java.lang.Object): Any = ???
+  def handleExtraData(index: Int, metadata: ResultSetMetaData,data: java.lang.Object): Any
   
   def handleArrayType(index: Int, metadata: ResultSetMetaData, data: Object): StructField = {
     val array = data.asInstanceOf[java.sql.Array]
@@ -138,3 +138,4 @@ class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
     }
   }
 }
+

@@ -100,7 +100,7 @@
 		<module>blkchn-antlr4-gen</module>
 		<module>blkchn-sql-interfaces</module>
 		<module>blkchn-sql-addons</module>
-		<module>spark-blkchn-connector</module>
+		<module>blkchn-spark-connector</module>
 	</modules>
 
 	<dependencies>
