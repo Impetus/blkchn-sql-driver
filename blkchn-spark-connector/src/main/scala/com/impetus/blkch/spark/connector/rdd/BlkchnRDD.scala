@@ -33,7 +33,7 @@ import com.impetus.blkch.spark.connector.BlkchnConnector
 import com.impetus.blkch.spark.connector.rdd.partitioner.BlkchnPartition
 import com.impetus.blkch.BlkchnException
 
-abstract class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
+class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
                              private[impetus] val connector: Broadcast[BlkchnConnector],
                              private[impetus] val readConf: ReadConf) extends RDD[R](sc, Nil) {
 
@@ -108,9 +108,9 @@ abstract class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
     StructField(metadata.getColumnLabel(index), dataType, true)
   }
 
-  def handleExtraType(index: Int, metadata: ResultSetMetaData,data: java.lang.Object): StructField
+  def handleExtraType(index: Int, metadata: ResultSetMetaData,data: java.lang.Object): StructField = ???
   
-  def handleExtraData(index: Int, metadata: ResultSetMetaData,data: java.lang.Object): Any
+  def handleExtraData(index: Int, metadata: ResultSetMetaData,data: java.lang.Object): Any = ???
   
   def handleArrayType(index: Int, metadata: ResultSetMetaData, data: Object): StructField = {
     val array = data.asInstanceOf[java.sql.Array]
