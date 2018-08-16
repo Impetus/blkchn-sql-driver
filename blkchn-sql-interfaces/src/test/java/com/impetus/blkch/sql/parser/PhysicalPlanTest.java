@@ -60,6 +60,51 @@ public class PhysicalPlanTest extends TestCase
     }
 
     @Test
+    public void testPaginate(){
+        String sql = "Select * from myTable tbl";
+        LogicalPlan plan = getLogicalPlan(sql);
+        DummyPhysicalPlan physicalPlan = new DummyPhysicalPlan("dummyPlan", plan);
+        RangeNode<Long> rangeNode1 = new RangeNode<>("myTable", "column1");
+        rangeNode1.getRangeList().addRange(new Range<Long>(0l, Long.MAX_VALUE));
+        PhysicalPlan newPhysicalPlan = physicalPlan.paginate(rangeNode1);
+        WhereClause actual = newPhysicalPlan.getWhereClause();
+        WhereClause expected = buildRangeClause();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testPaginateWithDirectAPI(){
+        String sql = "Select * from myTable tbl where qcol1 = 30";
+        LogicalPlan plan = getLogicalPlan(sql);
+        DummyPhysicalPlan physicalPlan = new DummyPhysicalPlan("dummyPlan", plan);
+        RangeNode<Long> rangeNode1 = new RangeNode<>("myTable", "column1");
+        rangeNode1.getRangeList().addRange(new Range<Long>(0l, Long.MAX_VALUE));
+        PhysicalPlan newPhysicalPlan = physicalPlan.paginate(rangeNode1);
+        WhereClause actual = newPhysicalPlan.getWhereClause();
+        WhereClause expected = buildRangeClauseWithDirectAPI();
+        assertEquals(expected, actual);
+    }
+
+    private WhereClause buildRangeClauseWithDirectAPI() {
+        WhereClause whereClause = new WhereClause();
+        LogicalOperation and = new LogicalOperation(Operator.AND);
+        RangeNode<Long> rangeNode = new RangeNode<>("myTable", "column1");
+        rangeNode.getRangeList().addRange(new Range<Long>(0l, Long.MAX_VALUE));
+        and.addChildNode(rangeNode);
+        and.addChildNode(new DirectAPINode("myTable", "qcol1", "30"));
+        whereClause.addChildNode(and);
+        return whereClause;
+    }
+
+    private WhereClause buildRangeClause() {
+        WhereClause whereClause = new WhereClause();
+        RangeNode<Long> rangeNode1 = new RangeNode<>("myTable", "column1");
+        rangeNode1.getRangeList().addRange(new Range<Long>(0l, Long.MAX_VALUE));
+        whereClause.addChildNode(rangeNode1);
+        return whereClause;
+    }
+
+    @Test
     public void testComplexRangeQuery(){
         String sql = "SELECT column1 as rcol1, column2 as rcol2, column3, qcol1 as direct1 FROM myTable tbl where rcol1 > 10 and rcol1 < 25 and (column2 <= 30 and "
                 + "column2 >= 20 and rcol2 != 25) or (column3 != 25 and direct1 < 30)";

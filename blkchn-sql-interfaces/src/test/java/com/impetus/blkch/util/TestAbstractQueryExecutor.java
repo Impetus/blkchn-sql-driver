@@ -84,6 +84,31 @@ public class TestAbstractQueryExecutor extends TestCase {
     }
 
     @Test
+    public void testGetprobableRange(){
+        String sql = "Select * from myTable tbl";
+        LogicalPlan plan = getLogicalPlan(sql);
+        DummyQueryExecutor dummyQueryExecutor = new DummyQueryExecutor(plan);
+        RangeNode range = dummyQueryExecutor.getProbableRange();
+        assertEquals(range, dummyQueryExecutor.getFullRange());
+
+        String sql1 = "Select * from myTable tbl where qcol1 = 30";
+        LogicalPlan plan1 = getLogicalPlan(sql1);
+        DummyQueryExecutor dummyQueryExecutor1 = new DummyQueryExecutor(plan1);
+        RangeNode rangeActual = dummyQueryExecutor1.getProbableRange();
+        RangeNode<Long> rangeExpected = new RangeNode<>("myTable", "column1");
+        rangeExpected.getRangeList().addRange(new Range<Long>(0l, 0l));
+        assertEquals(rangeExpected,rangeActual);
+
+        String sql2 = "Select * from myTable tbl where column1 < 30";
+        LogicalPlan plan2 = getLogicalPlan(sql2);
+        DummyQueryExecutor dummyQueryExecutor2 = new DummyQueryExecutor(plan2);
+        RangeNode rangeActual2 = dummyQueryExecutor2.getProbableRange();
+        RangeNode<Long> rangeExpected2 = new RangeNode<>("myTable", "column1");
+        rangeExpected2.getRangeList().addRange(new Range<Long>(new LongRangeOperations().getMinValue(), 29l));
+        assertEquals(rangeExpected2,rangeActual2);
+    }
+
+    @Test
     public void testCompareNumbers() {
         Number first = 3l;
         Number second = 3l;

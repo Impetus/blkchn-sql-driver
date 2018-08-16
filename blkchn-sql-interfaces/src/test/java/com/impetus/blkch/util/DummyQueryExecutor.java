@@ -34,12 +34,16 @@ public class DummyQueryExecutor extends AbstractQueryExecutor {
 
     @Override
     public RangeNode getFullRange() {
-        return null;
+        RangeNode<Long> rangeNode = new RangeNode<>("myTable", "column1");
+        rangeNode.getRangeList().addRange(new Range<Long>(0l, Long.MAX_VALUE));
+        return rangeNode;
     }
 
     @Override
     public RangeNode getRangeNodeFromDataNode(DataNode dataNode) {
-        return null;
+        RangeNode<Long> rangeNode = new RangeNode<>("myTable", "column1");
+        rangeNode.getRangeList().addRange(new Range<Long>(0l, 0l));
+        return rangeNode;
     }
 
     @Override
