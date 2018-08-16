@@ -79,7 +79,7 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
             if (comparator.isNEQ()) {
                 rangeNode.getRangeList().addRange(new Range<T>(getMinValue(), getMaxValue()));
             } else {
-                rangeNode.getRangeList().addRange(null);
+                rangeNode.getRangeList().addRange(new Range<T>(getMaxValue(),getMaxValue()));
             }
             return rangeNode;
 
