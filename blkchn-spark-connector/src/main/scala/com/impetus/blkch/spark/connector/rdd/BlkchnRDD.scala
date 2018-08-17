@@ -41,6 +41,18 @@ class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
     readConf.partitioner.getPartitions(connector.value, readConf).asInstanceOf[Array[Partition]]
   }
 
+  def getSchema:StructType = {
+    val metadata = connector.value.withStatementDo {
+      stat =>
+        stat.getSchema(readConf.query)
+    }
+    val columnCount = metadata.getColumnCount
+    val schema = for(i <- 1 to columnCount) yield {
+        getStructField(i, metadata)
+      }
+    StructType(schema)
+  }
+
   override def compute(split: Partition, context: TaskContext): Iterator[R] = {
     connector.value.withStatementDo {
       stat =>

@@ -15,6 +15,7 @@
 ******************************************************************************/
 package com.impetus.blkch.jdbc;
 
+import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 
 import com.impetus.blkch.sql.query.RangeNode;
@@ -26,4 +27,6 @@ public interface BlkchnStatement extends Statement {
     public Number getBlockHeight();
 
     public RangeNode getProbableRange(String sql);
+
+    public ResultSetMetaData getSchema(String sql);
 }
