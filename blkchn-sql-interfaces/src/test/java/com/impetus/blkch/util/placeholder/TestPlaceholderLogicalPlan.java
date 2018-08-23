@@ -22,7 +22,6 @@ import com.impetus.blkch.sql.insert.ColumnValue;
 import com.impetus.blkch.sql.insert.Insert;
 import com.impetus.blkch.sql.parser.LogicalPlan;
 import com.impetus.blkch.sql.parser.LogicalPlanTest;
-
 import com.impetus.blkch.sql.parser.TreeNode;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.Comparator;
@@ -37,6 +36,7 @@ import com.impetus.blkch.sql.query.WhereClause;
 import junit.framework.TestCase;
 
 public class TestPlaceholderLogicalPlan extends TestCase {
+    
     protected Object[] placeholderValues;
 
     protected QueryPlaceholderHandler handler;
@@ -110,6 +110,7 @@ public class TestPlaceholderLogicalPlan extends TestCase {
         assertEquals(expected, actual);
     }
 
+
     public TreeNode manualColumnValue() {
 
         ColumnValue columnValue = new ColumnValue();
@@ -170,6 +171,7 @@ public class TestPlaceholderLogicalPlan extends TestCase {
         op2.addChildNode(filterItem3);
         return whereClause;
     }
+
     public static LogicalPlan buildSelectWithWherePlaceHolder() {
         LogicalPlan logicalPlan = LogicalPlanTest.buildSimpleSelect();
 

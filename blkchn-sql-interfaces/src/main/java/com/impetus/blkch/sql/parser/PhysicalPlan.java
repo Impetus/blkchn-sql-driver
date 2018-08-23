@@ -128,7 +128,6 @@ public abstract class PhysicalPlan extends TreeNode {
         } else {
             secondChild = (TreeNode) logicalOperation.getChildNode(1).clone();
         }
-
         if ((firstChild instanceof RangeNode<?>) && (secondChild instanceof RangeNode<?>)) {
             RangeNode<?> firstRange = (RangeNode<?>) firstChild;
             RangeNode<?> secondRange = (RangeNode<?>) secondChild;

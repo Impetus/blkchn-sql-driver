@@ -99,7 +99,7 @@ public class LogicalPlanTest extends TestCase {
 
     @Test
     public void testPlaceHolder1() {
-        String sql = "select count(*) as cnt, blocknumber from transaction where blocknumber = ? and name='ashish' and address=? and phone=13244 group by blocknumber";
+        String sql = "select count(*) as cnt, blocknumber from transaction where blocknumber = 'ass' and name=? and addres=? and col3=111 group by blocknumber";
         LogicalPlan plan = getLogicalPlan(sql);
         plan.getQuery().traverse();
        WhereClause whereclause= plan.getQuery().getChildType(WhereClause.class,0);

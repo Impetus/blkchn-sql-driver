@@ -32,7 +32,7 @@ public abstract class AbstractQueryExecutor {
     protected LogicalPlan logicalPlan;
     
     protected PhysicalPlan originalPhysicalPlan;
-    
+
     protected PhysicalPlan physicalPlan;
 
     protected Map<String, Object> dataMap = new HashMap<>();

@@ -557,6 +557,7 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setType(SQLType.DEPLOY_SMARTCONTRACT);
         return visitChildrenAndResetNode(ctx);
     }
+    
     @Override
     public LogicalPlan visitDropAsset(DropAssetContext ctx) {
         logger.trace("In visitDropAsset " + ctx.getText());
