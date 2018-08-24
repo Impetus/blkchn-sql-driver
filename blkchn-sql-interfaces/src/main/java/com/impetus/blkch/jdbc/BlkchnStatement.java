@@ -29,4 +29,8 @@ public interface BlkchnStatement extends Statement {
     public RangeNode getProbableRange(String sql);
 
     public ResultSetMetaData getSchema(String sql);
+
+    public default int getArrayElementType(String table, String column) {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -41,15 +41,15 @@ class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
     readConf.partitioner.getPartitions(connector.value, readConf).asInstanceOf[Array[Partition]]
   }
 
-  def getSchema:StructType = {
-    val metadata = connector.value.withStatementDo {
+  def getSchema(meta: ResultSetMetaData = null):StructType = {
+    val metadata = if(meta != null) meta else connector.value.withStatementDo {
       stat =>
         stat.getSchema(readConf.query)
     }
     val columnCount = metadata.getColumnCount
     val schema = for(i <- 1 to columnCount) yield {
-        getStructField(i, metadata)
-      }
+      getStructField(i, metadata)
+    }
     StructType(schema)
   }
 
@@ -60,34 +60,9 @@ class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
         stat.setPageRange(partition.range)
         val rs = stat.executeQuery(partition.readConf.query)
         var buffer = scala.collection.mutable.ArrayBuffer[R]()
-        var firstRow = scala.collection.mutable.ArrayBuffer[Any]()
         val metadata = rs.getMetaData
         val columnCount = metadata.getColumnCount
-        val schema = (if(!rs.next()) {
-          for(i <- 1 to columnCount) yield {
-            getStructField(i, metadata)
-          }
-        } else {
-          for(i <- 1 to columnCount) yield {
-            if(rs.getObject(i).isInstanceOf[BigInteger]){
-              val dataValue = new BigDecimal(rs.getBigDecimal(i))
-              firstRow += dataValue
-              StructField(metadata.getColumnLabel(i), DecimalType(38,0), true)
-            } else if(rs.getObject(i).isInstanceOf[java.util.ArrayList[_]]) {
-              firstRow += handleExtraData(i, metadata, rs.getObject(i))
-              handleExtraType(i, metadata, rs.getObject(i))
-            } else if(rs.getObject(i).isInstanceOf[java.sql.Array]) {
-              firstRow += rs.getObject(i).asInstanceOf[java.sql.Array].getArray
-              handleArrayType(i, metadata, rs.getObject(i))
-            } else {
-              firstRow += rs.getObject(i)
-              getStructField(i, metadata)
-            }
-          }
-        }).toArray
-        if(!firstRow.isEmpty) {
-          buffer = buffer :+ new GenericRowWithSchema(firstRow.toArray, StructType(schema)).asInstanceOf[R]
-        }
+        val schema = getSchema(metadata)
         while(rs.next()) {
           val rowVals = (for(i <- 1 to columnCount) yield {
             if(rs.getObject(i).isInstanceOf[BigInteger]){
@@ -109,44 +84,54 @@ class BlkchnRDD[R: ClassTag](@transient sc: SparkContext,
 
   private def getStructField(index: Int, metadata: ResultSetMetaData): StructField = {
     val dataType = metadata.getColumnType(index) match {
-        case Types.INTEGER => IntegerType
-        case Types.DOUBLE => DoubleType
-        case Types.BIGINT => LongType
-        case Types.FLOAT => FloatType
-        case Types.BOOLEAN => BooleanType
-        case Types.TIMESTAMP => TimestampType
-        case _ => StringType
-      }
+      case Types.INTEGER => IntegerType
+      case Types.DOUBLE => DoubleType
+      case Types.BIGINT => return handleExtraType(index, metadata)
+      case Types.FLOAT => FloatType
+      case Types.BOOLEAN => BooleanType
+      case Types.TIMESTAMP => TimestampType
+      case Types.JAVA_OBJECT => return handleExtraType(index, metadata)
+      case Types.ARRAY => return handleArrayType(index, metadata)
+      case _ => StringType
+    }
     StructField(metadata.getColumnLabel(index), dataType, true)
   }
 
-  def handleExtraType(index: Int, metadata: ResultSetMetaData,data: java.lang.Object): StructField = ???
-  
+  def handleExtraType(index: Int, metadata: ResultSetMetaData): StructField = if(metadata.getColumnType(index).equals(Types.BIGINT)) {
+    StructField(metadata.getColumnLabel(index), LongType, true)
+  } else {
+    StructField(metadata.getColumnLabel(index), StringType, true)
+  }
+
   def handleExtraData(index: Int, metadata: ResultSetMetaData,data: java.lang.Object): Any = ???
-  
-  def handleArrayType(index: Int, metadata: ResultSetMetaData, data: Object): StructField = {
-    val array = data.asInstanceOf[java.sql.Array]
-    array.getBaseType match {
-      case Types.VARCHAR => StructField(metadata.getColumnLabel(index), 
-          DataTypes.createArrayType(StringType), true)
-          
-      case Types.INTEGER => StructField(metadata.getColumnLabel(index), 
-          DataTypes.createArrayType(IntegerType), true)
-          
-      case Types.BIGINT => StructField(metadata.getColumnLabel(index), 
-          DataTypes.createArrayType(LongType), true)
-          
-      case Types.DOUBLE => StructField(metadata.getColumnLabel(index), 
-          DataTypes.createArrayType(DoubleType), true)
-          
-      case Types.FLOAT => StructField(metadata.getColumnLabel(index), 
-          DataTypes.createArrayType(FloatType), true)
-          
-      case Types.BOOLEAN => StructField(metadata.getColumnLabel(index), 
-          DataTypes.createArrayType(BooleanType), true)
-          
-      case _ => throw new BlkchnException("Unidentified type found for column " + 
-          metadata.getColumnLabel(index));
+
+  def handleArrayType(index: Int, metadata: ResultSetMetaData): StructField = {
+    val column = metadata.getColumnName(index)
+    val table = metadata.getTableName(index)
+    connector.value.withStatementDo {
+      stat =>
+        stat.getArrayElementType(table, column)
+    } match {
+      case Types.VARCHAR => StructField(metadata.getColumnLabel(index),
+        DataTypes.createArrayType(StringType), true)
+
+      case Types.INTEGER => StructField(metadata.getColumnLabel(index),
+        DataTypes.createArrayType(IntegerType), true)
+
+      case Types.BIGINT => StructField(metadata.getColumnLabel(index),
+        DataTypes.createArrayType(LongType), true)
+
+      case Types.DOUBLE => StructField(metadata.getColumnLabel(index),
+        DataTypes.createArrayType(DoubleType), true)
+
+      case Types.FLOAT => StructField(metadata.getColumnLabel(index),
+        DataTypes.createArrayType(FloatType), true)
+
+      case Types.BOOLEAN => StructField(metadata.getColumnLabel(index),
+        DataTypes.createArrayType(BooleanType), true)
+
+      case _ => throw new BlkchnException("Unidentified type found for column " +
+        metadata.getColumnLabel(index));
     }
   }
 }
