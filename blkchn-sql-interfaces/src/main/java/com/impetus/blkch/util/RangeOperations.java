@@ -75,15 +75,6 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
                 : columnName;
         String valueString = filterItem.getChildType(IdentifierNode.class, 0).getValue();
         RangeNode<T> rangeNode = new RangeNode<>(table, column);
-        if (valueString == null) {
-            if (comparator.isNEQ()) {
-                rangeNode.getRangeList().addRange(new Range<T>(getMinValue(), getMaxValue()));
-            } else {
-                rangeNode.getRangeList().addRange(new Range<T>(getMaxValue(),getMaxValue()));
-            }
-            return rangeNode;
-
-        }
         T value = getValue(valueString.replaceAll("'", ""));
         if (value.compareTo(getMinValue()) < 0 || value.compareTo(getMaxValue()) > 0) {
             String errMsg = "Value: " + value + " is not in valid range";

@@ -81,7 +81,7 @@ public class LogicalPlanTest extends TestCase {
 
     @Test
     public void testSimpleIsNotNULL() {
-        String sql = " SELECT \"blocknumber\",\"hash\",\"parenthash\",\"nonce\" FROM block WHERE (blocknumber IS NOT NULL) AND (blocknumber = '22222')";
+        String sql = "SELECT blocknumber,hash,transactions FROM block WHERE (hash IS NOT NULL) AND (blocknumber IS NOT NULL) AND (blocknumber > 123) AND (blocknumber < 145) AND (hash = '2f32268b02c2d498c926401f6e74406525c02f735feefe457c5689')";
         LogicalPlan plan = getLogicalPlan(sql);
         plan.getQuery().traverse();
         // LogicalPlan logicalPlan = buildSimpleSelect();
