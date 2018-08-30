@@ -84,8 +84,7 @@ public class LogicalPlanTest extends TestCase {
         String sql = "SELECT blocknumber,hash,transactions FROM block WHERE (hash IS NOT NULL) AND (blocknumber IS NOT NULL) AND (blocknumber > 123) AND (blocknumber < 145) AND (hash = '2f32268b02c2d498c926401f6e74406525c02f735feefe457c5689')";
         LogicalPlan plan = getLogicalPlan(sql);
         plan.getQuery().traverse();
-        // LogicalPlan logicalPlan = buildSimpleSelect();
-        // assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
+       
     }
 
     @Test
@@ -95,17 +94,6 @@ public class LogicalPlanTest extends TestCase {
 
         LogicalPlan logicalPlan = buildSimpleSelect();
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
-    }
-
-    @Test
-    public void testPlaceHolder1() {
-        String sql = "select count(*) as cnt, blocknumber from transaction where blocknumber = ? and name='ashish' and address=? and phone=13244 group by blocknumber";
-        LogicalPlan plan = getLogicalPlan(sql);
-        plan.getQuery().traverse();
-       WhereClause whereclause= plan.getQuery().getChildType(WhereClause.class,0);
-       System.out.println(whereclause.getChildNodes());
-       System.out.println(plan.getQuery().hasChildType(WhereClause.class));
-       System.out.println(plan.getQuery().getChildType(WhereClause.class,0));
     }
 
     @Test

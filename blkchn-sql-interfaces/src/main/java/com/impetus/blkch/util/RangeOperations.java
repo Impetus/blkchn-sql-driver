@@ -77,7 +77,6 @@ public abstract class RangeOperations<T extends Number & Comparable<T>> {
         RangeNode<T> rangeNode = new RangeNode<>(table, column);
         T value = getValue(valueString.replaceAll("'", ""));
         if (value.compareTo(getMinValue()) < 0 || value.compareTo(getMaxValue()) > 0) {
-
             String errMsg = "Value: " + value + " is not in valid range";
             logger.error(errMsg);
             throw new BlkchnException(errMsg);

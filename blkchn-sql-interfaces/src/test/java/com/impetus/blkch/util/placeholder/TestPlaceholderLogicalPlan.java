@@ -37,6 +37,7 @@ import com.impetus.blkch.sql.query.WhereClause;
 import junit.framework.TestCase;
 
 public class TestPlaceholderLogicalPlan extends TestCase {
+    
     protected Object[] placeholderValues;
 
     protected QueryPlaceholderHandler handler;

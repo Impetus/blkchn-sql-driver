@@ -50,19 +50,6 @@ import com.impetus.blkch.sql.parser.LogicalPlan;
 
 public abstract class AbstractPreparedStatement implements PreparedStatement {
 
-
-    protected LogicalPlan logicalPlan;
-   /* protected LogicalPlan logicalPlan;
->>>>>>> restructured packages and classes for preparedstatement implementation
-
-    protected Object[] placeholderValues;
-
-    protected List<Integer> placeholderIndexes = new ArrayList<Integer>();
-
-    protected int filterItemIndex;
-*/
-
-
     @Override
     public ResultSet executeQuery(String sql) throws SQLException {
         throw new UnsupportedOperationException();

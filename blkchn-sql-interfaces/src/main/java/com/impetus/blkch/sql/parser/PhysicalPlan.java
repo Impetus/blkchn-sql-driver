@@ -128,7 +128,6 @@ public abstract class PhysicalPlan extends TreeNode {
         } else {
             secondChild = (TreeNode) logicalOperation.getChildNode(1).clone();
         }
-
         if ((firstChild instanceof RangeNode<?>) && (secondChild instanceof RangeNode<?>)) {
             RangeNode<?> firstRange = (RangeNode<?>) firstChild;
             RangeNode<?> secondRange = (RangeNode<?>) secondChild;
@@ -306,7 +305,6 @@ public abstract class PhysicalPlan extends TreeNode {
     public abstract boolean columnExists(String table, String column);
 
     public abstract Map<String, Integer> getColumnTypeMap(String table);
-
 
     public static enum Color {
         RED, GREEN;
