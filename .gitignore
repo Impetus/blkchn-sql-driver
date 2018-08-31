@@ -5,3 +5,4 @@ target/
 .wtpmodules
 .pydevproject
 **/.DS_Store
+bin/
