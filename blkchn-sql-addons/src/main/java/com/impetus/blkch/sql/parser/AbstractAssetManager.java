@@ -39,9 +39,9 @@ import com.impetus.blkch.sql.parser.LogicalPlan.SQLType;
 import com.impetus.blkch.sql.query.IdentifierNode;
 
 public abstract class AbstractAssetManager {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(BlockchainVisitor.class);
-    
+
     protected LogicalPlan logicalPlan;
 
     @SuppressWarnings("unchecked")
@@ -76,7 +76,7 @@ public abstract class AbstractAssetManager {
         }
         saveSchemaInDB(asset, json);
     }
-    
+
     public void executeDropAsset() {
         if (!logicalPlan.getType().equals(SQLType.DROP_ASSET)) {
             throw new BlkchnException("Statement executed is not of type 'DROP ASSET'");
@@ -85,7 +85,7 @@ public abstract class AbstractAssetManager {
         String asset = dropAsset.getChildType(Asset.class, 0).getChildType(IdentifierNode.class, 0).getValue().trim();
         removeSchemaInDB(asset);
     }
-    
+
     public String getSchemaJSON(String asset) throws SQLException {
         String schemaJSON;
         String query = "SELECT schema_json FROM asset_schema WHERE asset_name='%s'";
@@ -99,7 +99,7 @@ public abstract class AbstractAssetManager {
         }
         return schemaJSON;
     }
-    
+
     private void saveSchemaInDB(String asset, JSONObject json) {
         String query = "INSERT INTO asset_schema (asset_name, schema_json) VALUES('%s', '%s')";
         try {
@@ -111,7 +111,7 @@ public abstract class AbstractAssetManager {
             throw new BlkchnException("Error inserting asset type " + asset + " into database", e);
         }
     }
-    
+
     private void removeSchemaInDB(String asset) {
         String query = "DELETE FROM asset_schema WHERE asset_name='%s'";
         try {
@@ -123,14 +123,19 @@ public abstract class AbstractAssetManager {
             throw new BlkchnException("Error deleting asset type " + asset + " from database", e);
         }
     }
-    
+
     private Connection getConnection() throws SQLException {
         StringBuilder sb = new StringBuilder();
         Properties props = getDBProperties();
         if(props.isEmpty()) {
             throw new BlkchnException("Error reading db config file");
         }
-        sb.append("jdbc:mysql://");
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new BlkchnException(e.getMessage());
+        }
+        sb.append("jdbc:postgresql://");
         sb.append(props.get("host") + ":" + props.getProperty("port") + "/");
         sb.append(props.get("database"));
         String jdbcUrl = sb.toString();
