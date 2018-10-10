@@ -78,10 +78,10 @@ Product includes Other 3rd party software as indicated below.
         Modified by Impetus     :No
         Version                 :1.1
         
-10.     Name                    :Mysql-connector-java
-        Source                  :http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar
-        Licence                 :GPL 2.0
-        Licence Source          :https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
-        Linking                 :Provided
+10.     Name                    :postgresql-connector-java
+        Source                  :http://central.maven.org/maven2/org/postgresql/postgresql/9.4-1200-jdbc41/postgresql-9.4-1200-jdbc41.jar
+        Licence                 :BSD 2-clause
+        Licence Source          :https://opensource.org/licenses/BSD-2-Clause
+        Linking                 :Static
         Modified by Impetus     :No
-        Version                 :5.1.38
+        Version                 :9.4-1200-jdbc41
