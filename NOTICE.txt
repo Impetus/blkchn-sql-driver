@@ -24,16 +24,16 @@ Product includes Other 3rd party software as indicated below.
         
 3.      Name                    :Logback-classic
         Source                  :http://central.maven.org/maven2/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3.jar
-        Licence                 :EPL 1.0, LGPL 2.1
-        Licence Source          :https://www.eclipse.org/legal/epl-v10.html https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html
+        Licence                 :EPL 1.0
+        Licence Source          :https://www.eclipse.org/legal/epl-v10.html
         Linking                 :Static
         Modified by Impetus     :No
         Version                 :1.2.3
         
 4.      Name                    :Logback-core
         Source                  :http://central.maven.org/maven2/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.jar
-        Licence                 :EPL 1.0, LGPL 2.1
-        Licence Source          :https://www.eclipse.org/legal/epl-v10.html https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html
+        Licence                 :EPL 1.0
+        Licence Source          :https://www.eclipse.org/legal/epl-v10.html
         Linking                 :Static
         Modified by Impetus     :No
         Version                 :1.2.3
